@@ -4,7 +4,12 @@ import ColumnCreateModal from "@/components/ColumnCreateModal";
 import ColumnEditModal from "@/components/ColumnEditModal";
 import ItemCreateModal from "@/components/ItemCreateModal";
 import ItemEditModal from "@/components/ItemEditModal";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/contexts/AuthContext";
+import { Calendar, Clock, Edit, Plus, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const API = "https://localhost:7177";
@@ -75,79 +80,125 @@ export default function BoardDetails({ boardId }: { boardId: string }) {
     fetchData();
   }, [boardId, auth.token]);
 
-  if (loading) return <div className="p-8">Cargando tablero...</div>;
+  if (loading)
+    return (
+      <div className="p-8 space-y-4">
+        <Skeleton className="h-8 w-64" />
+        <Skeleton className="h-4 w-40" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+          {[1, 2, 3].map((i) => (
+            <Skeleton key={i} className="h-64" />
+          ))}
+        </div>
+      </div>
+    );
+
   if (!board)
-    return <div className="p-8 text-red-600">Tablero no encontrado</div>;
+    return (
+      <div className="p-8 text-center">
+        <h2 className="text-2xl font-bold text-destructive mb-2">
+          Tablero no encontrado
+        </h2>
+        <p className="text-muted-foreground">
+          El tablero que buscas no existe o no tienes permisos para acceder
+        </p>
+        <Button asChild className="mt-4">
+          <a href="/tableros">Volver a tableros</a>
+        </Button>
+      </div>
+    );
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold">{board.name}</h1>
-        <span className="text-sm px-2 py-1 rounded bg-gray-200 dark:bg-gray-700">
-          {board.isPublic ? "Público" : "Privado"}
-        </span>
+    <div className="p-6 max-w-7xl mx-auto">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <div>
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-bold">{board.name}</h1>
+            <Badge variant={board.isPublic ? "default" : "secondary"}>
+              {board.isPublic ? "Público" : "Privado"}
+            </Badge>
+          </div>
+          <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
+            <div className="flex items-center">
+              <Users className="h-4 w-4 mr-1" />
+              <span>{members.length} miembros</span>
+            </div>
+            <div className="flex items-center">
+              <Calendar className="h-4 w-4 mr-1" />
+              <span>
+                Creado el {new Date(board.createdAt).toLocaleDateString()}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {canEdit && (
+          <Button onClick={() => setShowCreateColumn(true)}>
+            <Plus className="h-4 w-4 mr-2" />
+            Añadir columna
+          </Button>
+        )}
       </div>
 
-      {canEdit && (
-        <button
-          onClick={() => setShowCreateColumn(true)}
-          className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
-        >
-          ➕ Añadir columna
-        </button>
-      )}
-
-      <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-        Miembros: {members.length}
-      </p>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 overflow-x-auto pb-6">
         {columns.map((col) => (
-          <div
-            key={col.id}
-            className="bg-white dark:bg-neutral-800 p-4 rounded shadow"
-          >
-            <div className="flex justify-between items-center mb-2">
+          <Card key={col.id} className="bg-muted/30 border shadow-sm">
+            <div className="p-4 border-b bg-card flex justify-between items-center">
               <h2 className="font-semibold text-lg">{col.title}</h2>
               {canEdit && (
-                <button
+                <Button
+                  variant="ghost"
+                  size="sm"
                   onClick={() => {
                     setEditColumnId(col.id);
                     setEditColumnTitle(col.title);
                   }}
-                  className="text-sm text-blue-500 hover:underline"
+                  className="h-8 w-8 p-0"
                 >
-                  ✏️ Editar
-                </button>
+                  <Edit className="h-4 w-4" />
+                  <span className="sr-only">Editar columna</span>
+                </Button>
               )}
             </div>
-            <div className="flex flex-col gap-2">
+            <div className="p-3 space-y-2 min-h-[200px]">
               {items
                 .filter((item) => item.columnId === col.id)
                 .map((item) => (
-                  <button
+                  <div
                     key={item.id}
-                    className="border rounded p-2 bg-neutral-50 dark:bg-neutral-900 cursor-pointer text-left"
+                    className="border rounded-md p-3 bg-background cursor-pointer hover:shadow-sm transition-shadow"
                     onClick={() => canEdit && setEditItem(item)}
                   >
-                    <strong>{item.title}</strong>
+                    <h3 className="font-medium mb-1">{item.title}</h3>
                     {item.description && (
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
                         {item.description}
                       </p>
                     )}
-                  </button>
+                    {item.dueDate && (
+                      <div className="flex items-center text-xs text-muted-foreground">
+                        <Clock className="h-3 w-3 mr-1" />
+                        <span>
+                          {new Date(item.dueDate).toLocaleDateString()}
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 ))}
+
+              {canEdit && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setCreateItemColumnId(col.id)}
+                  className="w-full justify-center text-muted-foreground hover:text-foreground"
+                >
+                  <Plus className="h-4 w-4 mr-1" />
+                  Añadir tarea
+                </Button>
+              )}
             </div>
-            {canEdit && (
-              <button
-                onClick={() => setCreateItemColumnId(col.id)}
-                className="text-blue-500 text-sm mt-2 hover:underline"
-              >
-                ➕ Añadir tarea
-              </button>
-            )}
-          </div>
+          </Card>
         ))}
       </div>
 

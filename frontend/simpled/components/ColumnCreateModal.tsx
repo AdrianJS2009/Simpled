@@ -1,6 +1,10 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
+import { Loader2, X } from "lucide-react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
@@ -56,32 +60,47 @@ export default function ColumnCreateModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-      <div className="bg-white dark:bg-neutral-900 p-6 rounded shadow max-w-sm w-full">
-        <h2 className="text-xl font-semibold mb-4">Nueva columna</h2>
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+      <div className="bg-background rounded-lg shadow-lg w-full max-w-md overflow-hidden">
+        <div className="flex items-center justify-between p-4 border-b">
+          <h2 className="text-xl font-semibold">Nueva columna</h2>
+          <Button variant="ghost" size="icon" onClick={onClose}>
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
 
-        <input
-          type="text"
-          placeholder="Título"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="w-full border rounded px-3 py-2 mb-4"
-        />
+        <div className="p-4">
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="title">Título</Label>
+              <Input
+                id="title"
+                placeholder="Ej: Por hacer, En progreso, Completado"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                autoFocus
+              />
+            </div>
 
-        <div className="flex justify-end gap-2">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 bg-gray-300 dark:bg-gray-700 rounded"
-          >
-            Cancelar
-          </button>
-          <button
-            onClick={handleCreate}
-            disabled={loading}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            {loading ? "Creando..." : "Crear"}
-          </button>
+            <div className="flex justify-end gap-2 pt-2">
+              <Button variant="outline" onClick={onClose}>
+                Cancelar
+              </Button>
+              <Button
+                onClick={handleCreate}
+                disabled={loading || !title.trim()}
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Creando...
+                  </>
+                ) : (
+                  "Crear columna"
+                )}
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

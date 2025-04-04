@@ -1,6 +1,11 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/contexts/AuthContext";
+import { Calendar, Loader2, X } from "lucide-react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
@@ -59,52 +64,71 @@ export default function ItemCreateModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-      <div className="bg-white dark:bg-neutral-900 p-6 rounded shadow max-w-sm w-full">
-        <h2 className="text-xl font-semibold mb-4">Nueva tarea</h2>
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+      <div className="bg-background rounded-lg shadow-lg w-full max-w-md overflow-hidden">
+        <div className="flex items-center justify-between p-4 border-b">
+          <h2 className="text-xl font-semibold">Nueva tarea</h2>
+          <Button variant="ghost" size="icon" onClick={onClose}>
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
 
-        <input
-          type="text"
-          placeholder="Título"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="w-full border rounded px-3 py-2 mb-3"
-        />
+        <div className="p-4">
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="title">Título</Label>
+              <Input
+                id="title"
+                placeholder="Título de la tarea"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                autoFocus
+              />
+            </div>
 
-        <textarea
-          placeholder="Descripción (opcional)"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          className="w-full border rounded px-3 py-2 mb-3"
-          rows={3}
-        />
+            <div className="space-y-2">
+              <Label htmlFor="description">Descripción (opcional)</Label>
+              <Textarea
+                id="description"
+                placeholder="Descripción detallada de la tarea"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={3}
+              />
+            </div>
 
-        <label htmlFor="dueDate" className="block text-sm font-medium mb-1">
-          Fecha de vencimiento
-        </label>
-        <input
-          id="dueDate"
-          type="date"
-          value={dueDate}
-          onChange={(e) => setDueDate(e.target.value)}
-          className="w-full border rounded px-3 py-2 mb-4"
-          title="Selecciona una fecha de vencimiento"
-        />
+            <div className="space-y-2">
+              <Label htmlFor="dueDate" className="flex items-center gap-2">
+                <Calendar className="h-4 w-4" />
+                Fecha de vencimiento
+              </Label>
+              <Input
+                id="dueDate"
+                type="date"
+                value={dueDate}
+                onChange={(e) => setDueDate(e.target.value)}
+              />
+            </div>
 
-        <div className="flex justify-end gap-2">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 bg-gray-300 dark:bg-gray-700 rounded"
-          >
-            Cancelar
-          </button>
-          <button
-            onClick={handleCreate}
-            disabled={loading}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            {loading ? "Creando..." : "Crear"}
-          </button>
+            <div className="flex justify-end gap-2 pt-2">
+              <Button variant="outline" onClick={onClose}>
+                Cancelar
+              </Button>
+              <Button
+                onClick={handleCreate}
+                disabled={loading || !title.trim()}
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Creando...
+                  </>
+                ) : (
+                  "Crear tarea"
+                )}
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

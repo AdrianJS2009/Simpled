@@ -1,5 +1,12 @@
 "use client";
 import { useBoards } from "@/contexts/BoardsContext";
+import type React from "react";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Calendar, Loader2, X } from "lucide-react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
@@ -19,10 +26,17 @@ export default function ItemEditModal({ item, onClose, onUpdated }: Props) {
   const [title, setTitle] = useState(item.title);
   const [description, setDescription] = useState(item.description || "");
   const [dueDate, setDueDate] = useState(item.dueDate?.slice(0, 10) || "");
+  const [loading, setLoading] = useState(false);
   const { updateBoard } = useBoards(); // reutilizamos contexto por si se refresca al cerrar
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!title.trim()) {
+      toast.warning("El título es obligatorio.");
+      return;
+    }
+
+    setLoading(true);
     try {
       const response = await fetch(
         `https://localhost:7177/api/Items/${item.id}`,
@@ -51,60 +65,74 @@ export default function ItemEditModal({ item, onClose, onUpdated }: Props) {
     } catch (err) {
       console.error(err);
       toast.error("No se pudo actualizar la tarea.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-      <div className="bg-white dark:bg-neutral-900 p-6 rounded w-full max-w-md shadow-md">
-        <h2 className="text-lg font-semibold mb-4">Editar Tarea</h2>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          <label
-            htmlFor="title"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-          >
-            Título
-          </label>
-          <input
-            id="title"
-            type="text"
-            className="border rounded px-3 py-2"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Ingrese el título"
-            required
-          />
-          <textarea
-            className="border rounded px-3 py-2"
-            rows={3}
-            placeholder="Descripción (opcional)"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          <input
-            type="date"
-            className="border rounded px-3 py-2"
-            value={dueDate}
-            onChange={(e) => setDueDate(e.target.value)}
-            title="Fecha de vencimiento"
-            placeholder="Seleccione una fecha"
-          />
-          <div className="flex justify-end gap-2 mt-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 rounded bg-gray-300 dark:bg-gray-700"
-            >
-              Cancelar
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
-            >
-              Guardar
-            </button>
-          </div>
-        </form>
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+      <div className="bg-background rounded-lg shadow-lg w-full max-w-md overflow-hidden">
+        <div className="flex items-center justify-between p-4 border-b">
+          <h2 className="text-xl font-semibold">Editar tarea</h2>
+          <Button variant="ghost" size="icon" onClick={onClose}>
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
+
+        <div className="p-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="title">Título</Label>
+              <Input
+                id="title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                autoFocus
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="description">Descripción (opcional)</Label>
+              <Textarea
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={3}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="dueDate" className="flex items-center gap-2">
+                <Calendar className="h-4 w-4" />
+                Fecha de vencimiento
+              </Label>
+              <Input
+                id="dueDate"
+                type="date"
+                value={dueDate}
+                onChange={(e) => setDueDate(e.target.value)}
+              />
+            </div>
+
+            <div className="flex justify-end gap-2 pt-2">
+              <Button type="button" variant="outline" onClick={onClose}>
+                Cancelar
+              </Button>
+              <Button type="submit" disabled={loading || !title.trim()}>
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Guardando...
+                  </>
+                ) : (
+                  "Guardar cambios"
+                )}
+              </Button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
