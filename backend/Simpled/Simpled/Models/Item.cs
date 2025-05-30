@@ -75,11 +75,6 @@ namespace Simpled.Models
         /// Lista de subtareas asociadas al ítem.
         /// </summary>
         public List<Subtask> Subtasks { get; set; } = new();
-
-        /// <summary>
-        /// Fecha y hora en que la tarea fue completada (UTC).
-        /// </summary>
-        public DateTime? CompletedAt { get; set; }
     }
 
 }

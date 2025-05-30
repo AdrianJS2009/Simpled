@@ -3,15 +3,9 @@ import { CalendarDays, CheckCircle2, Clock } from 'lucide-react';
 
 interface DashboardHeaderProps {
   readonly user: any;
-  completedTasksThisWeek: number;
-  pendingTasksToday: number;
 }
 
-export function DashboardHeader({
-  user,
-  completedTasksThisWeek,
-  pendingTasksToday,
-}: DashboardHeaderProps) {
+export function DashboardHeader({ user }: DashboardHeaderProps) {
   const currentTime = new Date();
   const hours = currentTime.getHours();
 
@@ -25,7 +19,7 @@ export function DashboardHeader({
   return (
     <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Panel</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
         <p className="text-muted-foreground mt-2">
           {greeting}, {user?.name ?? 'Usuario'}. Aquí tienes un resumen de tus proyectos.
         </p>
@@ -51,9 +45,7 @@ export function DashboardHeader({
           <CardContent className="flex items-center gap-3 p-3">
             <CheckCircle2 className="h-5 w-5 text-emerald-500" />
             <div>
-              <p className="text-sm font-medium">
-                {completedTasksThisWeek} tareas completadas esta semana
-              </p>
+              <p className="text-sm font-medium">8 tareas completadas esta semana</p>
             </div>
           </CardContent>
         </Card>
@@ -62,7 +54,7 @@ export function DashboardHeader({
           <CardContent className="flex items-center gap-3 p-3">
             <Clock className="h-5 w-5 text-amber-500" />
             <div>
-              <p className="text-sm font-medium">{pendingTasksToday} tareas pendientes para hoy</p>
+              <p className="text-sm font-medium">3 tareas pendientes para hoy</p>
             </div>
           </CardContent>
         </Card>

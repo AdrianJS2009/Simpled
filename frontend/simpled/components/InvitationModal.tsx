@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { useAuth } from '@/contexts/AuthContext';
-import { useInvitations } from '@/contexts/InvitationsContext';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 type BoardInvite = {
@@ -35,19 +35,40 @@ type Props = Readonly<{
 
 export default function InvitationsModal({ onClose }: Props) {
   const { auth } = useAuth();
-  const {
-    boardInvites,
-    teamInvites,
-    loading,
-    removeBoardInvite,
-    removeTeamInvite,
-    refreshInvites,
-  } = useInvitations();
+  const [boardInvites, setBoardInvites] = useState<BoardInvite[]>([]);
+  const [teamInvites, setTeamInvites] = useState<TeamInvite[]>([]);
+  const [loading, setLoading] = useState(true);
+
   const API = 'http://localhost:5193';
+
+  const fetchInvites = async () => {
+    setLoading(true);
+    try {
+      const [bRes, tRes] = await Promise.all([
+        fetch(`${API}/api/BoardInvitations/user`, {
+          headers: { Authorization: `Bearer ${auth.token}` },
+        }),
+        fetch(`${API}/api/TeamInvitations/user`, {
+          headers: { Authorization: `Bearer ${auth.token}` },
+        }),
+      ]);
+      if (!bRes.ok) throw new Error('Tableros');
+      if (!tRes.ok) throw new Error('Equipos');
+      setBoardInvites(await bRes.json());
+      setTeamInvites(await tRes.json());
+    } catch {
+      toast.error('Error al cargar invitaciones.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchInvites();
+  }, []);
 
   const handleBoard = async (token: string, action: 'accept' | 'reject') => {
     try {
-      const inv = boardInvites.find((i) => i.token === token);
       const res = await fetch(`${API}/api/BoardInvitations/${action}`, {
         method: 'POST',
         headers: {
@@ -57,17 +78,10 @@ export default function InvitationsModal({ onClose }: Props) {
         body: JSON.stringify({ token }),
       });
       if (!res.ok) throw new Error();
-      removeBoardInvite(token);
       toast.success(
-        <div className="flex items-center gap-2">
-          <span className="text-xl text-green-600"></span>
-          <span>
-            Invitación a <b>{inv?.boardName ?? 'tablero'}</b>{' '}
-            {action === 'accept' ? 'aceptada' : 'rechazada'}
-          </span>
-        </div>,
-        { autoClose: 2500 },
+        action === 'accept' ? 'Invitación de tablero aceptada' : 'Invitación de tablero rechazada',
       );
+      setBoardInvites((prev) => prev.filter((i) => i.token !== token));
     } catch {
       toast.error('Error procesando invitación de tablero.');
     }
@@ -75,7 +89,6 @@ export default function InvitationsModal({ onClose }: Props) {
 
   const handleTeam = async (token: string, action: 'accept' | 'reject') => {
     try {
-      const inv = teamInvites.find((i) => i.token === token);
       const res = await fetch(`${API}/api/TeamInvitations/${action}`, {
         method: 'POST',
         headers: {
@@ -85,17 +98,10 @@ export default function InvitationsModal({ onClose }: Props) {
         body: JSON.stringify({ token }),
       });
       if (!res.ok) throw new Error();
-      removeTeamInvite(token);
       toast.success(
-        <div className="flex items-center gap-2">
-          <span className="text-xl text-green-600"></span>
-          <span>
-            Invitación a <b>{inv?.teamName ?? 'equipo'}</b>{' '}
-            {action === 'accept' ? 'aceptada' : 'rechazada'}
-          </span>
-        </div>,
-        { autoClose: 2500 },
+        action === 'accept' ? 'Invitación de equipo aceptada' : 'Invitación de equipo rechazada',
       );
+      setTeamInvites((prev) => prev.filter((i) => i.token !== token));
     } catch {
       toast.error('Error procesando invitación de equipo.');
     }

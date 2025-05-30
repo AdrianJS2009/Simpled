@@ -12,11 +12,9 @@ type User = {
   email: string;
   imageUrl: string;
   isOnline: boolean;
-  roles: string[];
   achievementsCompleted: number;
   achievements: Achievement[];
   teams: Team[];
-  isBanned: boolean;
 };
 
 interface Achievement {
@@ -127,34 +125,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         body: JSON.stringify({ email, password }),
       });
 
-      if (response.status === 403) {
-        const msg = await response.text();
-        if (msg && msg.toLowerCase().includes('baneado')) {
-          throw { banned: true };
-        }
-      }
-
-      if (!response.ok) {
-        try {
-          const userRes = await fetch(`${API_URL}/api/Users`);
-          if (userRes.ok) {
-            const users = await userRes.json();
-            const user = users.find((u: any) => u.email.toLowerCase() === email.toLowerCase());
-            if (user && user.isBanned) {
-              throw { banned: true };
-            }
-          }
-        } catch {}
-        throw new Error('Credenciales incorrectas o error en el servidor.');
-      }
+      if (!response.ok) throw new Error('Credenciales incorrectas o error en el servidor.');
 
       const { token, id } = await response.json();
-      const userRes = await fetch(`${API_URL}/api/Users/${id}`);
-      if (!userRes.ok) throw new Error('Error al obtener perfil.');
-      const user = await userRes.json();
-      if (user.isBanned) {
-        throw { banned: true };
-      }
       setAuth({ token, id });
 
       if (keepUserLoggedIn) {
@@ -167,10 +140,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       toast.success('Sesión iniciada correctamente.');
       router.push('/');
-    } catch (error: any) {
-      if (error && error.banned) {
-        throw { banned: true };
-      }
+    } catch (error) {
       console.error('Error al iniciar sesión:', error);
       toast.error('Correo o contraseña incorrectos.');
     }

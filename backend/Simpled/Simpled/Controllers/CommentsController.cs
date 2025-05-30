@@ -62,8 +62,6 @@ namespace Simpled.Controllers
                 ItemId = itemId,
                 UserId = CurrentUserId,
                 Action = "Comentario añadido",
-                Field = "comment",
-                NewValue = created.Text,
                 Details = created.Text,
                 Timestamp = DateTime.UtcNow
             });
@@ -88,8 +86,6 @@ namespace Simpled.Controllers
                 ItemId = itemId,
                 UserId = CurrentUserId,
                 Action = "Comentario eliminado",
-                Field = "comment",
-                NewValue = commentId.ToString(),
                 Details = commentId.ToString(),
                 Timestamp = DateTime.UtcNow
             });
@@ -114,8 +110,6 @@ namespace Simpled.Controllers
                 ItemId = itemId,
                 UserId = CurrentUserId,
                 Action = resolved ? "Comentario resuelto" : "Comentario reabierto",
-                Field = "comment",
-                NewValue = commentId.ToString(),
                 Details = commentId.ToString(),
                 Timestamp = DateTime.UtcNow
             });
@@ -146,8 +140,6 @@ namespace Simpled.Controllers
                 ItemId = itemId,
                 UserId = CurrentUserId,
                 Action = "Comentario editado",
-                Field = "comment",
-                NewValue = updated.Text,
                 Details = updated.Text,
                 Timestamp = DateTime.UtcNow
             });

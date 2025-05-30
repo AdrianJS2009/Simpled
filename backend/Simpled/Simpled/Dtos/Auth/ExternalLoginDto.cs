@@ -1,4 +1,5 @@
-﻿namespace Simpled.Dtos.Auth
+﻿
+namespace Simpled.Dtos.Auth
 {
     /// <summary>
     /// DTO para inicio de sesión externo (OAuth, etc.).
@@ -24,10 +25,5 @@
         /// Nombre completo del usuario autenticado.
         /// </summary>
         public string Name { get; set; } = string.Empty;
-
-        /// <summary>
-        /// URL de la imagen de perfil del usuario autenticado.
-        /// </summary>
-        public string ImageUrl { get; set; } = string.Empty;
     }
 }

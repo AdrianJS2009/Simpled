@@ -15,9 +15,9 @@ import { toast } from 'react-toastify';
 import { deleteBoardMember, updateBoardMemberRole } from '../services/boardMemberService';
 
 const ROLES = [
-  { value: 'admin', label: 'Administrador' },
+  { value: 'admin', label: 'Admin' },
   { value: 'editor', label: 'Editor' },
-  { value: 'viewer', label: 'Visualizador' },
+  { value: 'viewer', label: 'Lector' },
 ];
 
 const getRoleBadgeColor = (role: string) => {

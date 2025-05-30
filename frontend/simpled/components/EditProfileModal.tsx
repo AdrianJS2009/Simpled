@@ -12,7 +12,7 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet';
 import { useAuth } from '@/contexts/AuthContext';
-import { ArrowBigDown, Image } from 'lucide-react';
+import { Image, ArrowBigDown } from 'lucide-react';
 import type React from 'react';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
@@ -22,8 +22,7 @@ interface User {
   name: string;
   email: string;
   imageUrl: string;
-  isExternal?: boolean;
-  provider?: string;
+  password: string;
 }
 
 interface EditProfileModalProps {
@@ -41,12 +40,10 @@ export default function EditProfileModal({ isOpen, onClose, user }: EditProfileM
     name: user.name,
     email: user.email,
     imageUrl: user.imageUrl || '',
-    password: '',
+    password: user.password || '',
   });
 
   const [image, setImage] = useState<File | null>(null);
-
-  const isExternal = (user as any).isExternal || (user as any).provider;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -120,7 +117,6 @@ export default function EditProfileModal({ isOpen, onClose, user }: EditProfileM
               value={formData.email}
               onChange={handleChange}
               required
-              disabled={isExternal}
             />
           </div>
 
@@ -146,7 +142,6 @@ export default function EditProfileModal({ isOpen, onClose, user }: EditProfileM
               type="button"
               onClick={() => setModifyPassword(!modifyPassword)}
               className="w-full"
-              disabled={isExternal}
             >
               <span>Modificar contraseña</span>
               <div
@@ -177,7 +172,6 @@ export default function EditProfileModal({ isOpen, onClose, user }: EditProfileM
                     value={formData.password}
                     onChange={handleChange}
                     minLength={6}
-                    disabled={isExternal}
                   />
                 </div>
               )}

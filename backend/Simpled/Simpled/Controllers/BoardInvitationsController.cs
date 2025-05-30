@@ -5,7 +5,6 @@ using Simpled.Dtos.BoardInvitations;
 using Simpled.Helpers;
 using Simpled.Hubs;
 using Simpled.Repository;
-using Simpled.Services;
 using System.Security.Claims;
 
 namespace Simpled.Controllers
@@ -19,20 +18,17 @@ namespace Simpled.Controllers
         private readonly IBoardMemberRepository _boardMemberRepo;
         private readonly IBoardRepository _boardRepo;
         private readonly IHubContext<BoardHub> _hub;
-        private readonly SseInvitationBroadcastService _sseBroadcast;
 
         public BoardInvitationsController(
             IBoardInvitationRepository invitationService,
             IBoardMemberRepository boardMemberRepo,
             IBoardRepository boardRepo,
-            IHubContext<BoardHub> hub,
-            SseInvitationBroadcastService sseBroadcast)
+            IHubContext<BoardHub> hub)
         {
             _invitationService = invitationService;
             _boardMemberRepo = boardMemberRepo;
             _boardRepo = boardRepo;
             _hub = hub;
-            _sseBroadcast = sseBroadcast;
         }
 
         /// <summary>
@@ -80,6 +76,7 @@ namespace Simpled.Controllers
             if (board == null)
                 return NotFound("Tablero no encontrado.");
 
+            
             await _hub.Clients.User(dto.Email.ToLower()).SendAsync("InvitationReceived", new
             {
                 boardName = board.Name,
@@ -87,18 +84,12 @@ namespace Simpled.Controllers
                 invitationToken = invitation.Token
             });
 
-            // Notificación SSE
-            var invitationDto = new Simpled.Dtos.BoardInvitations.BoardInvitationReadDto
+            await _hub.Clients.User(dto.Email.ToLower()).SendAsync("InvitationReceived", new
             {
-                Id = invitation.Id,
-                BoardId = invitation.BoardId,
-                BoardName = board.Name,
-                Role = invitation.Role,
-                Token = invitation.Token,
-                Accepted = invitation.Accepted,
-                CreatedAt = invitation.CreatedAt
-            };
-            await _sseBroadcast.BroadcastInvitationAsync(dto.Email.ToLower(), invitationDto, "board");
+                boardName = board.Name,
+                role = dto.Role,
+                invitationToken = invitation.Token
+            });
 
             return Ok("Invitación enviada.");
         }

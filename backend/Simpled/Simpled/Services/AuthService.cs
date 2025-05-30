@@ -7,7 +7,6 @@ using Simpled.Data;
 using Simpled.Dtos.Auth;
 using Simpled.Models;
 using Simpled.Repository;
-using Simpled.Models.Enums;
 
 namespace Simpled.Services
 {
@@ -43,20 +42,15 @@ namespace Simpled.Services
                 .FirstOrDefaultAsync(u => u.Email == loginDto.Email);
             if (user == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
                 return null;
-            if (user.IsBanned)
-                return new LoginResultDto
-                {
-                    IsBanned = true,
-                    UserId = user.Id.ToString(),
-                    Token = string.Empty
-                };
+
 
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.WebRole.ToString())
+                new Claim(ClaimTypes.Role, string.Join(",", user.Roles.Select(r => r.Role)))
             };
+
 
             var jwtSettings = _configuration.GetSection("JwtSettings");
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]!));
@@ -69,6 +63,7 @@ namespace Simpled.Services
                 signingCredentials: creds
             );
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
 
             user.CreatedBoardsCount = 10;
             user.CreatedTasksCount = 50;
@@ -87,8 +82,7 @@ namespace Simpled.Services
             return new LoginResultDto
             {
                 Token = tokenString,
-                UserId = user.Id.ToString(),
-                IsBanned = false
+                UserId = user.Id.ToString()
             };
         }
 
@@ -99,53 +93,25 @@ namespace Simpled.Services
         /// <returns>DTO con el token y el ID del usuario.</returns>
         public async Task<LoginResultDto?> ExternalLoginAsync(ExternalLoginDto dto)
         {
+
             var user = await _context.Users
                 .Include(u => u.Roles)
                 .FirstOrDefaultAsync(u => u.Email == dto.Email);
-            if (user != null && user.IsBanned)
-                return new LoginResultDto
-                {
-                    IsBanned = true,
-                    UserId = user.Id.ToString(),
-                    Token = string.Empty
-                };
+
 
             if (user == null)
             {
                 user = new User
                 {
                     Email = dto.Email,
-                    Name = string.IsNullOrEmpty(dto.Name) ? "" : dto.Name,
-                    ImageUrl = string.IsNullOrEmpty(dto.ImageUrl) ? "/images/default/avatar-default.jpg" : dto.ImageUrl,
                     PasswordHash = BCrypt.Net.BCrypt.HashPassword(Guid.NewGuid().ToString()),
-                    Roles = new List<UserRole> { new UserRole { Role = "User" } },
-                    IsExternal = true,
-                    Provider = dto.Provider
+                    Roles = new List<UserRole> { new UserRole { Role = "User" } }
                 };
 
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
             }
-            else
-            {
-                // Actualizar nombre e imagen si han cambiado y los datos 
-                bool updated = false;
-                if (!string.IsNullOrEmpty(dto.Name) && user.Name != dto.Name)
-                {
-                    user.Name = dto.Name;
-                    updated = true;
-                }
-                if (!string.IsNullOrEmpty(dto.ImageUrl) && user.ImageUrl != dto.ImageUrl)
-                {
-                    user.ImageUrl = dto.ImageUrl;
-                    updated = true;
-                }
-                if (updated)
-                {
-                    _context.Users.Update(user);
-                    await _context.SaveChangesAsync();
-                }
-            }
+
 
             var claims = new List<Claim>
             {
@@ -153,6 +119,7 @@ namespace Simpled.Services
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, string.Join(",", user.Roles.Select(r => r.Role)))
             };
+
 
             var jwtSettings = _configuration.GetSection("JwtSettings");
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]!));
@@ -169,8 +136,7 @@ namespace Simpled.Services
             return new LoginResultDto
             {
                 Token = tokenString,
-                UserId = user.Id.ToString(),
-                IsBanned = false
+                UserId = user.Id.ToString()
             };
         }
     }

@@ -14,10 +14,5 @@
         /// Identificador único del usuario autenticado.
         /// </summary>
         public string UserId { get; set; } = default!;
-
-        /// <summary>
-        /// Indica si el usuario está baneado.
-        /// </summary>
-        public bool IsBanned { get; set; }
     }
 }
