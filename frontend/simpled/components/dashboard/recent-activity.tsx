@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { CheckCircle2, MessageSquare, PenSquare, Tag, UserPlus } from 'lucide-react';
 
@@ -20,6 +20,7 @@ export interface Activity {
   comment?: {
     text: string;
   };
+  commentText?: string;
   oldStatus?: string;
   newStatus?: string;
   assignee?: {
@@ -31,6 +32,39 @@ export interface Activity {
 interface RecentActivityProps {
   readonly activities: Activity[];
 }
+
+const mapActionType = (action: string) => {
+  switch (action) {
+    case 'Comentario añadido':
+    case 'CommentAdded':
+      return 'comment_added';
+    case 'Comentario editado':
+    case 'CommentEdited':
+      return 'comment_edited';
+    case 'Comentario eliminado':
+    case 'CommentDeleted':
+      return 'comment_deleted';
+    case 'Comentario resuelto':
+    case 'CommentResolved':
+      return 'comment_resolved';
+    case 'Comentario reabierto':
+    case 'CommentReopened':
+      return 'comment_reopened';
+    case 'Subtarea creada':
+    case 'SubtaskCreated':
+      return 'task_created';
+    case 'StatusChanged':
+      return 'task_status_changed';
+    case 'Asignado':
+    case 'Assigned':
+      return 'task_assigned';
+    case 'Tarea completada':
+    case 'Completed':
+      return 'task_completed';
+    default:
+      return action?.toLowerCase().replace(/ /g, '_') || 'unknown';
+  }
+};
 
 export function RecentActivity({ activities }: RecentActivityProps) {
   const getActivityIcon = (type: string) => {
@@ -73,7 +107,22 @@ export function RecentActivity({ activities }: RecentActivityProps) {
           <>
             <span className="font-medium">{activity.user.name}</span> comentó en{' '}
             <span className="font-medium">{activity.task?.title}</span>:{' '}
-            <span className="italic">"{activity.comment?.text}"</span>
+            <span className="italic">"{activity.comment?.text || activity.commentText || ''}"</span>
+          </>
+        );
+      case 'comment_edited':
+        return (
+          <>
+            <span className="font-medium">{activity.user.name}</span> editó un comentario en{' '}
+            <span className="font-medium">{activity.task?.title}</span>:{' '}
+            <span className="italic">"{activity.comment?.text || activity.commentText || ''}"</span>
+          </>
+        );
+      case 'comment_deleted':
+        return (
+          <>
+            <span className="font-medium">{activity.user.name}</span> eliminó un comentario en{' '}
+            <span className="font-medium">{activity.task?.title}</span>
           </>
         );
       case 'task_status_changed':
@@ -91,6 +140,41 @@ export function RecentActivity({ activities }: RecentActivityProps) {
             <span className="font-medium">{activity.user.name}</span> asignó{' '}
             <span className="font-medium">{activity.task?.title}</span> a{' '}
             <span className="font-medium">{activity.assignee?.name}</span>
+          </>
+        );
+      case 'subtask_created':
+        return (
+          <>
+            <span className="font-medium">{activity.user.name}</span> creó una subtarea en{' '}
+            <span className="font-medium">{activity.task?.title}</span>
+          </>
+        );
+      case 'subtask_updated':
+        return (
+          <>
+            <span className="font-medium">{activity.user.name}</span> actualizó una subtarea en{' '}
+            <span className="font-medium">{activity.task?.title}</span>
+          </>
+        );
+      case 'subtask_deleted':
+        return (
+          <>
+            <span className="font-medium">{activity.user.name}</span> eliminó una subtarea en{' '}
+            <span className="font-medium">{activity.task?.title}</span>
+          </>
+        );
+      case 'comment_resolved':
+        return (
+          <>
+            <span className="font-medium">{activity.user.name}</span> marcó un comentario como
+            resuelto en <span className="font-medium">{activity.task?.title}</span>
+          </>
+        );
+      case 'comment_reopened':
+        return (
+          <>
+            <span className="font-medium">{activity.user.name}</span> reabrió un comentario en{' '}
+            <span className="font-medium">{activity.task?.title}</span>
           </>
         );
       default:
@@ -118,11 +202,13 @@ export function RecentActivity({ activities }: RecentActivityProps) {
                 </Avatar>
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    {getActivityIcon(activity.type)}
-                    <p className="text-sm">{getActivityText(activity)}</p>
+                    {getActivityIcon(mapActionType(activity.type))}
+                    <p className="text-sm">
+                      {getActivityText({ ...activity, type: mapActionType(activity.type) })}
+                    </p>
                   </div>
                   <p className="text-muted-foreground text-xs">
-                    {formatDistanceToNow(new Date(activity.timestamp), {
+                    {formatDistanceToNow(parseISO(activity.timestamp), {
                       addSuffix: true,
                       locale: es,
                     })}

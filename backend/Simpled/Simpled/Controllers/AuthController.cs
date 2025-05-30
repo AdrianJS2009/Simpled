@@ -30,6 +30,9 @@ namespace Simpled.Controllers
             if (result == null)
                 return Unauthorized("Credenciales inválidas");
 
+            if (result.IsBanned)
+                return StatusCode(403, "Usuario baneado");
+
             return Ok(new
             {
                 token = result.Token,
@@ -77,6 +80,7 @@ namespace Simpled.Controllers
             var email = authResult.Principal.FindFirstValue(ClaimTypes.Email)!;
             var name = authResult.Principal.FindFirstValue(ClaimTypes.Name) ?? string.Empty;
             var key = authResult.Principal.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            var imageUrl = authResult.Principal.FindFirst("picture")?.Value ?? string.Empty;
 
 
             var dto = new ExternalLoginDto
@@ -84,7 +88,8 @@ namespace Simpled.Controllers
                 Provider = provider,
                 ProviderKey = key,
                 Email = email,
-                Name = name
+                Name = name,
+                ImageUrl = imageUrl
             };
             var loginResult = await _authService.ExternalLoginAsync(dto);
 

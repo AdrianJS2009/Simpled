@@ -103,9 +103,9 @@ export default function BoardInviteModal({ boardId, onClose, onInvited }: Props)
                 <SelectValue placeholder="Selecciona un rol" />
               </SelectTrigger>
               <SelectContent className="z-[1200]">
-                <SelectItem value="viewer">Viewer (Solo ver)</SelectItem>
+                <SelectItem value="viewer">Visualizador (Solo ver)</SelectItem>
                 <SelectItem value="editor">Editor (Puede editar tareas)</SelectItem>
-                <SelectItem value="admin">Admin (Control total)</SelectItem>
+                <SelectItem value="admin">Administrador (Control total)</SelectItem>
               </SelectContent>
             </Select>
           </div>

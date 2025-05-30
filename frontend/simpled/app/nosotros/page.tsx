@@ -1,4 +1,5 @@
 import Banner from '@/components/Banner';
+import StatCard from '@/components/StatCard';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -10,7 +11,7 @@ export default function AboutPage() {
   return (
     <main className="flex min-h-screen flex-col">
       <Banner className="bg-gradient-to-r from-indigo-600 to-purple-600">
-        <h1 className="mb-6 text-4xl font-bold md:text-5xl">Conoce a Simpled</h1>
+        <h1 className="mb-6 text-4xl font-bold md:text-5xl">Conoce a Simpled.</h1>
         <p className="mx-auto mb-8 max-w-3xl text-lg md:text-xl">
           Descubre nuestra historia, misión y el equipo detrás de la plataforma que está
           transformando la gestión de proyectos colaborativos.
@@ -61,7 +62,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
             <ValueCard
               icon={<Lightbulb className="h-10 w-10 text-indigo-500" />}
               title="Innovación"
@@ -101,13 +102,13 @@ export default function AboutPage() {
             <TimelineItem
               year="2020"
               title="Los inicios"
-              description="Simpled nace como una idea para resolver los problemas de organización que enfrentábamos en nuestros propios proyectos."
+              description="Simpled. nace como una idea para resolver los problemas de organización que enfrentábamos en nuestros propios proyectos."
               isLeft={true}
             />
             <TimelineItem
               year="2021"
               title="Primer lanzamiento"
-              description="Lanzamos la primera versión de Simpled, con funcionalidades básicas de gestión de tableros y tareas."
+              description="Lanzamos la primera versión de Simpled., con funcionalidades básicas de gestión de tableros y tareas."
               isLeft={false}
             />
             <TimelineItem
@@ -136,14 +137,14 @@ export default function AboutPage() {
         <div className="container mx-auto max-w-6xl">
           <div className="mb-16 text-center">
             <Badge className="mb-4">Nuestro Equipo</Badge>
-            <h2 className="mb-4 text-3xl font-bold">Las personas detrás de Simpled</h2>
+            <h2 className="mb-4 text-3xl font-bold">Las personas detrás de Simpled.</h2>
             <p className="text-muted-foreground mx-auto max-w-3xl text-lg">
               Un grupo diverso de profesionales apasionados por crear herramientas que mejoren la
               forma en que trabajamos.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
             <TeamMemberCard
               name="Adrián Jiménez Santiago"
               role="CEO & Co-fundador"
@@ -236,11 +237,7 @@ interface TimelineItemProps {
 
 function TimelineItem({ year, title, description, isLeft }: Readonly<TimelineItemProps>) {
   return (
-    <div
-      className={`flex flex-col md:flex-row ${
-        isLeft ? 'md:flex-row' : 'md:flex-row-reverse'
-      } items-center`}
-    >
+    <div className={`flex flex-col ${isLeft ? 'md:flex-row' : 'md:flex-row-reverse'} items-center`}>
       <div className="flex justify-center p-4 md:w-1/2">
         <div className="rounded-lg bg-indigo-500 px-6 py-3 text-2xl font-bold text-white shadow-lg">
           {year}
@@ -255,21 +252,5 @@ function TimelineItem({ year, title, description, isLeft }: Readonly<TimelineIte
         </Card>
       </div>
     </div>
-  );
-}
-
-interface StatCardProps {
-  readonly number: string;
-  readonly label: string;
-}
-
-function StatCard({ number, label }: StatCardProps) {
-  return (
-    <Card className="border-none text-center shadow-md">
-      <CardContent className="p-6">
-        <p className="mb-2 text-4xl font-bold text-indigo-500">{number}</p>
-        <p className="text-muted-foreground text-lg">{label}</p>
-      </CardContent>
-    </Card>
   );
 }

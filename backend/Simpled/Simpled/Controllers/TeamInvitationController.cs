@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.SignalR;
 using Simpled.Dtos.TeamInvitations;
 using Simpled.Hubs;
 using Simpled.Repository;
+using Simpled.Services;
 
 namespace Simpled.Controllers
 {
@@ -19,15 +20,18 @@ namespace Simpled.Controllers
         private readonly ITeamInvitationRepository _invService;
         private readonly ITeamRepository _teamRepo;
         private readonly IHubContext<BoardHub> _hub;
+        private readonly SseInvitationBroadcastService _sseBroadcast;
 
         public TeamInvitationsController(
             ITeamInvitationRepository invService,
             ITeamRepository teamRepo,
-            IHubContext<BoardHub> hub)
+            IHubContext<BoardHub> hub,
+            SseInvitationBroadcastService sseBroadcast)
         {
             _invService = invService;
             _teamRepo = teamRepo;
             _hub = hub;
+            _sseBroadcast = sseBroadcast;
         }
 
         private Guid CurrentUserId =>
@@ -68,6 +72,18 @@ namespace Simpled.Controllers
                 role = "viewer",
                 invitationToken = inv.Token
             });
+
+            // Notificación SSE
+            var invitationDto = new Simpled.Dtos.TeamInvitations.TeamInvitationReadDto
+            {
+                Id = inv.Id,
+                TeamId = inv.TeamId,
+                TeamName = team.Name,
+                Token = inv.Token,
+                Accepted = inv.Accepted,
+                CreatedAt = inv.CreatedAt
+            };
+            await _sseBroadcast.BroadcastInvitationAsync(dto.Email.ToLower(), invitationDto, "team");
 
             return Ok("Invitación enviada.");
         }

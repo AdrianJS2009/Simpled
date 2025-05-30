@@ -22,7 +22,7 @@ export function ProjectOverview({ boards }: ProjectOverviewProps) {
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
+      <CardHeader className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div>
           <CardTitle>Resumen de Proyectos</CardTitle>
           <CardDescription>Estado actual de tus tableros y proyectos</CardDescription>

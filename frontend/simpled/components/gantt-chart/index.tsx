@@ -230,7 +230,7 @@ export function GanttChart({ boardId, className }: GanttChartProps) {
     <Card className={cn('w-full', className)}>
       <CardHeader className="pb-3">
         <div className="flex flex-col gap-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center">
             <div>
               <CardTitle>Diagrama de Gantt</CardTitle>
               <CardDescription>Visualización de tareas y cronograma del proyecto</CardDescription>
@@ -254,7 +254,7 @@ export function GanttChart({ boardId, className }: GanttChartProps) {
             goToToday={goToToday}
             setDateRange={setDateRange}
           />
-          <div className="mb-4 flex flex-wrap items-center gap-4 text-sm">
+          <div className="mb-4 flex flex-wrap items-center gap-4 text-xs sm:text-sm">
             <div className="font-medium">Tipos de dependencias:</div>
             <div className="flex items-center gap-2">
               <div className="h-1 w-6 bg-blue-500"></div>

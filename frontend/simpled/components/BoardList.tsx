@@ -1,6 +1,6 @@
 'use client';
 import { useBoards } from '@/contexts/BoardsContext';
-import { Search, SortAsc, SortDesc } from 'lucide-react';
+import { Layers, Search, SortAsc, SortDesc } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import BoardCard from './BoardCard';
 import { Button } from './ui/button';
@@ -43,13 +43,13 @@ export default function BoardList() {
 
   if (loading)
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex min-h-[200px] items-center justify-center">
         <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-blue-600"></div>
       </div>
     );
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-[200px]">
       <div className="mb-6 flex flex-col items-center gap-4 sm:flex-row">
         <div className="relative flex-1">
           <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
@@ -76,11 +76,13 @@ export default function BoardList() {
       </div>
 
       {filteredBoards.length === 0 ? (
-        <div className="rounded-lg border border-dashed py-12 text-center">
-          <p className="text-muted-foreground">
+        <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-12 text-center">
+          <Layers className="mb-4 h-16 w-16 text-gray-400" />
+          <h2 className="mb-2 text-xl font-semibold">No tienes tableros</h2>
+          <p className="text-muted-foreground mb-6 max-w-md">
             {searchTerm
               ? 'No se encontraron tableros que coincidan con tu búsqueda.'
-              : 'No tienes tableros todavía.'}
+              : 'Crea tu primer tablero para comenzar a organizar tus proyectos y tareas.'}
           </p>
         </div>
       ) : (

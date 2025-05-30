@@ -1,5 +1,4 @@
-﻿
-using Simpled.Dtos.Users;
+﻿using Simpled.Dtos.Users;
 
 namespace Simpled.Repository
 {
@@ -43,5 +42,31 @@ namespace Simpled.Repository
         /// <param name="id">Identificador del usuario a eliminar.</param>
         /// <returns><c>true</c> si la eliminación fue exitosa; en caso contrario, <c>false</c>.</returns>
         Task<bool> DeleteAsync(Guid id);
+
+        /// <summary>
+        /// Cambia el rol global de un usuario (admin, editor, viewer).
+        /// </summary>
+        /// <param name="userId">ID del usuario.</param>
+        /// <param name="role">Nuevo rol global a asignar.</param>
+        /// <returns>True si la operación fue exitosa.</returns>
+        Task<bool> ChangeUserRoleAsync(Guid userId, string role);
+
+        /// <summary>
+        /// Banea o desbanea a un usuario globalmente. Si el usuario está baneado, no podrá acceder a la aplicación.
+        /// </summary>
+        /// <param name="userId">ID del usuario.</param>
+        /// <param name="isBanned">True para banear, false para desbanear.</param>
+        /// <returns>True si la operación fue exitosa.</returns>
+        Task<bool> SetUserBannedAsync(Guid userId, bool isBanned);
+
+        /// <summary>
+        /// Obtiene estadísticas del usuario para el dashboard.
+        /// </summary>
+        Task<UserStatsDto> GetUserStatsAsync(Guid userId);
+
+        /// <summary>
+        /// Obtiene la actividad reciente del usuario para el dashboard.
+        /// </summary>
+        Task<List<UserActivityDto>> GetUserRecentActivityAsync(Guid userId);
     }
 }

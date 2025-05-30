@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Simpled.Models.Enums;
 
 namespace Simpled.Models
 {
@@ -38,6 +39,12 @@ namespace Simpled.Models
         /// Fecha de creación de la cuenta (UTC).
         /// </summary>
         public DateTime CreatedAt { get; set; }
+
+        /// <summary>
+        /// Rol asociado al usuario en la web.
+        /// </summary>
+        [Required]
+        public UserWebRoles WebRole { get; set; } = UserWebRoles.User;
 
         /// <summary>
         /// Roles asociados al usuario.
@@ -83,6 +90,21 @@ namespace Simpled.Models
         /// Equipos de los que el usuario es miembro.
         /// </summary>
         public List<TeamMember> TeamMembers { get; set; } = new();
+
+        /// <summary>
+        /// Indica si el usuario está baneado globalmente. Si es true, el usuario no podrá acceder a la aplicación.
+        /// </summary>
+        public bool IsBanned { get; set; } = false;
+
+        /// <summary>
+        /// Indica si el usuario es externo (OAuth).
+        /// </summary>
+        public bool IsExternal { get; set; } = false;
+
+        /// <summary>
+        /// Proveedor externo (Google, GitHub, etc), si aplica.
+        /// </summary>
+        public string? Provider { get; set; }
     }
 
 }

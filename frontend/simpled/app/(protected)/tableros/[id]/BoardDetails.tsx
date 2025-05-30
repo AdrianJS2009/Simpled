@@ -1,9 +1,17 @@
 'use client';
 
+import BoardMembersList from '@/components/BoardMembersList';
 import ColumnCreateModal from '@/components/ColumnCreateModal';
 import ColumnEditModal from '@/components/ColumnEditModal';
 import ItemCreateModal from '@/components/ItemCreateModal';
 import ItemEditModal from '@/components/ItemEditModal';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { useAuth } from '@/contexts/AuthContext';
 import { BookUser, Lock, LockOpen, PenLine, Plus, UserPlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -156,6 +164,29 @@ export default function BoardDetails({ boardId }: Readonly<{ boardId: string }>)
           >
             <UserPlus className="mr-1 inline-block h-4 w-4" /> Invitar usuarios
           </button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <button
+                className="rounded border border-neutral-700 bg-neutral-800 px-3 py-2 text-white hover:bg-neutral-700"
+                title="Gestionar miembros del tablero"
+              >
+                <BookUser className="mr-1 inline-block h-4 w-4" /> Gestionar miembros
+              </button>
+            </DialogTrigger>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle>Gestión de miembros</DialogTitle>
+              </DialogHeader>
+              <BoardMembersList
+                members={members}
+                users={users}
+                currentUserRole={userRole}
+                boardId={boardId}
+                onRoleUpdated={fetchData}
+                onMemberRemoved={fetchData}
+              />
+            </DialogContent>
+          </Dialog>
         </div>
       )}
 
