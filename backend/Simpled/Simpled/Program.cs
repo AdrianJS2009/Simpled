@@ -29,11 +29,15 @@ var builder = WebApplication.CreateBuilder(args);
         builder.Configuration.GetConnectionString("DefaultConnection")
     )
 ); */
+// builder.Services.AddDbContext<SimpledDbContext>(options =>
+//     options.UseMySql(
+//         builder.Configuration.GetConnectionString("DefaultConnection"),
+//         new MySqlServerVersion(new Version(8, 0, 36))
+//     ));
+var connectionString = "Server=bd.simpled.es;Database=simpled;User Id=simpled_user;Password=12345;";
 builder.Services.AddDbContext<SimpledDbContext>(options =>
-    options.UseMySql(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        new MySqlServerVersion(new Version(8, 0, 36))
-    ));
+    options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 36))));
+
 
 
 // --------------------------------------------------
