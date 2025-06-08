@@ -31,8 +31,7 @@ import { Check, Loader2, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import SubtaskList from './SubtaskList';
-
-const API = process.env.NEXT_PUBLIC_API_URL ?? 'https://localhost:7177';
+import { API_URL as API } from '@/next.config';
 
 type Props = Readonly<{
   item: Item;

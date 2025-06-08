@@ -39,9 +39,7 @@ import ItemCreateModal from './ItemCreateModal';
 import ItemEditModal from './ItemEditModal';
 import KanbanColumn from './KanbanColumn';
 import KanbanItem from './KanbanItem';
-
-const API = 'https://localhost:7177';
-
+import { API_URL as API } from '@/next.config';
 // Helper functions for subtask, column, and item updates
 function addSubtaskToItem(items: Item[], payload: any): Item[] {
   return items.map((item) => {

@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { useAuth } from './AuthContext';
-
+import { API_URL as API } from '@/next.config';
 export type BoardInvite = {
   id: string;
   boardId: string;
@@ -35,7 +35,6 @@ export const InvitationsProvider = ({ children }: { children: React.ReactNode })
   const [boardInvites, setBoardInvites] = useState<BoardInvite[]>([]);
   const [teamInvites, setTeamInvites] = useState<TeamInvite[]>([]);
   const [loading, setLoading] = useState(true);
-  const API = 'https://localhost:7177';
 
   // Refresca la lista de invitaciones
   const fetchInvites = useCallback(async () => {

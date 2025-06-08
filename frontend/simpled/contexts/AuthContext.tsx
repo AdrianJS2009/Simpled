@@ -1,10 +1,9 @@
 'use client';
+import { API_URL } from '@/next.config';
 import { useRouter } from 'next/navigation';
 import type React from 'react';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
-
-const API_URL = 'https://localhost:7177';
 
 type User = {
   id: string | null;

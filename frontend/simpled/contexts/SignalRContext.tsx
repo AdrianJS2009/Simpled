@@ -4,6 +4,7 @@ import * as signalR from '@microsoft/signalr';
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useAuth } from './AuthContext';
+import { API_URL } from '@/next.config';
 
 type SignalRContextType = {
   connection: signalR.HubConnection | null;
@@ -80,7 +81,7 @@ export const SignalRProvider = ({ children }: { children: React.ReactNode }) => 
     if (connection) return;
 
     const conn = new signalR.HubConnectionBuilder()
-      .withUrl('https://localhost:7177/hubs/board', {
+      .withUrl(`${API_URL}/hubs/board`, {
         accessTokenFactory: () => auth.token!,
       })
       .withAutomaticReconnect()

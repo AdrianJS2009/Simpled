@@ -9,9 +9,8 @@ import { TaskDistribution } from '@/components/dashboard/task-distribution';
 import { TaskProgressChart } from '@/components/dashboard/task-progress-chart';
 import { useAuth } from '@/contexts/AuthContext';
 import { useBoards } from '@/contexts/BoardsContext';
+import { API_URL } from '@/next.config';
 import { useEffect, useState } from 'react';
-
-const API_URL = 'https://localhost:7177';
 
 export default function DashboardPage() {
   const { auth, userData } = useAuth();

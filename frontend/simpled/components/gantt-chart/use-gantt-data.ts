@@ -3,9 +3,7 @@
 import { addDays } from 'date-fns';
 import { useEffect, useState } from 'react';
 import type { Dependency, Task } from './index';
-
-// URL base de la API
-const API_URL = 'https://localhost:7177';
+import { API_URL } from '@/next.config';
 
 type Auth = { token: string | null; id: string | null };
 

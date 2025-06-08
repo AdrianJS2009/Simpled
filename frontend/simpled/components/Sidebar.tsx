@@ -1,5 +1,5 @@
 'use client';
-
+import { API_URL as API } from '@/next.config';
 import {
   Accordion,
   AccordionContent,
@@ -24,8 +24,6 @@ import { useBoards } from '@/contexts/BoardsContext';
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useParams, useRouter } from 'next/navigation';
-
-const API = 'https://localhost:7177';
 
 const Sidebar = () => {
   const { auth } = useAuth();

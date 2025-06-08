@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/contexts/AuthContext';
+import { API_URL } from '@/next.config';
 import type { Comment } from '@/types';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -134,7 +135,7 @@ export function CommentSection({
                           comment.userImageUrl
                             ? comment.userImageUrl.startsWith('http')
                               ? comment.userImageUrl
-                              : `https://localhost:7177${comment.userImageUrl}`
+                              : `${API_URL}${comment.userImageUrl}`
                             : '/images/default/avatar-default.jpg'
                         }
                         alt={comment.userName}
@@ -248,7 +249,7 @@ export function CommentSection({
               userData?.imageUrl
                 ? userData.imageUrl.startsWith('http')
                   ? userData.imageUrl
-                  : `https://localhost:7177${userData.imageUrl}`
+                  : `${API_URL}${userData.imageUrl}`
                 : '/images/default/avatar-default.jpg'
             }
             alt={userData?.name || 'U'}

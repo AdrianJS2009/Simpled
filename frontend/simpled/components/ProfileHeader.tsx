@@ -3,10 +3,9 @@
 import EditProfileModal from '@/components/EditProfileModal';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { API_URL } from '@/next.config';
 import Image from 'next/image';
 import { useState } from 'react';
-
-const API_URL = 'https://localhost:7177';
 
 interface User {
   id: string;

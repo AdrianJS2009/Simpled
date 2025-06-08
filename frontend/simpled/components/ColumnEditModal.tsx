@@ -4,8 +4,7 @@ import { motion } from 'framer-motion';
 import type React from 'react';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-
-const API = 'https://localhost:7177';
+import { API_URL as API } from '@/next.config';
 
 export default function ColumnEditModal({
   columnId,
