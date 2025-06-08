@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5193';
+import { API_URL } from '@/next.config';
 
 export async function updateBoardMemberRole({
   boardId,

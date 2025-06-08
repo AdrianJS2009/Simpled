@@ -2,8 +2,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useAuth } from './AuthContext';
-
-const API_URL = 'http://localhost:5193';
+import { API_URL } from '@/next.config';
 
 export type Board = {
   id: string;

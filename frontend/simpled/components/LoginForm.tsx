@@ -15,15 +15,46 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
   const [password, setPassword] = useState('');
   const [keepUserLoggedIn, setKeepUserLoggedIn] = useState(false);
   const { loginUser, externalLogin } = useAuth();
+  const [banned, setBanned] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await loginUser(email, password, keepUserLoggedIn);
-    } catch (error) {
-      console.error('Error al iniciar sesión:', error);
+    } catch (error: any) {
+      if (error && error.banned) {
+        setBanned(true);
+      }
     }
   };
+
+  if (banned) {
+    return (
+      <div className={cn('flex flex-col gap-6', className)} {...props}>
+        <Card>
+          <CardHeader>
+            <CardTitle>Cuenta baneada</CardTitle>
+            <CardDescription>
+              Tu cuenta ha sido baneada y no puedes acceder a la plataforma.
+              <br />
+              Si crees que esto es un error, contacta con un administrador.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col items-center gap-4">
+              <span className="text-6xl">🚫</span>
+              <a href="mailto:admin@admin.es" className="text-blue-600 underline">
+                Contactar administrador
+              </a>
+              <a href="/login" className="text-muted-foreground text-sm underline">
+                Volver a intentar iniciar sesión
+              </a>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>

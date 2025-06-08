@@ -1,6 +1,5 @@
+import { API_URL } from '@/next.config';
 import type { Comment } from '@/types';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5193';
 
 export async function fetchComments(itemId: string, token: string): Promise<Comment[]> {
   const res = await fetch(`${API_URL}/api/items/${itemId}/comments`, {

@@ -17,6 +17,7 @@ import {
 
 import { AuthProvider } from '@/contexts/AuthContext';
 import { BoardsProvider } from '@/contexts/BoardsContext';
+import { InvitationsProvider } from '@/contexts/InvitationsContext';
 import { SignalRProvider } from '@/contexts/SignalRContext';
 import { TeamsProvider } from '@/contexts/TeamsContext';
 
@@ -71,55 +72,57 @@ export default function RootLayout({ children }: { readonly children: React.Reac
     <html lang="es" suppressHydrationWarning>
       <body className={`${figtree.variable} flex min-h-screen flex-col antialiased`}>
         <AuthProvider>
-          <BoardsProvider>
-            <TeamsProvider>
-              <SignalRProvider>
-                <ToastContainer
-                  position="top-right"
-                  autoClose={3000}
-                  hideProgressBar={false}
-                  newestOnTop
-                  closeOnClick
-                  rtl={false}
-                  pauseOnFocusLoss
-                  draggable
-                  pauseOnHover
-                  theme="light"
-                  transition={Bounce}
-                  className="toast-container"
-                />
+          <InvitationsProvider>
+            <BoardsProvider>
+              <TeamsProvider>
+                <SignalRProvider>
+                  <ToastContainer
+                    position="top-right"
+                    autoClose={3000}
+                    hideProgressBar={false}
+                    newestOnTop
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                    transition={Bounce}
+                    className="toast-container"
+                  />
 
-                <Navbar />
-                <main className="container mx-auto flex-1 p-4">{children}</main>
-                <Footer />
+                  <Navbar />
+                  <main className="container mx-auto flex-1 p-4">{children}</main>
+                  <Footer />
 
-                <Dialog open={showCheatsheet} onOpenChange={setShowCheatsheet}>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Atajos de teclado</DialogTitle>
-                      <DialogDescription>
-                        Lista de combinaciones con <kbd>Alt</kbd>:
-                      </DialogDescription>
-                    </DialogHeader>
-                    <ul className="mt-4 list-inside list-disc space-y-2 text-sm">
-                      <li>
-                        <kbd>Alt + !</kbd>: Ir al inicio
-                      </li>
-                      <li>
-                        <kbd>Alt + "</kbd>: Sobre nosotros
-                      </li>
-                      <li>
-                        <kbd>Alt + /</kbd>: Mostrar este menú
-                      </li>
-                    </ul>
-                    <button className="mt-4" onClick={() => setShowCheatsheet(false)}>
-                      Cerrar
-                    </button>
-                  </DialogContent>
-                </Dialog>
-              </SignalRProvider>
-            </TeamsProvider>
-          </BoardsProvider>
+                  <Dialog open={showCheatsheet} onOpenChange={setShowCheatsheet}>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Atajos de teclado</DialogTitle>
+                        <DialogDescription>
+                          Lista de combinaciones con <kbd>Alt</kbd>:
+                        </DialogDescription>
+                      </DialogHeader>
+                      <ul className="mt-4 list-inside list-disc space-y-2 text-sm">
+                        <li>
+                          <kbd>Alt + !</kbd>: Ir al inicio
+                        </li>
+                        <li>
+                          <kbd>Alt + "</kbd>: Sobre nosotros
+                        </li>
+                        <li>
+                          <kbd>Alt + /</kbd>: Mostrar este menú
+                        </li>
+                      </ul>
+                      <button className="mt-4" onClick={() => setShowCheatsheet(false)}>
+                        Cerrar
+                      </button>
+                    </DialogContent>
+                  </Dialog>
+                </SignalRProvider>
+              </TeamsProvider>
+            </BoardsProvider>
+          </InvitationsProvider>
         </AuthProvider>
       </body>
     </html>

@@ -1,10 +1,9 @@
 'use client';
 
 import { useAuth } from '@/contexts/AuthContext';
+import { API_URL } from '@/next.config';
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
-
-const API_URL = 'http://localhost:5193';
 
 export type Team = {
   id: string;

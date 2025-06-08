@@ -10,14 +10,16 @@ import {
 } from '@/components/ui/select';
 import { useAuth } from '@/contexts/AuthContext';
 import { User } from '@/types';
+import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { deleteBoardMember, updateBoardMemberRole } from '../services/boardMemberService';
+import { API_URL as API } from '@/next.config';
 
 const ROLES = [
-  { value: 'admin', label: 'Admin' },
+  { value: 'admin', label: 'Administrador' },
   { value: 'editor', label: 'Editor' },
-  { value: 'viewer', label: 'Lector' },
+  { value: 'viewer', label: 'Visualizador' },
 ];
 
 const getRoleBadgeColor = (role: string) => {
@@ -95,15 +97,25 @@ export default function BoardMembersList({
                     user?.imageUrl
                       ? user.imageUrl.startsWith('http')
                         ? user.imageUrl
-                        : `http://localhost:5193${user.imageUrl}`
+                        : `${API}${user.imageUrl}`
                       : '/images/default/avatar-default.jpg'
                   }
                   alt={user?.name}
                   className="h-8 w-8 rounded-full border object-cover"
                 />
-                <span className="min-w-0 flex-1 truncate font-medium text-gray-900 dark:text-gray-100">
-                  {user?.name || m.userId}
-                </span>
+                {user?.id && (
+                  <Link
+                    href={`/perfil/${user.id}`}
+                    className="min-w-0 flex-1 truncate font-medium text-gray-900 hover:text-blue-700 hover:underline dark:text-gray-100"
+                  >
+                    {user.name || m.userId}
+                  </Link>
+                )}
+                {!user?.id && (
+                  <span className="min-w-0 flex-1 truncate font-medium text-gray-900 dark:text-gray-100">
+                    {m.userId}
+                  </span>
+                )}
                 <span className="flex items-center gap-2">
                   {currentUserRole === 'admin' && m.role !== 'owner' ? (
                     <Select

@@ -141,6 +141,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
 .gantt-container {
   overflow-x: auto;
   max-width: 100%;
+  -webkit-overflow-scrolling: touch;
 }
 
 .gantt-task-bar {
@@ -312,4 +313,39 @@ input[type='date']::-webkit-calendar-picker-indicator {
 
 .dark .scrollbar-thin::-webkit-scrollbar-thumb:hover {
   background-color: rgba(255, 255, 255, 0.4);
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+}
+
+@media (max-width: 640px) {
+  h1 {
+    font-size: 1.75rem;
+  }
+  h2 {
+    font-size: 1.5rem;
+  }
+  h3 {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .Toastify__toast-container {
+    width: 90%;
+    padding: 0;
+    left: 5%;
+    margin: 0;
+  }
 }

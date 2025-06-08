@@ -4,8 +4,7 @@ import { motion } from 'framer-motion';
 import type React from 'react';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-
-const API = 'http://localhost:5193';
+import { API_URL as API } from '@/next.config';
 
 export default function ColumnEditModal({
   columnId,
@@ -45,7 +44,6 @@ export default function ColumnEditModal({
 
       if (!res.ok) throw new Error('Error al actualizar la columna.');
 
-      toast.success('Columna actualizada.');
       onUpdated();
       onClose();
     } catch (err) {

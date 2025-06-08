@@ -49,11 +49,17 @@ namespace Simpled.Services
                             .Select(m => m.Role)
                             .FirstOrDefault()
                         : null,
-                    IsFavorite = userId != null &&
-                    _context.FavoriteBoards
-                        .Any(f => f.BoardId == b.Id && f.UserId == userId)
                 })
                 .ToListAsync();
+
+            if (userId != null)
+            {
+                foreach (var board in boards)
+                {
+                    board.IsFavorite = await _context.FavoriteBoards
+                        .AnyAsync(f => f.BoardId == board.Id && f.UserId == userId);
+                }
+            }
 
             return boards;
         }
@@ -77,8 +83,8 @@ namespace Simpled.Services
                 Name = b.Name,
                 OwnerId = b.OwnerId,
                 IsPublic = b.IsPublic,
-                IsFavorite = _context.FavoriteBoards
-                                .Any(f => f.BoardId == b.Id && f.UserId == userId)
+                IsFavorite = await _context.FavoriteBoards
+                                .AnyAsync(f => f.BoardId == b.Id && f.UserId == userId)
             };
         }
 

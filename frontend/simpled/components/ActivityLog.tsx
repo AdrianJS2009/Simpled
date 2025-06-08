@@ -7,6 +7,7 @@ import { formatDistanceToNow, isValid } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { CheckCircle2, Clock, Edit, MessageSquare, Tag, Trash2, UserPlus } from 'lucide-react';
 import React from 'react';
+import { API_URL as API } from '@/next.config';
 
 type ActivityLog = ActivityLogBase & {
   oldValueName?: string;
@@ -193,7 +194,7 @@ export const ActivityLogComponent: React.FC<ActivityLogProps> = ({ logs, users }
                       log.userAvatarUrl
                         ? log.userAvatarUrl.startsWith('http')
                           ? log.userAvatarUrl
-                          : `http://localhost:5193${log.userAvatarUrl}`
+                          : `${API}${log.userAvatarUrl}`
                         : '/images/default/avatar-default.jpg'
                     }
                     alt={log.userName}

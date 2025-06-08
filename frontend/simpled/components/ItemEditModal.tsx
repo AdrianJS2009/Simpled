@@ -31,8 +31,7 @@ import { Check, Loader2, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import SubtaskList from './SubtaskList';
-
-const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5193';
+import { API_URL as API } from '@/next.config';
 
 type Props = Readonly<{
   item: Item;
@@ -179,7 +178,6 @@ export default function ItemEditModal({
       });
 
       if (!res.ok) throw new Error('Error al actualizar');
-      toast.success('Tarea actualizada');
       onUpdated();
       onClose();
     } catch (err) {
@@ -204,7 +202,6 @@ export default function ItemEditModal({
       if (!res.ok) throw new Error('Error al crear subtarea');
       const newSubtask = await res.json();
       setSubtasks((prev) => [...prev, newSubtask]);
-      toast.success('Subtarea añadida');
     } catch (err) {
       console.error(err);
       toast.error('Error al crear subtarea');
@@ -249,7 +246,6 @@ export default function ItemEditModal({
       });
       if (!res.ok) throw new Error('Error al eliminar subtarea');
       setSubtasks((prev) => prev.filter((st) => st.id !== subtaskId));
-      toast.success('Subtarea eliminada');
     } catch (err) {
       console.error(err);
       toast.error('Error al eliminar subtarea');

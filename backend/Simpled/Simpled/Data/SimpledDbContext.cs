@@ -165,6 +165,11 @@ namespace Simpled.Data
                 .WithOne(m => m.ChatRoom)
                 .HasForeignKey(m => m.ChatRoomId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // Índice único para el email de usuario
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
         }
     }
 }

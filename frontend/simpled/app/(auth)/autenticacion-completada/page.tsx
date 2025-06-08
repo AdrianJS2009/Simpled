@@ -25,6 +25,7 @@ export default function ExternalAuth() {
 
       const timeout = setTimeout(() => {
         router.push('/');
+        window.location.reload();
       }, 3000);
 
       return () => {

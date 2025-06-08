@@ -8,6 +8,7 @@ using Simpled.Dtos.Teams;
 using Simpled.Dtos.Teams.TeamMembers;
 using Simpled.Validators;
 using FluentValidation;
+using Simpled.Models.Enums;
 
 namespace Simpled.Services
 {
@@ -39,7 +40,11 @@ namespace Simpled.Services
                 ImageUrl = u.ImageUrl,
                 AchievementsCompleted = u.Achievements.Count,
                 CreatedAt = u.CreatedAt,
-                Roles = u.Roles.Select(r => r.Role).ToList()
+                WebRole = u.WebRole,
+                Roles = u.Roles.Select(r => r.Role).ToList(),
+                IsBanned = u.IsBanned,
+                IsExternal = u.IsExternal,
+                Provider = u.Provider
             });
         }
 
@@ -70,17 +75,18 @@ namespace Simpled.Services
             var teamDtos = memberships.Select(tm => new TeamReadDto
             {
                 Id = tm.TeamId,
-                Name = tm.Team != null ? tm.Team.Name : string.Empty,
-                OwnerId = tm.Team != null ? tm.Team.OwnerId : Guid.Empty,
-                OwnerName = tm.Team != null && tm.Team.Owner != null ? tm.Team.Owner.Name : string.Empty,
+                Name = tm.Team?.Name ?? string.Empty,
+                OwnerId = tm.Team?.OwnerId ?? Guid.Empty,
+                OwnerName = tm.Team?.Owner?.Name ?? string.Empty,
                 Role = tm.Role,
-                Members = tm.Team != null && tm.Team.Members != null ?
-                    tm.Team.Members.Select(m => new TeamMemberDto
+                Members = tm.Team?.Members != null
+                    ? tm.Team.Members.Select(m => new TeamMemberDto
                     {
                         UserId = m.UserId,
-                        UserName = m.User != null ? m.User.Name : string.Empty,
+                        UserName = m.User?.Name ?? string.Empty,
                         Role = m.Role
-                    }) : new List<TeamMemberDto>()
+                    })
+                    : new List<TeamMemberDto>()
             });
 
             return new UserReadDto
@@ -91,8 +97,12 @@ namespace Simpled.Services
                 ImageUrl = user.ImageUrl,
                 AchievementsCompleted = user.Achievements.Count,
                 CreatedAt = user.CreatedAt,
+                WebRole = user.WebRole,
                 Roles = user.Roles.Select(r => r.Role).ToList(),
-                Teams = teamDtos.ToList()
+                Teams = teamDtos.ToList(),
+                IsBanned = user.IsBanned,
+                IsExternal = user.IsExternal,
+                Provider = user.Provider
             };
         }
 
@@ -108,6 +118,8 @@ namespace Simpled.Services
             var validationResult = validator.Validate(userDto);
             if (!validationResult.IsValid)
                 throw new ApiException(validationResult.Errors[0].ErrorMessage, 400);
+            if (await _context.Users.AnyAsync(u => u.Email == userDto.Email))
+                throw new ApiException("Ya existe un usuario con ese correo.", 409);
             var user = new User
             {
                 Id = Guid.NewGuid(),
@@ -115,6 +127,7 @@ namespace Simpled.Services
                 Email = userDto.Email,
                 CreatedAt = DateTime.UtcNow,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(userDto.Password),
+                WebRole = UserWebRoles.User,
                 Roles = new List<UserRole>(),
                 ImageUrl = "/images/default/avatar-default.jpg"
             };
@@ -161,8 +174,11 @@ namespace Simpled.Services
                 Name = user.Name,
                 Email = user.Email,
                 CreatedAt = user.CreatedAt,
+                WebRole = user.WebRole,
                 Roles = user.Roles.Select(r => r.Role).ToList(),
                 ImageUrl = user.ImageUrl,
+                IsExternal = user.IsExternal,
+                Provider = user.Provider
             };
         }
 
@@ -183,11 +199,19 @@ namespace Simpled.Services
             if (existing == null)
                 throw new NotFoundException("Usuario no encontrado.");
 
-            existing.Email = userDto.Email;
-            existing.Name = userDto.Name;
-
-            await ActualizarPasswordSiEsNecesario(existing, userDto.Password);
-            await ActualizarImagenUsuario(existing, userDto.ImageUrl, image);
+            if (existing.IsExternal)
+            {
+                // Solo permite cambiar nombre e imagen
+                existing.Name = userDto.Name;
+                await ActualizarImagenUsuario(existing, userDto.ImageUrl, image);
+            }
+            else
+            {
+                existing.Email = userDto.Email;
+                existing.Name = userDto.Name;
+                await ActualizarPasswordSiEsNecesario(existing, userDto.Password);
+                await ActualizarImagenUsuario(existing, userDto.ImageUrl, image);
+            }
 
             await _context.SaveChangesAsync();
             return true;
@@ -263,6 +287,88 @@ namespace Simpled.Services
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        /// <summary>
+        /// Cambia el rol global de un usuario (admin, editor, viewer).
+        /// </summary>
+        /// <param name="userId">ID del usuario.</param>
+        /// <param name="role">Nuevo rol global a asignar.</param>
+        /// <returns>True si la operación fue exitosa.</returns>
+        public async Task<bool> ChangeUserRoleAsync(Guid userId, string role)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null) throw new NotFoundException("Usuario no encontrado.");
+
+            if (!Enum.TryParse<UserWebRoles>(role, true, out var parsedRole))
+                throw new ApiException("Rol no válido.", 400);
+
+            user.WebRole = parsedRole;
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        /// <summary>
+        /// Banea o desbanea a un usuario globalmente.
+        /// </summary>
+        /// <param name="userId">ID del usuario.</param>
+        /// <param name="isBanned">True para banear, false para desbanear.</param>
+        /// <returns>True si la operación fue exitosa.</returns>
+        public async Task<bool> SetUserBannedAsync(Guid userId, bool isBanned)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null) throw new NotFoundException("Usuario no encontrado.");
+            user.IsBanned = isBanned;
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<UserStatsDto> GetUserStatsAsync(Guid userId)
+        {
+            var tasks = await _context.Items.Where(i => i.AssigneeId == userId).ToListAsync();
+            var now = DateTime.UtcNow;
+            var startOfWeek = now.Date.AddDays(-(int)now.DayOfWeek + 1); // Lunes
+            var endOfWeek = startOfWeek.AddDays(7);
+            var today = now.Date;
+            return new UserStatsDto
+            {
+                TotalTasks = tasks.Count,
+                CompletedTasks = tasks.Count(t => t.Status == "completed"),
+                InProgressTasks = tasks.Count(t => t.Status == "in-progress"),
+                DelayedTasks = tasks.Count(t => t.Status == "delayed"),
+                UpcomingDeadlines = tasks.Count(t => (t.Status == "pending" || t.Status == "in-progress") && t.DueDate != null && t.DueDate > now && t.DueDate < now.AddDays(7)),
+                CompletedTasksThisWeek = tasks.Count(t => t.Status == "completed" && t.CompletedAt != null && t.CompletedAt >= startOfWeek && t.CompletedAt < endOfWeek),
+                PendingTasksToday = tasks.Count(t => (t.Status == "pending" || t.Status == "in-progress") && t.DueDate != null && t.DueDate.Value.Date == today),
+                PendingTasks = tasks.Count(t => t.Status == "pending")
+            };
+        }
+
+        public async Task<List<UserActivityDto>> GetUserRecentActivityAsync(Guid userId)
+        {
+            var activities = await _context.ActivityLogs
+                .Include(a => a.User)
+                .Include(a => a.Item)
+                    .ThenInclude(i => i.Column)
+                        .ThenInclude(c => c.Board)
+                .Where(a => a.UserId == userId)
+                .OrderByDescending(a => a.Timestamp)
+                .Take(10)
+                .ToListAsync();
+            return activities.Select(a => new UserActivityDto
+            {
+                Id = a.Id.ToString(),
+                Type = a.Action,
+                UserName = a.User != null ? a.User.Name : "",
+                UserImageUrl = a.User != null ? a.User.ImageUrl : "",
+                TaskTitle = a.Item != null ? a.Item.Title : null,
+                BoardName = a.Item?.Column?.Board != null ? a.Item.Column.Board.Name : null,
+                CommentText = a.Field == "comment" ? a.NewValue : null,
+                OldStatus = a.Field == "status" ? a.OldValue : null,
+                NewStatus = a.Field == "status" ? a.NewValue : null,
+                AssigneeName = a.Field == "assignee" ? a.NewValue : null,
+                Timestamp = a.Timestamp
+            }).ToList();
         }
     }
 }

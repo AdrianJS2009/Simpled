@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Simpled.Data;
 using Simpled.Dtos.Items;
@@ -153,6 +152,9 @@ namespace Simpled.Services
             var item = await _context.Items.FindAsync(dto.Id)
                 ?? throw new NotFoundException("Ítem no encontrado.");
 
+          
+            var wasCompleted = item.Status == "completed";
+
             item.Title = dto.Title;
             item.Description = dto.Description;
             item.StartDate = dto.StartDate;
@@ -160,6 +162,12 @@ namespace Simpled.Services
             item.ColumnId = dto.ColumnId;
             item.Status = dto.Status;
             item.AssigneeId = dto.AssigneeId;
+
+ 
+            if (!wasCompleted && dto.Status == "completed")
+                item.CompletedAt = DateTime.UtcNow;
+            else if (wasCompleted && dto.Status != "completed")
+                item.CompletedAt = null;
 
             await _context.SaveChangesAsync();
 
@@ -193,7 +201,13 @@ namespace Simpled.Services
             var item = await _context.Items.FindAsync(id)
                 ?? throw new NotFoundException("Ítem no encontrado.");
 
+            var wasCompleted = item.Status == "completed";
             item.Status = status;
+            if (!wasCompleted && status == "completed")
+                item.CompletedAt = DateTime.UtcNow;
+            else if (wasCompleted && status != "completed")
+                item.CompletedAt = null;
+
             await _context.SaveChangesAsync();
 
             var boardId = (await GetBoardIdByItemId(id)).ToString();

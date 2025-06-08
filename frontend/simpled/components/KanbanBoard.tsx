@@ -1,6 +1,13 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSignalR } from '@/contexts/SignalRContext';
 import { fadeIn, slideUp } from '@/lib/animation-variants';
@@ -32,9 +39,7 @@ import ItemCreateModal from './ItemCreateModal';
 import ItemEditModal from './ItemEditModal';
 import KanbanColumn from './KanbanColumn';
 import KanbanItem from './KanbanItem';
-
-const API = 'http://localhost:5193';
-
+import { API_URL as API } from '@/next.config';
 // Helper functions for subtask, column, and item updates
 function addSubtaskToItem(items: Item[], payload: any): Item[] {
   return items.map((item) => {
@@ -413,7 +418,6 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
       if (!res.ok) throw new Error(await res.text());
       setColumns((p) => p.filter((c) => c.id !== colId));
       setItems((p) => p.filter((i) => i.columnId !== colId));
-      toast.success('Columna eliminada');
       showDesktopNotification('🗑️ Columna eliminada', { body: `ID: ${colId}` });
     } catch (e: any) {
       toast.error(e.message);
@@ -465,7 +469,7 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
   if (!board) return <div className="p-8 text-red-600">Tablero no encontrado</div>;
 
   return (
-    <div className="flex flex-row gap-6">
+    <div className="flex flex-col gap-6 lg:flex-row">
       <div className="min-w-0 flex-1">
         <motion.div className="mx-auto p-4" initial="hidden" animate="visible" variants={fadeIn}>
           <motion.div
@@ -518,6 +522,33 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
                   </Button>
                 </motion.div>
               )}
+              {userRole === 'admin' && (
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex items-center gap-1"
+                      title="Gestionar miembros del tablero"
+                    >
+                      <Users className="h-4 w-4" /> Gestionar miembros
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-2xl">
+                    <DialogHeader>
+                      <DialogTitle>Gestión de miembros</DialogTitle>
+                    </DialogHeader>
+                    <BoardMembersList
+                      members={members}
+                      users={users}
+                      currentUserRole={userRole}
+                      boardId={boardId}
+                      onRoleUpdated={fetchData}
+                      onMemberRemoved={fetchData}
+                    />
+                  </DialogContent>
+                </Dialog>
+              )}
               <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                 <Link href={`/tableros/${boardId}/gantt`}>
                   <Button variant="outline" size="sm" className="flex items-center gap-1">
@@ -527,20 +558,6 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
               </motion.div>
             </motion.div>
           </motion.div>
-
-          {/* Gestión de miembros y roles */}
-          {userRole === 'admin' && (
-            <div className="mb-6">
-              <BoardMembersList
-                members={members}
-                users={users}
-                currentUserRole={userRole}
-                boardId={boardId}
-                onRoleUpdated={fetchData}
-                onMemberRemoved={fetchData}
-              />
-            </div>
-          )}
 
           <DndContext
             sensors={sensors}
@@ -664,7 +681,7 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
           </AnimatePresence>
         </motion.div>
       </div>
-      <div className="flex min-h-[600px] w-[380px] flex-col border-l pl-4">
+      <div className="flex min-h-[300px] w-full flex-col border-t pt-4 lg:min-h-[600px] lg:w-[380px] lg:border-t-0 lg:border-l lg:pt-0 lg:pl-4">
         <ChatPanel
           roomType="Board"
           entityId={boardId}

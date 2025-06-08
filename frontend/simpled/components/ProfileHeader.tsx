@@ -3,10 +3,9 @@
 import EditProfileModal from '@/components/EditProfileModal';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { API_URL } from '@/next.config';
 import Image from 'next/image';
 import { useState } from 'react';
-
-const API_URL = 'http://localhost:5193';
 
 interface User {
   id: string;
@@ -14,12 +13,20 @@ interface User {
   email: string;
   imageUrl: string;
   isOnline: boolean;
+  isExternal?: boolean;
+  provider?: string;
 }
 
 interface ProfileHeaderProps {
   readonly user: User;
   readonly isOwner: boolean;
 }
+
+const getImageSrc = (imageUrl: string) => {
+  if (!imageUrl) return '/images/default/avatar-default.jpg';
+  if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) return imageUrl;
+  return `${API_URL}${imageUrl}`;
+};
 
 export default function ProfileHeader({ user, isOwner }: ProfileHeaderProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -34,15 +41,7 @@ export default function ProfileHeader({ user, isOwner }: ProfileHeaderProps) {
           <div
             className={`relative h-32 w-32 overflow-hidden rounded-full ${user.isOnline ? 'border-green-500' : 'border-gray-400'} border-2`}
           >
-            <Image
-              src={
-                `${API_URL}${user.imageUrl}` ||
-                'https://s3.amazonaws.com/comicgeeks/characters/avatars/23353.jpg'
-              }
-              alt={user.name}
-              fill
-              className="object-cover"
-            />
+            <Image src={getImageSrc(user.imageUrl)} alt={user.name} fill className="object-cover" />
           </div>
           <div
             className={`absolute right-1 bottom-1 h-4 w-4 rounded-full ${user.isOnline ? 'bg-green-500' : 'bg-gray-400'} border-2 border-white dark:border-gray-800`}

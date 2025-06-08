@@ -10,10 +10,10 @@ import {
   getOrCreateRoom,
   sendMessage,
 } from '@/services/chatService';
+import { MessageSquare, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
-
-const API_URL = 'http://localhost:5193';
+import { API_URL } from '@/next.config';
 
 interface MemberInfo {
   userId: string;
@@ -35,7 +35,10 @@ export default function ChatPanel({ roomType, entityId, members }: ChatPanelProp
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [unreadMessages, setUnreadMessages] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const lastReadMessageRef = useRef<string | null>(null);
 
   // Para mostrar "escribiendo" (opcional, si se implementa en backend)
   // const [typingUsers, setTypingUsers] = useState<string[]>([]);
@@ -52,6 +55,9 @@ export default function ChatPanel({ roomType, entityId, members }: ChatPanelProp
         const msgs = await getMessages(room.id, auth.token!);
         if (!isMounted) return;
         setMessages(msgs);
+        if (msgs.length > 0) {
+          lastReadMessageRef.current = msgs[msgs.length - 1].id;
+        }
       } catch (err) {
         toast.error('No se pudo cargar el chat');
       } finally {
@@ -82,6 +88,14 @@ export default function ChatPanel({ roomType, entityId, members }: ChatPanelProp
     const handler = (msg: ChatMessageReadDto) => {
       if (!mounted) return;
       setMessages((prev) => [...prev, msg]);
+      if (!isVisible) {
+        setUnreadMessages((prev) => prev + 1);
+        toast.info(`Nuevo mensaje de ${getUserInfo(msg.userId).name}`, {
+          toastId: `chat-msg-${msg.id}`,
+        });
+      } else {
+        lastReadMessageRef.current = msg.id;
+      }
     };
     connection.on('ReceiveMessage', handler);
     return () => {
@@ -89,7 +103,16 @@ export default function ChatPanel({ roomType, entityId, members }: ChatPanelProp
       connection.off('ReceiveMessage', handler);
       if (roomId) connection.invoke('LeaveRoom', roomId).catch(() => {});
     };
-  }, [connection, roomId, roomType, entityId]);
+  }, [connection, roomId, roomType, entityId, isVisible]);
+
+  useEffect(() => {
+    if (isVisible) {
+      setUnreadMessages(0);
+      if (messages.length > 0) {
+        lastReadMessageRef.current = messages[messages.length - 1].id;
+      }
+    }
+  }, [isVisible, messages]);
 
   // Scroll automático al final
   useEffect(() => {
@@ -121,14 +144,34 @@ export default function ChatPanel({ roomType, entityId, members }: ChatPanelProp
     return { name: 'Usuario', imageUrl: undefined };
   };
 
-  console.log(messages);
+  if (!isVisible) {
+    return (
+      <div className="fixed right-4 bottom-4 z-50">
+        <Button
+          onClick={() => setIsVisible(true)}
+          className="relative flex items-center gap-2"
+          size="lg"
+        >
+          <MessageSquare className="h-5 w-5" />
+          {unreadMessages > 0 && (
+            <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
+              {unreadMessages}
+            </span>
+          )}
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <Card className="relative flex h-full flex-col">
-      <CardHeader className="pb-2">
+      <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-lg">
           Chat {roomType === 'Team' ? 'del Equipo' : 'del Tablero'}
         </CardTitle>
+        <Button variant="ghost" size="icon" onClick={() => setIsVisible(false)} className="h-8 w-8">
+          <X className="h-4 w-4" />
+        </Button>
       </CardHeader>
       <CardContent className="mb-10 max-h-[500px] flex-1 overflow-y-scroll px-0 pb-1">
         {loading ? (

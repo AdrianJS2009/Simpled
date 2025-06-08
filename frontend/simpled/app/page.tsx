@@ -28,7 +28,7 @@ export default function Home() {
       <section id="caracteristicas" className="bg-background px-4 py-20">
         <div className="container mx-auto max-w-6xl">
           <h2 className="mb-4 text-center text-3xl font-bold md:text-4xl">
-            ¿Qué puedes hacer con Simpled?
+            ¿Qué puedes hacer con Simpled.?
           </h2>
           <p className="text-muted-foreground mx-auto mb-16 max-w-3xl text-center text-xl">
             Una plataforma completa para gestionar tus proyectos de forma eficiente y colaborativa
@@ -104,7 +104,8 @@ export default function Home() {
       <Banner className="bg-gradient-to-r from-blue-500 to-indigo-600 px-4 py-16 text-center">
         <h2 className="mb-4 text-3xl font-bold">¡Comienza a organizar tus proyectos hoy mismo!</h2>
         <p className="mb-8 text-xl">
-          Regístrate ahora y prueba todas las funciones de <b>Simpled</b>. ¡Es completamente gratis!
+          Regístrate ahora y prueba todas las funciones de <b>Simpled.</b>. ¡Es completamente
+          gratis!
         </p>
         <Button asChild size="lg" className="bg-white text-indigo-600 hover:bg-white/90">
           <a href="/registro">Regístrate</a>

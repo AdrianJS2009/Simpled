@@ -23,8 +23,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Send, X } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-
-const API = 'http://localhost:5193';
+import { API_URL as API } from '@/next.config';
 
 type Props = {
   readonly boardId: string;
@@ -103,9 +102,9 @@ export default function BoardInviteModal({ boardId, onClose, onInvited }: Props)
                 <SelectValue placeholder="Selecciona un rol" />
               </SelectTrigger>
               <SelectContent className="z-[1200]">
-                <SelectItem value="viewer">Viewer (Solo ver)</SelectItem>
+                <SelectItem value="viewer">Visualizador (Solo ver)</SelectItem>
                 <SelectItem value="editor">Editor (Puede editar tareas)</SelectItem>
-                <SelectItem value="admin">Admin (Control total)</SelectItem>
+                <SelectItem value="admin">Administrador (Control total)</SelectItem>
               </SelectContent>
             </Select>
           </div>
