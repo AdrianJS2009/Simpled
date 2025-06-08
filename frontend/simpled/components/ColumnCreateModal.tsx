@@ -50,8 +50,6 @@ export default function ColumnCreateModal({ boardId, onClose, onCreated }: Props
       });
 
       if (!res.ok) throw new Error('Error al crear la columna.');
-
-      toast.success('Columna creada correctamente.');
       onCreated();
       onClose();
     } catch (err) {

@@ -44,7 +44,6 @@ export default function ColumnEditModal({
 
       if (!res.ok) throw new Error('Error al actualizar la columna.');
 
-      toast.success('Columna actualizada.');
       onUpdated();
       onClose();
     } catch (err) {

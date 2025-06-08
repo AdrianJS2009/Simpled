@@ -26,7 +26,6 @@ export default function BoardCard({ board }: { readonly board: Board }) {
       setIsDeleting(true);
       try {
         deleteBoard(board.id);
-        toast.success('Tablero eliminado con éxito');
       } catch (error) {
         console.error('Error al eliminar el tablero:', error);
         toast.error('Error al eliminar el tablero');

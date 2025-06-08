@@ -178,7 +178,6 @@ export default function ItemEditModal({
       });
 
       if (!res.ok) throw new Error('Error al actualizar');
-      toast.success('Tarea actualizada');
       onUpdated();
       onClose();
     } catch (err) {
@@ -203,7 +202,6 @@ export default function ItemEditModal({
       if (!res.ok) throw new Error('Error al crear subtarea');
       const newSubtask = await res.json();
       setSubtasks((prev) => [...prev, newSubtask]);
-      toast.success('Subtarea añadida');
     } catch (err) {
       console.error(err);
       toast.error('Error al crear subtarea');
@@ -248,7 +246,6 @@ export default function ItemEditModal({
       });
       if (!res.ok) throw new Error('Error al eliminar subtarea');
       setSubtasks((prev) => prev.filter((st) => st.id !== subtaskId));
-      toast.success('Subtarea eliminada');
     } catch (err) {
       console.error(err);
       toast.error('Error al eliminar subtarea');

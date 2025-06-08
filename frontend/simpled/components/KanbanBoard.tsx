@@ -418,7 +418,6 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
       if (!res.ok) throw new Error(await res.text());
       setColumns((p) => p.filter((c) => c.id !== colId));
       setItems((p) => p.filter((i) => i.columnId !== colId));
-      toast.success('Columna eliminada');
       showDesktopNotification('🗑️ Columna eliminada', { body: `ID: ${colId}` });
     } catch (e: any) {
       toast.error(e.message);

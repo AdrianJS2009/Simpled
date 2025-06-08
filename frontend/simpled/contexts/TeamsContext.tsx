@@ -5,7 +5,6 @@ import { API_URL } from '@/next.config';
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 
-
 export type Team = {
   id: string;
   name: string;

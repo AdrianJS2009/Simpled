@@ -3,7 +3,6 @@
 import { API_URL } from '@/next.config';
 import type { ActivityLog } from '@/types';
 
-
 export async function fetchActivityLogs(itemId: string, token: string): Promise<ActivityLog[]> {
   const res = await fetch(`${API_URL}/api/items/${itemId}/activity`, {
     headers: {

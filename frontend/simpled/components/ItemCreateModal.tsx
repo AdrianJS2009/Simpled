@@ -105,7 +105,6 @@ export default function ItemCreateModal({
         });
       }
 
-      toast.success('Tarea creada');
       onCreated();
       onClose();
     } catch {

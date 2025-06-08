@@ -18,7 +18,6 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { API_URL as API } from '@/next.config';
 
-
 type User = {
   id: string;
   name: string;

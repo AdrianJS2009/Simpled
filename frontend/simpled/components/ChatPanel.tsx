@@ -15,7 +15,6 @@ import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { API_URL } from '@/next.config';
 
-
 interface MemberInfo {
   userId: string;
   name: string;

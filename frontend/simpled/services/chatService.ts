@@ -1,4 +1,4 @@
-import { API_URL } from "@/next.config";
+import { API_URL } from '@/next.config';
 
 // Tipos mínimos para el chat
 export type ChatRoomReadDto = {

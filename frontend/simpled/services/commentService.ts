@@ -1,7 +1,6 @@
 import { API_URL } from '@/next.config';
 import type { Comment } from '@/types';
 
-
 export async function fetchComments(itemId: string, token: string): Promise<Comment[]> {
   const res = await fetch(`${API_URL}/api/items/${itemId}/comments`, {
     headers: { Authorization: `Bearer ${token}` },
