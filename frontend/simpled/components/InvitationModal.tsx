@@ -43,7 +43,7 @@ export default function InvitationsModal({ onClose }: Props) {
     removeTeamInvite,
     refreshInvites,
   } = useInvitations();
-  const API = 'http://localhost:5193';
+  const API = 'https://localhost:7177';
 
   const handleBoard = async (token: string, action: 'accept' | 'reject') => {
     try {

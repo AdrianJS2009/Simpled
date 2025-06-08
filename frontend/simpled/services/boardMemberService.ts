@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5193';
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'https://localhost:7177';
 
 export async function updateBoardMemberRole({
   boardId,

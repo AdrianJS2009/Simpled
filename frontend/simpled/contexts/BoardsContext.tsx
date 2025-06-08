@@ -3,7 +3,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useAuth } from './AuthContext';
 
-const API_URL = 'http://localhost:5193';
+const API_URL = 'https://localhost:7177';
 
 export type Board = {
   id: string;

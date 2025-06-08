@@ -35,7 +35,7 @@ export const InvitationsProvider = ({ children }: { children: React.ReactNode })
   const [boardInvites, setBoardInvites] = useState<BoardInvite[]>([]);
   const [teamInvites, setTeamInvites] = useState<TeamInvite[]>([]);
   const [loading, setLoading] = useState(true);
-  const API = 'http://localhost:5193';
+  const API = 'https://localhost:7177';
 
   // Refresca la lista de invitaciones
   const fetchInvites = useCallback(async () => {

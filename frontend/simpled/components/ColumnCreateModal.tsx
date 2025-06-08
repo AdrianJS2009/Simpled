@@ -16,7 +16,7 @@ import { Check, X } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-const API = 'http://localhost:5193';
+const API = 'https://localhost:7177';
 
 type Props = {
   readonly boardId: string;

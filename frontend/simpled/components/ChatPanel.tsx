@@ -14,7 +14,7 @@ import { MessageSquare, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 
-const API_URL = 'http://localhost:5193';
+const API_URL = 'https://localhost:7177';
 
 interface MemberInfo {
   userId: string;
