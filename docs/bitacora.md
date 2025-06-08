@@ -118,6 +118,15 @@ Registro de tareas realizadas durante el desarrollo del proyecto **Simpled**.
 | 2025-05-27  | Elías Robles   | Cloudformation + route 53 (fase de pruebas) |
 | 2025-05-28  | Elías Robles   | Cloudformation back + front (fase de pruebas) |
 | 2025-05-28  | Elías Robles   | Cloudformation LB Externo (fase de pruebas) |
+| 2025-05-30  | Elías Robles   | Cloudformation resolucion de errores |
+| 2025-06-01  | Elías Robles   | Cloudformation no funciona aún |
+| 2025-06-02  | Elías Robles   | Cloudformation problemas con Route 53 como enrutador |
+| 2025-06-03  | Elías Robles   | Cloudformation buscando soluciones al Route 53 |
+| 2025-06-04  | Elías Robles   | Cloudformation puente entre backend y Load balancer roto |
+| 2025-06-05  | Elías Robles   | Cloudformation intento de https con certificado externo y autofirmado |
+| 2025-06-06  | Elías Robles   | Cloudformation funcionando con parametros genericos en la primera instancia y todas las configuraciones pertinentes |
+
+
 
 ---
 
