@@ -11,7 +11,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useBoards } from '@/contexts/BoardsContext';
 import { useEffect, useState } from 'react';
 
-const API_URL = 'https://localhost:7177';
+const API_URL = 'http://localhost:5193';
 
 export default function DashboardPage() {
   const { auth, userData } = useAuth();

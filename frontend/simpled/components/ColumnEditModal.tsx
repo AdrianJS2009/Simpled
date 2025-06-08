@@ -5,7 +5,7 @@ import type React from 'react';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-const API = 'https://localhost:7177';
+const API = 'http://localhost:5193';
 
 export default function ColumnEditModal({
   columnId,

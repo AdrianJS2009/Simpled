@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
 import { useState } from 'react';
 
-const API_URL = 'https://localhost:7177';
+const API_URL = 'http://localhost:5193';
 
 interface User {
   id: string;

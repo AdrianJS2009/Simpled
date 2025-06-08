@@ -40,7 +40,7 @@ import ItemEditModal from './ItemEditModal';
 import KanbanColumn from './KanbanColumn';
 import KanbanItem from './KanbanItem';
 
-const API = 'https://localhost:7177';
+const API = 'http://localhost:5193';
 
 // Helper functions for subtask, column, and item updates
 function addSubtaskToItem(items: Item[], payload: any): Item[] {

@@ -23,7 +23,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const API_URL = 'https://localhost:7177';
+const API_URL = 'http://localhost:5193';
 
 type User = {
   id: string;

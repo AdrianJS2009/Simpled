@@ -4,7 +4,7 @@ import { ArrowLeft, Trophy } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-const API = 'https://localhost:7177';
+const API = 'http://localhost:5193';
 
 type Achievement = {
   key: string;

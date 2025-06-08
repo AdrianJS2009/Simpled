@@ -4,7 +4,7 @@ import type React from 'react';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 
-const API_URL = 'https://localhost:7177';
+const API_URL = 'http://localhost:5193';
 
 type User = {
   id: string | null;
@@ -12,7 +12,7 @@ type User = {
   email: string;
   imageUrl: string;
   isOnline: boolean;
-  webRole: unknown;
+  roles: string[];
   achievementsCompleted: number;
   achievements: Achievement[];
   teams: Team[];

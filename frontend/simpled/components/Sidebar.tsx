@@ -25,7 +25,7 @@ import { useBoards } from '@/contexts/BoardsContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useParams, useRouter } from 'next/navigation';
 
-const API = 'https://localhost:7177';
+const API = 'http://localhost:5193';
 
 const Sidebar = () => {
   const { auth } = useAuth();

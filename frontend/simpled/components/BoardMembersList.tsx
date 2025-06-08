@@ -95,7 +95,7 @@ export default function BoardMembersList({
                     user?.imageUrl
                       ? user.imageUrl.startsWith('http')
                         ? user.imageUrl
-                        : `https://localhost:7177${user.imageUrl}`
+                        : `http://localhost:5193${user.imageUrl}`
                       : '/images/default/avatar-default.jpg'
                   }
                   alt={user?.name}
