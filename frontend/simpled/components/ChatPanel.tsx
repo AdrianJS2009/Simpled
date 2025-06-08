@@ -13,8 +13,7 @@ import {
 import { MessageSquare, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
-
-const API_URL = 'https://localhost:7177';
+import { API_URL } from '@/next.config';
 
 interface MemberInfo {
   userId: string;

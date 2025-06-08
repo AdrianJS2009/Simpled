@@ -1,5 +1,5 @@
 'use client';
-
+import { API_URL as API } from '@/next.config';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -43,7 +43,6 @@ export default function InvitationsModal({ onClose }: Props) {
     removeTeamInvite,
     refreshInvites,
   } = useInvitations();
-  const API = 'https://localhost:7177';
 
   const handleBoard = async (token: string, action: 'accept' | 'reject') => {
     try {

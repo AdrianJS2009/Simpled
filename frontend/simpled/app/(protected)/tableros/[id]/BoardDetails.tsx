@@ -16,8 +16,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { BookUser, Lock, LockOpen, PenLine, Plus, UserPlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-
-const API = 'https://localhost:7177';
+import { API_URL as API } from '@/next.config';
 
 type User = {
   id: string;

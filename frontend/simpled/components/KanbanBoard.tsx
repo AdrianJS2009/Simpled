@@ -39,9 +39,7 @@ import ItemCreateModal from './ItemCreateModal';
 import ItemEditModal from './ItemEditModal';
 import KanbanColumn from './KanbanColumn';
 import KanbanItem from './KanbanItem';
-
-const API = 'https://localhost:7177';
-
+import { API_URL as API } from '@/next.config';
 // Helper functions for subtask, column, and item updates
 function addSubtaskToItem(items: Item[], payload: any): Item[] {
   return items.map((item) => {
@@ -420,7 +418,6 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
       if (!res.ok) throw new Error(await res.text());
       setColumns((p) => p.filter((c) => c.id !== colId));
       setItems((p) => p.filter((i) => i.columnId !== colId));
-      toast.success('Columna eliminada');
       showDesktopNotification('🗑️ Columna eliminada', { body: `ID: ${colId}` });
     } catch (e: any) {
       toast.error(e.message);

@@ -27,8 +27,7 @@ import { Check, Loader2, Trash2, X } from 'lucide-react';
 import { nanoid } from 'nanoid';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-
-const API = 'https://localhost:7177';
+import { API_URL as API } from '@/next.config';
 
 type Props = Readonly<{
   columnId: string;
@@ -106,7 +105,6 @@ export default function ItemCreateModal({
         });
       }
 
-      toast.success('Tarea creada');
       onCreated();
       onClose();
     } catch {

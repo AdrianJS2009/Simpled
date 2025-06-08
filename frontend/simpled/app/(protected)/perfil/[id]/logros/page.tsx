@@ -3,8 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ArrowLeft, Trophy } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-
-const API = 'https://localhost:7177';
+import { API_URL as API } from '@/next.config';
 
 type Achievement = {
   key: string;

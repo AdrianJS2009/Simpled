@@ -14,6 +14,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { deleteBoardMember, updateBoardMemberRole } from '../services/boardMemberService';
+import { API_URL as API } from '@/next.config';
 
 const ROLES = [
   { value: 'admin', label: 'Administrador' },
@@ -96,7 +97,7 @@ export default function BoardMembersList({
                     user?.imageUrl
                       ? user.imageUrl.startsWith('http')
                         ? user.imageUrl
-                        : `https://localhost:7177${user.imageUrl}`
+                        : `${API}${user.imageUrl}`
                       : '/images/default/avatar-default.jpg'
                   }
                   alt={user?.name}

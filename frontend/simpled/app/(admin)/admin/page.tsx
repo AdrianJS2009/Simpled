@@ -18,12 +18,11 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useAuth } from '@/contexts/AuthContext';
+import { API_URL } from '@/next.config';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-const API_URL = 'https://localhost:7177';
 
 type User = {
   id: string;

@@ -1,3 +1,5 @@
+import { API_URL } from '@/next.config';
+
 // Tipos mínimos para el chat
 export type ChatRoomReadDto = {
   id: string;
@@ -18,7 +20,7 @@ export type ChatMessageCreateDto = {
   text: string;
 };
 
-const API = 'https://localhost:7177/api/Chat';
+const API = `${API_URL}/api/Chat`;
 
 export async function getOrCreateRoom(
   roomType: 'Team' | 'Board',
