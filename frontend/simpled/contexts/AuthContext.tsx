@@ -96,6 +96,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setAuthenticated(!!auth.token);
   }, [auth.token]);
 
+  useEffect(() => {
+    if (auth.token) {
+      fetchFavoriteBoards();
+    } else {
+      setFavoriteBoards([]);
+    }
+  }, [auth.token]);
+
   const fetchUserProfile = async (userId: string) => {
     try {
       const response = await fetch(`${API_URL}/api/Users/${userId}`);
@@ -116,7 +124,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     };
     getUserData();
-    fetchFavoriteBoards();
   }, [auth.id, userData]);
 
   const loginUser = async (email: string, password: string, keepUserLoggedIn: boolean) => {
@@ -248,6 +255,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const fetchFavoriteBoards = async () => {
+    if (!auth.token) {
+      setFavoriteBoards([]);
+      return;
+    }
+
     try {
       const response = await fetch(`${API_URL}/api/favorite-boards`, {
         headers: {
@@ -259,7 +271,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setFavoriteBoards(data);
     } catch (error) {
       console.error('Error al obtener la lista de favoritos:', error);
-      return null;
+      setFavoriteBoards([]);
     }
   };
 
