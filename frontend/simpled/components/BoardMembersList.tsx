@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/select';
 import { useAuth } from '@/contexts/AuthContext';
 import { User } from '@/types';
+import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { deleteBoardMember, updateBoardMemberRole } from '../services/boardMemberService';
@@ -101,9 +102,19 @@ export default function BoardMembersList({
                   alt={user?.name}
                   className="h-8 w-8 rounded-full border object-cover"
                 />
-                <span className="min-w-0 flex-1 truncate font-medium text-gray-900 dark:text-gray-100">
-                  {user?.name || m.userId}
-                </span>
+                {user?.id && (
+                  <Link
+                    href={`/perfil/${user.id}`}
+                    className="min-w-0 flex-1 truncate font-medium text-gray-900 hover:text-blue-700 hover:underline dark:text-gray-100"
+                  >
+                    {user.name || m.userId}
+                  </Link>
+                )}
+                {!user?.id && (
+                  <span className="min-w-0 flex-1 truncate font-medium text-gray-900 dark:text-gray-100">
+                    {m.userId}
+                  </span>
+                )}
                 <span className="flex items-center gap-2">
                   {currentUserRole === 'admin' && m.role !== 'owner' ? (
                     <Select

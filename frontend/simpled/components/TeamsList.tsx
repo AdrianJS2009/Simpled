@@ -1,10 +1,12 @@
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Users } from 'lucide-react';
+import Link from 'next/link';
 
 interface Team {
   id: string;
   name: string;
+  ownerId: string;
   ownerName?: string;
   members: { userId: string; userName: string; role: string }[];
 }
@@ -49,16 +51,25 @@ export default function TeamsList({ teams }: TeamsListProps) {
                     </div>
                     <div className="text-muted-foreground flex items-center gap-2 text-sm">
                       <span>Propietario:</span>
-                      <span className="font-medium text-blue-700">
+                      <Link
+                        href={`/perfil/${team.ownerId}`}
+                        className="font-medium text-blue-700 hover:text-blue-800 hover:underline"
+                      >
                         {team.ownerName || 'Desconocido'}
-                      </span>
+                      </Link>
                     </div>
                     <div className="mt-2 flex flex-wrap gap-2">
                       <span className="text-xs font-semibold text-gray-500">Miembros:</span>
                       {team.members.map((m) => (
-                        <Badge key={m.userId} className={getRoleBadgeColor(m.role)}>
-                          {m.userName} ({m.role})
-                        </Badge>
+                        <Link
+                          key={m.userId}
+                          href={`/perfil/${m.userId}`}
+                          className="hover:underline"
+                        >
+                          <Badge className={getRoleBadgeColor(m.role)}>
+                            {m.userName} ({m.role})
+                          </Badge>
+                        </Link>
                       ))}
                     </div>
                   </CardContent>

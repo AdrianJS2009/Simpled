@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/select';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTeams } from '@/contexts/TeamsContext';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import ChatPanel from './ChatPanel';
@@ -170,7 +171,12 @@ export default function TeamDetailModal({ team, isOwner, onClose, onUpdated }: P
                   <AvatarFallback>{ownerMember.name.substring(0, 2).toUpperCase()}</AvatarFallback>
                 </Avatar>
                 <div className="min-w-0 flex-1">
-                  <span className="font-medium">{ownerMember.name}</span>
+                  <Link
+                    href={`/perfil/${team.ownerId}`}
+                    className="font-medium hover:text-blue-700 hover:underline"
+                  >
+                    {ownerMember.name}
+                  </Link>
                   <span className="ml-2 rounded bg-blue-100 px-2 py-0.5 text-xs font-semibold text-blue-700">
                     Propietario
                   </span>
@@ -192,7 +198,12 @@ export default function TeamDetailModal({ team, isOwner, onClose, onUpdated }: P
                     <AvatarFallback>{m.name.substring(0, 2).toUpperCase()}</AvatarFallback>
                   </Avatar>
                   <div className="min-w-0 flex-1">
-                    <span className="font-medium">{m.name}</span>
+                    <Link
+                      href={`/perfil/${m.userId}`}
+                      className="font-medium hover:text-blue-700 hover:underline"
+                    >
+                      {m.name}
+                    </Link>
                     {isOwner && m.userId !== team.ownerId ? (
                       <div className="flex items-center gap-2">
                         <Select
