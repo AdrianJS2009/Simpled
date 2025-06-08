@@ -17,7 +17,7 @@
       "applicationUrl": "http://localhost:5193",
         "environmentVariables": {
             "ASPNETCORE_ENVIRONMENT": "Development",
-            "URL_FRONTEND": "http://localhost:3000"
+            "URL_FRONTEND": "http://54.242.210.146:3000"
         }
     },
     "https": {
@@ -28,7 +28,7 @@
       "applicationUrl": "https://localhost:7177;http://localhost:5193",
         "environmentVariables": {
             "ASPNETCORE_ENVIRONMENT": "Development",
-            "URL_FRONTEND": "http://localhost:3000"
+            "URL_FRONTEND": "http://54.242.210.146:3000"
         }
     },
     "IIS Express": {
@@ -37,7 +37,7 @@
       "launchUrl": "swagger",
         "environmentVariables": {
             "ASPNETCORE_ENVIRONMENT": "Development",
-            "URL_FRONTEND": "http://localhost:3000"
+            "URL_FRONTEND": "http://54.242.210.146:3000"
         }
     }
   }

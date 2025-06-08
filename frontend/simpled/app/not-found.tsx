@@ -146,7 +146,8 @@ export default function Custom404() {
               <div className="mt-4 flex justify-center">
                 <Button onClick={resetGame}>Reiniciar Juego</Button>
               </div>
-              {isAiThinking && (
+              <div className='h-2.5'>
+                {isAiThinking && (
                 <motion.div
                   className="text-muted-foreground mt-2 text-center text-xs"
                   initial={{ opacity: 0 }}
@@ -156,6 +157,7 @@ export default function Custom404() {
                   IA pensando...
                 </motion.div>
               )}
+              </div>
             </CardContent>
           </Card>
         </motion.div>

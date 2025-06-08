@@ -16,18 +16,29 @@ using Simpled.Exception;
 using Microsoft.AspNetCore.SignalR;
 using Simpled.Helpers;
 using Microsoft.AspNetCore.Authentication;
-using System.Text.Json;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // --------------------------------------------------
 //  DbContext 
 // --------------------------------------------------
-builder.Services.AddDbContext<SimpledDbContext>(options =>
+/* builder.Services.AddDbContext<SimpledDbContext>(options =>
     options.UseSqlite(
         builder.Configuration.GetConnectionString("DefaultConnection")
     )
-);
+); */
+// builder.Services.AddDbContext<SimpledDbContext>(options =>
+//     options.UseMySql(
+//         builder.Configuration.GetConnectionString("DefaultConnection"),
+//         new MySqlServerVersion(new Version(8, 0, 36))
+//     ));
+var connectionString = "Server=bd.simpled.es;Database=simpled;User Id=simpled_user;Password=12345;";
+builder.Services.AddDbContext<SimpledDbContext>(options =>
+    options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 36))));
+
+
 
 // --------------------------------------------------
 //  Authentication: JWT + Cookies + Google + GitHub
@@ -117,7 +128,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
-        policy.WithOrigins("http://localhost:3000", "https://localhost:3000")
+        policy.WithOrigins("http://localhost:3000", "https://localhost:3000", "http://54.226.33.124:3000")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials()
