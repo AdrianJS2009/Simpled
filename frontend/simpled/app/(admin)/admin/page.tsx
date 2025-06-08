@@ -31,7 +31,7 @@ type User = {
   email: string;
   imageUrl: string;
   isBanned: boolean;
-  roles: string[];
+  webRole: number;
 };
 
 export default function AdminPage() {
@@ -60,20 +60,22 @@ export default function AdminPage() {
     }
   };
 
-  const countAdmins = () => users.filter((u) => u.roles.includes('admin')).length;
+  const countAdmins = () => users.filter((u) => u.webRole === 1).length;
 
-  const isLastAdmin = (user: User) => user.roles.includes('admin') && countAdmins() === 1;
+  const isLastAdmin = (user: User) => user.webRole === 1 && countAdmins() === 1;
 
   const changeUserRole = async (userId: string, newRole: string) => {
     try {
       if (userId === auth.id) {
         throw new Error('No puedes cambiar tu propio rol.');
       }
+
       const user = users.find((u) => u.id === userId);
       if (!user) throw new Error('Usuario no encontrado');
-      if (user.roles.includes('admin') && newRole !== 'admin' && isLastAdmin(user)) {
+      if (user.webRole === 1 && parseInt(newRole) !== 1 && isLastAdmin(user)) {
         throw new Error('No puedes quitar el rol de admin al último administrador.');
       }
+
       const response = await fetch(`${API_URL}/api/users/${userId}/role?role=${newRole}`, {
         method: 'PUT',
         headers: {
@@ -85,7 +87,7 @@ export default function AdminPage() {
         throw new Error('Error al cambiar el rol');
       }
 
-      setUsers(users.map((u) => (u.id === userId ? { ...u, roles: [newRole] } : u)));
+      setUsers(users.map((u) => (u.id === userId ? { ...u, webRole: parseInt(newRole) } : u)));
 
       toast.success('Rol de usuario actualizado correctamente.');
     } catch (error: any) {
@@ -98,11 +100,13 @@ export default function AdminPage() {
       if (userId === auth.id) {
         throw new Error('No puedes banearte a ti mismo.');
       }
+
       const user = users.find((u) => u.id === userId);
       if (!user) throw new Error('Usuario no encontrado');
-      if (user.roles.includes('admin') && isLastAdmin(user) && isBanned) {
+      if (user.webRole === 1 && isLastAdmin(user) && isBanned) {
         throw new Error('No puedes banear al último administrador.');
       }
+
       const response = await fetch(`${API_URL}/api/users/${userId}/ban?isBanned=${isBanned}`, {
         method: 'PUT',
         headers: {
@@ -155,17 +159,9 @@ export default function AdminPage() {
                 {users.map((user) => {
                   const isSelf = user.id === auth.id;
                   const lastAdmin = isLastAdmin(user);
-                  const userRole = user.roles.includes('admin')
-                    ? 'admin'
-                    : user.roles.includes('editor')
-                      ? 'editor'
-                      : 'viewer';
                   const userRoleLabel =
-                    userRole === 'admin'
-                      ? 'Administrador'
-                      : userRole === 'editor'
-                        ? 'Editor'
-                        : 'Usuario';
+                    user.webRole === 1 ? 'Administrador' : 'Usuario';
+
                   return (
                     <TableRow key={user.id}>
                       <TableCell>
@@ -201,7 +197,7 @@ export default function AdminPage() {
                       </TableCell>
                       <TableCell>
                         <Select
-                          defaultValue={userRole}
+                          defaultValue={user.webRole.toString()}
                           onValueChange={(value) => changeUserRole(user.id, value)}
                           disabled={isSelf || lastAdmin}
                         >
@@ -209,9 +205,8 @@ export default function AdminPage() {
                             <SelectValue placeholder="Seleccionar rol" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="admin">Administrador</SelectItem>
-                            <SelectItem value="editor">Editor</SelectItem>
-                            <SelectItem value="viewer">Usuario</SelectItem>
+                            <SelectItem value="1">Administrador</SelectItem>
+                            <SelectItem value="0">Usuario</SelectItem>
                           </SelectContent>
                         </Select>
                         <div className="text-muted-foreground mt-1 text-xs">{userRoleLabel}</div>

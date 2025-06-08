@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Simpled.Dtos.Users;
 using Simpled.Repository;
+using Simpled.Models.Enums;
+using Microsoft.OpenApi.Extensions;
 
 namespace Simpled.Controllers
 {
@@ -82,7 +84,7 @@ namespace Simpled.Controllers
         /// </summary>
         /// <param name="id">ID del usuario.</param>
         /// <param name="role">Nuevo rol global a asignar (admin, editor, viewer).</param>
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = UserWebRoles.Admin)]
         [HttpPut("{id}/role")]
         public async Task<IActionResult> ChangeUserRole(Guid id, [FromQuery] string role)
         {
@@ -95,7 +97,7 @@ namespace Simpled.Controllers
         /// </summary>
         /// <param name="id">ID del usuario.</param>
         /// <param name="isBanned">True para banear, false para desbanear.</param>
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = UserWebRoles.Admin)]
         [HttpPut("{id}/ban")]
         public async Task<IActionResult> SetUserBanned(Guid id, [FromQuery] bool isBanned)
         {

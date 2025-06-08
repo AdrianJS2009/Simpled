@@ -20,7 +20,7 @@ export default function AdminLayout({ children }: Readonly<{ children: React.Rea
       return () => clearTimeout(timeout);
     }
 
-    if (!userData?.roles?.includes('admin')) {
+    if (userData?.webRole !== 1) {
       const timeout = setTimeout(() => {
         router.push('/');
       }, 1500);
