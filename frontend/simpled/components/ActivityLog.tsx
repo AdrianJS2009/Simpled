@@ -193,7 +193,7 @@ export const ActivityLogComponent: React.FC<ActivityLogProps> = ({ logs, users }
                       log.userAvatarUrl
                         ? log.userAvatarUrl.startsWith('http')
                           ? log.userAvatarUrl
-                          : `http://localhost:5193${log.userAvatarUrl}`
+                          : `https://localhost:7177${log.userAvatarUrl}`
                         : '/images/default/avatar-default.jpg'
                     }
                     alt={log.userName}

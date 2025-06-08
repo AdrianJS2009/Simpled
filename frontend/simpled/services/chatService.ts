@@ -18,7 +18,7 @@ export type ChatMessageCreateDto = {
   text: string;
 };
 
-const API = 'http://localhost:5193/api/Chat';
+const API = 'https://localhost:7177/api/Chat';
 
 export async function getOrCreateRoom(
   roomType: 'Team' | 'Board',

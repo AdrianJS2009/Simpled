@@ -80,7 +80,7 @@ export const SignalRProvider = ({ children }: { children: React.ReactNode }) => 
     if (connection) return;
 
     const conn = new signalR.HubConnectionBuilder()
-      .withUrl('http://localhost:5193/hubs/board', {
+      .withUrl('https://localhost:7177/hubs/board', {
         accessTokenFactory: () => auth.token!,
       })
       .withAutomaticReconnect()

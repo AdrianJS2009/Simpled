@@ -40,7 +40,7 @@ function NavItems({
 }: NavItemsProps) {
   const { totalInvites } = useInvitations();
   const { userData } = useAuth();
-  const esAdmin = userData?.roles?.includes('admin');
+
   return (
     <nav className={`flex ${className} gap-4`}>
       <IconLink href="/" icon={<Home className="size-4" />}>
@@ -64,7 +64,7 @@ function NavItems({
           <IconLink href="/equipos" icon={<Users className="size-4" />}>
             Equipos
           </IconLink>
-          {esAdmin && (
+          {userData?.webRole === 1 && (
             <IconLink href="/admin" icon={<User className="size-4" />}>
               Administración
             </IconLink>
@@ -84,6 +84,15 @@ function NavItems({
                   <User className="size-4 min-w-4" />
                   <span className="flex-grow">Perfil</span>
                 </Link>
+                {userData?.webRole === 1 && (
+                  <Link
+                    href={`/admin`}
+                    className="hover:bg-accent hover:text-accent-foreground flex w-full cursor-pointer items-center gap-2 rounded-md px-4 py-2 text-sm"
+                  >
+                    <User className="size-4 min-w-4" />
+                    <span className="flex-grow"> Administración</span>
+                  </Link>
+                )}
                 <button
                   onClick={onShowInvitations}
                   className="hover:bg-accent hover:text-accent-foreground relative flex w-full cursor-pointer items-center gap-2 rounded-md px-4 py-2 text-left text-sm"
@@ -120,7 +129,6 @@ export default function Navbar() {
   const [showInvitations, setShowInvitations] = useState(false);
   const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
   const { userData } = useAuth();
-  const esAdmin = userData?.roles?.includes('admin');
   const { totalInvites } = useInvitations();
 
   useEffect(() => {
@@ -175,11 +183,6 @@ export default function Navbar() {
                 <IconLink href="/equipos" icon={<Users className="size-4" />}>
                   Equipos
                 </IconLink>
-                {esAdmin && (
-                  <IconLink href="/admin" icon={<User className="size-4" />}>
-                    Administración
-                  </IconLink>
-                )}
                 <div className="relative">
                   <Button
                     variant="ghost"
@@ -208,6 +211,22 @@ export default function Navbar() {
                           <User className="size-4 min-w-4" />
                           <span className="flex-grow">Perfil</span>
                         </Link>
+                        <Link
+                          href={`/admin`}
+                          className="hover:bg-accent hover:text-accent-foreground flex w-full cursor-pointer items-center gap-2 rounded-md px-4 py-2 text-sm"
+                        >
+                          <User className="size-4 min-w-4" />
+                          <span className="flex-grow">Perfil</span>
+                        </Link>
+                        {userData?.webRole === 1 && (
+                          <Link
+                            href={`/admin`}
+                            className="hover:bg-accent hover:text-accent-foreground flex w-full cursor-pointer items-center gap-2 rounded-md px-4 py-2 text-sm"
+                          >
+                            <User className="size-4 min-w-4" />
+                            <span className="flex-grow"> Administración</span>
+                          </Link>
+                        )}
                         <button
                           onClick={() => setShowInvitations(true)}
                           className="hover:bg-accent hover:text-accent-foreground relative flex w-full cursor-pointer items-center gap-2 rounded-md px-4 py-2 text-left text-sm"
