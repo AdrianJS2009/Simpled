@@ -4,18 +4,38 @@
 
 El proyecto utiliza **Tailwind CSS** como base para la gestión de estilos y el diseño responsive. Se emplean los breakpoints estándar de Tailwind:
 
-- `sm`: 640px
-- `md`: 768px
-- `lg`: 1024px
-- `xl`: 1280px
-- `2xl`: 1536px
+- `sm`: 640px - Adaptación para móviles en modo horizontal
+- `md`: 768px - Tablets pequeñas y dispositivos móviles grandes
+- `lg`: 1024px - Tablets grandes y pantallas pequeñas
+- `xl`: 1280px - Pantallas de escritorio estándar
+- `2xl`: 1536px - Pantallas grandes y monitores de alta resolución
 
 No se han personalizado los breakpoints en la configuración, lo que garantiza compatibilidad y predictibilidad en todos los dispositivos.
 
 ### 1.2 Adaptaciones y utilidades responsive
 
-- **Contenedores y paddings**: Ajuste automático de paddings laterales en móviles para mejorar la legibilidad.
-- **Tipografía**: Reducción progresiva del tamaño de los títulos (`h1`, `h2`, `h3`) en pantallas pequeñas.
+- **Contenedores y paddings**:
+
+  - Ajuste automático de paddings laterales en móviles (16px) a desktop (24px)
+  - Márgenes adaptativos para mantener la legibilidad en diferentes tamaños
+  - Grid system flexible que se adapta de 1 a 4 columnas según el viewport
+
+- **Tipografía**:
+
+  - Escala tipográfica responsive:
+    - h1: 2.5rem (móvil) → 3.5rem (desktop)
+    - h2: 2rem (móvil) → 2.5rem (desktop)
+    - h3: 1.5rem (móvil) → 2rem (desktop)
+  - Ajuste automático del line-height para mejor legibilidad
+
+- **Componentes específicos**:
+
+  - Kanban: Cambio de layout horizontal a vertical en móviles
+  - Gantt: Zoom adaptativo y scroll horizontal en móviles
+  - Dashboard: Reorganización de widgets en grid responsive
+  - Modales: Ancho completo en móviles, centrado en desktop
+  - Tablas: Scroll horizontal en móviles con indicadores visuales
+
 - **Scrollbars**: Scrollbars más finos en tablets y móviles para una experiencia más limpia.
 - **Notificaciones**: El contenedor de Toastify se adapta al ancho de la pantalla en móviles.
 - **Componentes**: Uso extensivo de utilidades como `flex-col md:flex-row` para cambiar la disposición según el tamaño de pantalla.
@@ -30,18 +50,44 @@ No se han personalizado los breakpoints en la configuración, lo que garantiza c
 
 ### 1.4 Pruebas de responsive y calidad visual
 
-- Pruebas manuales en dispositivos reales y emuladores (móvil, tablet, escritorio).
-- Verificación visual de la correcta adaptación de menús, formularios, tablas, gráficos y modales.
-- Comprobación de la usabilidad de los modales y notificaciones en móvil.
-- Pruebas de accesibilidad visual: contraste, tamaño de fuente, foco en formularios y navegación por teclado.
+- **Pruebas manuales**:
+
+  - Dispositivos móviles: iPhone SE, iPhone 12/13/14, Samsung Galaxy S21/S22
+  - Tablets: iPad Mini, iPad Pro, Samsung Tab S7
+  - Desktop: Monitores 1080p, 1440p y 4K
+  - Navegadores: Chrome, Firefox, Safari, Edge.
+
+- **Pruebas automatizadas**:
+
+  - Lighthouse para rendimiento y accesibilidad
+  - Validación de W3C y WCAG 2.1
+
+- **Métricas de calidad**:
+  - Performance Score: >90
+  - Accessibility Score: >95
+  - Best Practices Score: >95
+  - SEO Score: >90
 
 ### 1.5 Calidad del código y estructura CSS
 
-- Uso de utilidades de Tailwind para mantener el CSS limpio, reutilizable y fácil de mantener.
-- Separación de estilos globales en `app/globals.css` y uso de clases utilitarias en los componentes.
-- Componentes desacoplados y reutilizables.
-- Configuración de Prettier (`.prettierrc.json`) y ESLint (`.eslintrc.json`) para asegurar buenas prácticas y estilo consistente.
-- Integración de `prettier-plugin-tailwindcss` para ordenar automáticamente las clases Tailwind.
+- **Metodología y organización**:
+
+  - Atomic Design para componentes
+  - BEM para nomenclatura de clases personalizadas
+  - CSS Modules para estilos específicos de componentes
+  - Variables CSS para temas y configuración global
+
+- **Optimizaciones**:
+
+  - PurgeCSS para eliminar CSS no utilizado
+  - Minificación en producción
+  - Lazy loading de componentes pesados
+  - Optimización de imágenes con next/image
+
+- **Herramientas de desarrollo**:
+  - ESLint con reglas específicas para CSS/SCSS
+  - Stylelint para mantener consistencia
+  - Prettier para formateo automático
 
 ## 2. Framework, Librerías y Buenas Prácticas
 
@@ -134,6 +180,25 @@ No se han personalizado los breakpoints en la configuración, lo que garantiza c
 - **Modales reutilizables**: Para edición, creación, invitaciones, comentarios, etc.
 - **Animaciones y feedback**: Transiciones, loaders y feedback visual en todas las acciones.
 - **Librería de componentes UI**: Botones, inputs, selects, tablas, popovers, tooltips, avatares, badges, etc., todos accesibles y personalizables.
+
+### 2.12 Pruebas y Calidad
+
+- **Pruebas de integración**:
+
+  - Cypress para flujos completos
+  - Pruebas de autenticación y autorización
+  - Validación de formularios
+  - Comprobación de estados y contextos
+
+- **Pruebas de rendimiento**:
+
+  - Lighthouse CI
+
+- **Calidad de código**:
+  - SonarQube análisis
+  - Code review guidelines
+  - Documentación inline con JSDoc
+  - TypeScript strict mode
 
 ---
 
