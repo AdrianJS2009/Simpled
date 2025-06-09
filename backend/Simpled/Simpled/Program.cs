@@ -39,6 +39,13 @@ builder.Services.AddDbContext<SimpledDbContext>(options =>
     options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 36))));
 
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(443, listenOptions =>
+    {
+        listenOptions.UseHttps("/etc/ssl/certs/simpled.crt", "/etc/ssl/private/simpled.key");
+    });
+});
 
 // --------------------------------------------------
 //  Authentication: JWT + Cookies + Google + GitHub
