@@ -11,18 +11,6 @@
 - [1.5 Calidad del código y estructura CSS](#15-calidad-del-código-y-estructura-css)
 
 ### 2. Framework, Librerías y Buenas Prácticas
-
-- [Documentación Frontend - Simpled](#documentación-frontend---simpled)
-  - [Índice](#índice)
-    - [1. CSS y Responsive Design](#1-css-y-responsive-design)
-    - [2. Framework, Librerías y Buenas Prácticas](#2-framework-librerías-y-buenas-prácticas)
-    - [3. Diseño y UI/UX](#3-diseño-y-uiux)
-  - [1. CSS y Responsive Design](#1-css-y-responsive-design-1)
-    - [1.1 Puntos de ruptura (Breakpoints)](#11-puntos-de-ruptura-breakpoints)
-    - [1.2 Adaptaciones y utilidades responsive](#12-adaptaciones-y-utilidades-responsive)
-    - [1.3 Variables, utilidades y estilos globales](#13-variables-utilidades-y-estilos-globales)
-    - [1.4 Pruebas de responsive y calidad visual](#14-pruebas-de-responsive-y-calidad-visual)
-    - [1.5 Calidad del código y estructura CSS](#15-calidad-del-código-y-estructura-css)
   - [2. Framework, Librerías y Buenas Prácticas](#2-framework-librerías-y-buenas-prácticas-1)
     - [2.1 Librerías de terceros principales](#21-librerías-de-terceros-principales)
     - [2.2 Sistema de rutas y navegación](#22-sistema-de-rutas-y-navegación)
@@ -36,15 +24,6 @@
     - [2.10 Tipado y robustez](#210-tipado-y-robustez)
     - [2.11 Componentes y utilidades destacadas](#211-componentes-y-utilidades-destacadas)
     - [2.12 Pruebas y Calidad](#212-pruebas-y-calidad)
-  - [3. Diseño y UI/UX](#3-diseño-y-uiux-1)
-    - [3.1 Figma](#31-figma)
-    - [3.2 Colores y Tipografía](#32-colores-y-tipografía)
-      - [Paleta de Colores {#32-paleta-de-colores}](#paleta-de-colores-32-paleta-de-colores)
-      - [Tipografía {#32-tipografía}](#tipografía-32-tipografía)
-      - [Justificación de la Elección de Colores {#32-justificación-de-la-elección-de-colores}](#justificación-de-la-elección-de-colores-32-justificación-de-la-elección-de-colores)
-      - [Justificación de la Tipografía {#32-justificación-de-la-tipografía}](#justificación-de-la-tipografía-32-justificación-de-la-tipografía)
-      - [Análisis Previo y Referencias de Diseño {#32-análisis-previo-y-referencias-de-diseño}](#análisis-previo-y-referencias-de-diseño-32-análisis-previo-y-referencias-de-diseño)
-    - [3.3 Figma plugins](#33-figma-plugins)
 
 ### 3. Diseño y UI/UX
 
