@@ -194,11 +194,127 @@ No se han personalizado los breakpoints en la configuración, lo que garantiza c
 
   - Lighthouse CI
 
+  ![Score de Lighthouse](https://i.imgur.com/wBq9nuw.png)
+
 - **Calidad de código**:
+
   - SonarQube análisis
   - Code review guidelines
   - Documentación inline con JSDoc
   - TypeScript strict mode
+
+  ### 3.1 Figma
+
+  - [Ver diseño en Figma](https://www.figma.com/design/ZTKNYtmhuYOohtMGaIVn5v/Simpled---TFG--Adri%C3%A1n-y-El%C3%ADas-?m=auto&t=msqBeFaFMWj3opuf-6)
+
+  ### 3.1 Figma Colores y Tipografia
+
+  #### Paleta de Colores
+
+  La aplicación utiliza un sistema de colores moderno basado en variables CSS con soporte para modo claro y oscuro:
+
+  **Colores Primarios:**
+
+  - Modo Claro:
+
+    - Primario: `oklch(0.205 0 0)` - Un gris oscuro que transmite profesionalidad y estabilidad
+    - Primario Foreground: `oklch(0.985 0 0)` - Blanco puro para contraste
+    - Acento: `oklch(0.97 0 0)` - Un gris muy claro para elementos secundarios
+    - Acento Foreground: `oklch(0.205 0 0)` - El mismo gris oscuro del primario
+
+  - Modo Oscuro:
+    - Primario: `oklch(0.922 0 0)` - Un gris claro que mantiene la legibilidad
+    - Primario Foreground: `oklch(0.205 0 0)` - El gris oscuro para contraste
+    - Acento: `oklch(0.269 0 0)` - Un gris medio para elementos secundarios
+    - Acento Foreground: `oklch(0.985 0 0)` - Blanco para contraste
+
+  **Colores de Estado:**
+
+  - Destructivo (Error): `oklch(0.577 0.245 27.325)` - Un rojo suave que indica peligro/error
+  - Destructivo (Dark): `oklch(0.704 0.191 22.216)` - Un rojo más intenso para modo oscuro
+
+  **Colores de Gráficos:**
+
+  - Chart 1: `oklch(0.646 0.222 41.116)` - Azul
+  - Chart 2: `oklch(0.6 0.118 184.704)` - Turquesa
+  - Chart 3: `oklch(0.398 0.07 227.392)` - Índigo
+  - Chart 4: `oklch(0.828 0.189 84.429)` - Verde
+  - Chart 5: `oklch(0.769 0.188 70.08)` - Amarillo
+
+  #### Tipografía
+
+  La aplicación utiliza la fuente **Figtree** como tipografía principal, una fuente moderna y legible que transmite profesionalidad y claridad:
+
+  ```css
+  font-family: var(--font-figtree), sans-serif;
+  ```
+
+  **Escala Tipográfica:**
+
+  - h1: 2.5rem (móvil) → 3.5rem (desktop)
+  - h2: 2rem (móvil) → 2.5rem (desktop)
+  - h3: 1.5rem (móvil) → 2rem (desktop)
+  - Texto base: 1rem (16px)
+  - Texto pequeño: 0.875rem (14px)
+
+  **Pesos de Fuente:**
+
+  - Regular: 400
+  - Medium: 500
+  - Semibold: 600
+  - Bold: 700
+
+  #### Justificación de la Elección de Colores
+
+  1. **Color Primario (Gris):**
+
+     - Transmite profesionalidad y estabilidad
+     - Proporciona un buen contraste para la legibilidad
+     - Es neutral y no distrae del contenido
+     - Funciona bien tanto en modo claro como oscuro
+
+  2. **Color de Acento:**
+
+     - Se basa en variaciones del color primario
+     - Crea una jerarquía visual clara
+     - Mantiene la coherencia visual
+     - Proporciona suficiente contraste para elementos interactivos
+
+  3. **Colores de Estado:**
+
+     - El rojo destructivo está cuidadosamente elegido para ser visible pero no agresivo
+     - Se ajusta automáticamente para modo oscuro para mantener la legibilidad
+
+  4. **Colores de Gráficos:**
+     - Paleta de colores armoniosa y accesible
+     - Suficiente contraste entre elementos
+     - Compatible con daltonismo
+     - Mantiene la coherencia con la identidad visual
+
+  #### Justificación de la Tipografía
+
+  1. **Figtree:**
+
+     - Diseño moderno y limpio
+     - Excelente legibilidad en diferentes tamaños
+     - Buena compatibilidad con diferentes dispositivos
+     - Soporte para múltiples pesos que permiten crear jerarquía visual
+     - Funciona bien tanto en modo claro como oscuro
+
+  2. **Escala Tipográfica:**
+     - Proporciona una clara jerarquía visual
+     - Se adapta responsivamente a diferentes tamaños de pantalla
+     - Mantiene la legibilidad en todos los dispositivos
+     - Crea una experiencia de lectura cómoda
+
+  Esta combinación de colores y tipografía crea una identidad visual coherente y profesional que refleja los valores de la aplicación: claridad, profesionalidad y facilidad de uso.
+
+  ### 3.3 Figma plugins
+
+  - Html.to.Design
+  - A11y - Colour Contrast Checker
+  - Palettes [Imagen con nuestras paletas](https://imgur.com/t32TbNz)
+  - asd
 
 ---
 
