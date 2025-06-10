@@ -115,6 +115,16 @@ namespace Simpled.Services
                 AssigneeId = dto.AssigneeId
             };
             _context.Items.Add(item);
+
+            if (dto.AssigneeId.HasValue)
+            {
+                var user = await _context.Users.FindAsync(dto.AssigneeId.Value);
+                if (user != null)
+                {
+                    user.CreatedTasksCount++;
+                }
+            }
+
             await _context.SaveChangesAsync();
 
             var result = new ItemReadDto
@@ -165,9 +175,31 @@ namespace Simpled.Services
 
  
             if (!wasCompleted && dto.Status == "completed")
+            {
                 item.CompletedAt = DateTime.UtcNow;
+                // Incrementar el contador de tareas completadas
+                if (item.AssigneeId.HasValue)
+                {
+                    var user = await _context.Users.FindAsync(item.AssigneeId.Value);
+                    if (user != null)
+                    {
+                        user.CompletedTasksCount++;
+                    }
+                }
+            }
             else if (wasCompleted && dto.Status != "completed")
+            {
                 item.CompletedAt = null;
+                // Decrementar el contador de tareas completadas
+                if (item.AssigneeId.HasValue)
+                {
+                    var user = await _context.Users.FindAsync(item.AssigneeId.Value);
+                    if (user != null)
+                    {
+                        user.CompletedTasksCount--;
+                    }
+                }
+            }
 
             await _context.SaveChangesAsync();
 
@@ -204,9 +236,31 @@ namespace Simpled.Services
             var wasCompleted = item.Status == "completed";
             item.Status = status;
             if (!wasCompleted && status == "completed")
+            {
                 item.CompletedAt = DateTime.UtcNow;
+                // Incrementar el contador de tareas completadas
+                if (item.AssigneeId.HasValue)
+                {
+                    var user = await _context.Users.FindAsync(item.AssigneeId.Value);
+                    if (user != null)
+                    {
+                        user.CompletedTasksCount++;
+                    }
+                }
+            }
             else if (wasCompleted && status != "completed")
+            {
                 item.CompletedAt = null;
+                // Decrementar el contador de tareas completadas
+                if (item.AssigneeId.HasValue)
+                {
+                    var user = await _context.Users.FindAsync(item.AssigneeId.Value);
+                    if (user != null)
+                    {
+                        user.CompletedTasksCount--;
+                    }
+                }
+            }
 
             await _context.SaveChangesAsync();
 

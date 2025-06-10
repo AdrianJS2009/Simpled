@@ -1,5 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Simpled.Data;
 using Simpled.Dtos.Teams;
 using Simpled.Dtos.Teams.TeamMembers;
@@ -200,6 +199,14 @@ namespace Simpled.Services
                 UserId = dto.UserId,
                 Role = dto.Role
             });
+
+          
+            var user = await _context.Users.FindAsync(dto.UserId);
+            if (user != null)
+            {
+                user.TeamsCount++;
+            }
+
             await _context.SaveChangesAsync();
         }
 
@@ -246,6 +253,13 @@ namespace Simpled.Services
             var member = await _context.TeamMembers
                 .FirstOrDefaultAsync(tm => tm.TeamId == teamId && tm.UserId == userId);
             if (member == null) throw new NotFoundException("Miembro no encontrado.");
+
+          
+            var user = await _context.Users.FindAsync(userId);
+            if (user != null)
+            {
+                user.TeamsCount--;
+            }
 
             _context.TeamMembers.Remove(member);
             await _context.SaveChangesAsync();

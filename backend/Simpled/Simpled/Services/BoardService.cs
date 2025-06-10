@@ -113,6 +113,12 @@ namespace Simpled.Services
                 Role = "admin"
             });
 
+            var user = await _context.Users.FindAsync(userId);
+            if (user != null)
+            {
+                user.CreatedBoardsCount++;
+            }
+
             await _context.SaveChangesAsync();
 
             var dtoResult = new BoardReadDto
