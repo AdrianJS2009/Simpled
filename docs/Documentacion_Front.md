@@ -313,8 +313,8 @@ No se han personalizado los breakpoints en la configuración, lo que garantiza c
 
   - Html.to.Design
   - A11y - Colour Contrast Checker
-  - Palettes [Imagen con nuestras paletas](https://imgur.com/t32TbNz)
-  - asd
+  - Palettes
+  - Material Design Icons
 
 ---
 
