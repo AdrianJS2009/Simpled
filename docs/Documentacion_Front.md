@@ -1,5 +1,64 @@
 # Documentación Frontend - Simpled
 
+## Índice
+
+### 1. CSS y Responsive Design
+
+- [1.1 Puntos de ruptura (Breakpoints)](#11-puntos-de-ruptura-breakpoints)
+- [1.2 Adaptaciones y utilidades responsive](#12-adaptaciones-y-utilidades-responsive)
+- [1.3 Variables, utilidades y estilos globales](#13-variables-utilidades-y-estilos-globales)
+- [1.4 Pruebas de responsive y calidad visual](#14-pruebas-de-responsive-y-calidad-visual)
+- [1.5 Calidad del código y estructura CSS](#15-calidad-del-código-y-estructura-css)
+
+### 2. Framework, Librerías y Buenas Prácticas
+
+- [Documentación Frontend - Simpled](#documentación-frontend---simpled)
+  - [Índice](#índice)
+    - [1. CSS y Responsive Design](#1-css-y-responsive-design)
+    - [2. Framework, Librerías y Buenas Prácticas](#2-framework-librerías-y-buenas-prácticas)
+    - [3. Diseño y UI/UX](#3-diseño-y-uiux)
+  - [1. CSS y Responsive Design](#1-css-y-responsive-design-1)
+    - [1.1 Puntos de ruptura (Breakpoints)](#11-puntos-de-ruptura-breakpoints)
+    - [1.2 Adaptaciones y utilidades responsive](#12-adaptaciones-y-utilidades-responsive)
+    - [1.3 Variables, utilidades y estilos globales](#13-variables-utilidades-y-estilos-globales)
+    - [1.4 Pruebas de responsive y calidad visual](#14-pruebas-de-responsive-y-calidad-visual)
+    - [1.5 Calidad del código y estructura CSS](#15-calidad-del-código-y-estructura-css)
+  - [2. Framework, Librerías y Buenas Prácticas](#2-framework-librerías-y-buenas-prácticas-1)
+    - [2.1 Librerías de terceros principales](#21-librerías-de-terceros-principales)
+    - [2.2 Sistema de rutas y navegación](#22-sistema-de-rutas-y-navegación)
+    - [2.3 Estados y contextos](#23-estados-y-contextos)
+    - [2.4 Fetching de datos y servicios](#24-fetching-de-datos-y-servicios)
+    - [2.5 Gestión y validación de formularios](#25-gestión-y-validación-de-formularios)
+    - [2.6 Arquitectura de carpetas y ficheros](#26-arquitectura-de-carpetas-y-ficheros)
+    - [2.7 Gestión de errores](#27-gestión-de-errores)
+    - [2.8 Modales y notificaciones](#28-modales-y-notificaciones)
+    - [2.9 Persistencia de datos](#29-persistencia-de-datos)
+    - [2.10 Tipado y robustez](#210-tipado-y-robustez)
+    - [2.11 Componentes y utilidades destacadas](#211-componentes-y-utilidades-destacadas)
+    - [2.12 Pruebas y Calidad](#212-pruebas-y-calidad)
+  - [3. Diseño y UI/UX](#3-diseño-y-uiux-1)
+    - [3.1 Figma](#31-figma)
+    - [3.2 Colores y Tipografía](#32-colores-y-tipografía)
+      - [Paleta de Colores](#paleta-de-colores)
+      - [Tipografía](#tipografía)
+      - [Justificación de la Elección de Colores](#justificación-de-la-elección-de-colores)
+      - [Justificación de la Tipografía](#justificación-de-la-tipografía)
+      - [Análisis Previo y Referencias de Diseño](#análisis-previo-y-referencias-de-diseño)
+    - [3.3 Figma plugins](#33-figma-plugins)
+
+### 3. Diseño y UI/UX
+
+- [3.1 Figma](#31-figma)
+- [3.2 Colores y Tipografía](#32-colores-y-tipografía)
+  - [Paleta de Colores](#paleta-de-colores)
+  - [Tipografía](#tipografía)
+  - [Justificación de la Elección de Colores](#justificación-de-la-elección-de-colores)
+  - [Justificación de la Tipografía](#justificación-de-la-tipografía)
+  - [Análisis Previo y Referencias de Diseño](#análisis-previo-y-referencias-de-diseño)
+- [3.3 Figma plugins](#33-figma-plugins)
+
+---
+
 ## 1. CSS y Responsive Design
 
 ### 1.1 Puntos de ruptura (Breakpoints)
@@ -207,8 +266,7 @@ No se han personalizado los breakpoints en la configuración, lo que garantiza c
 
 ### 3.1 Figma
 
-- [Ver diseño en Figma](https://www.figma.com/design/ZTKNYtmhuYOohtMGaIVn5v/Simpled---TFG--Adri%C3%A1n-y-El%C3%ADas-?node-id=372-11393&t=yufajR4l65NzAwTd-1)
-
+- [Ver diseño en Figma](https://www.figma.com/design/ZTKNYtmhuYOohtMGaIVn5v/Simpled---TFG--Adri%C3%A1n-y-El%C3%ADas-?m=auto&t=msqBeFaFMWj3opuf-6)
 
 ### 3.2 Colores y Tipografía
 
