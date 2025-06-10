@@ -309,12 +309,43 @@ No se han personalizado los breakpoints en la configuración, lo que garantiza c
 
   Esta combinación de colores y tipografía crea una identidad visual coherente y profesional que refleja los valores de la aplicación: claridad, profesionalidad y facilidad de uso.
 
+  #### Análisis Previo y Referencias de Diseño
+
+  Durante la fase de diseño, se realizó un análisis exhaustivo de las principales plataformas de gestión de proyectos del mercado, identificando patrones de diseño exitosos y áreas de mejora:
+
+  1. **Trello:**
+
+     - Inspiración para la simplicidad del Kanban
+     - Referencia en la organización de tarjetas y columnas
+     - Influencia en la interacción drag & drop
+     - Aprendizaje de su sistema de etiquetas y prioridades
+
+  2. **Monday.com:**
+
+     - Referencia en la visualización de datos y métricas
+     - Inspiración para el dashboard y widgets
+     - Influencia en el sistema de filtros y búsqueda
+     - Aprendizaje de su sistema de colaboración en tiempo real
+
+  3. **Asana:**
+
+     - Referencia en la gestión de subtareas
+     - Inspiración para el sistema de comentarios y seguimiento
+     - Influencia en la visualización de dependencias
+     - Aprendizaje de su sistema de notificaciones
+
+  4. **Jira:**
+     - Referencia en la gestión de proyectos ágiles
+     - Inspiración para el sistema de roles y permisos
+     - Influencia en el seguimiento de tiempo y progreso
+     - Aprendizaje de su sistema de reportes
+
   ### 3.3 Figma plugins
 
   - Html.to.Design
   - A11y - Colour Contrast Checker
-  - Palettes
-  - Material Design Icons
+  - Palettes [Imagen con nuestras paletas](https://imgur.com/t32TbNz)
+  - asd
 
 ---
 
