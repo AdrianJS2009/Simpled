@@ -43,7 +43,7 @@ builder.WebHost.ConfigureKestrel(options =>
 {
     options.ListenAnyIP(443, listenOptions =>
     {
-        listenOptions.UseHttps("/etc/ssl/certs/simpled.crt", "/etc/ssl/private/simpled.key");
+        listenOptions.UseHttps("/etc/ssl/certs/simpled.crt", "/etc/ssl/certs/simpled.key");
     });
 });
 
