@@ -38,15 +38,6 @@ var connectionString = "Server=bd.simpled.es;Database=simpled;User Id=simpled_us
 builder.Services.AddDbContext<SimpledDbContext>(options =>
     options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 36))));
 
-
-builder.WebHost.ConfigureKestrel(options =>
-{
-    options.ListenAnyIP(443, listenOptions =>
-    {
-        listenOptions.UseHttps("/etc/ssl/certs/simpled.crt", "/etc/ssl/certs/simpled.key");
-    });
-});
-
 // --------------------------------------------------
 //  Authentication: JWT + Cookies + Google + GitHub
 // --------------------------------------------------
@@ -255,7 +246,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//(app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 app.UseRouting();
 app.UseStaticFiles();
 app.UseGlobalExceptionHandler();
