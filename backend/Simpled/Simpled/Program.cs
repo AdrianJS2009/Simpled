@@ -126,10 +126,15 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
-        policy.WithOrigins("http://localhost:3000", "https://localhost:3000", "http://54.226.33.124:3000", "https://loadbalancer.simpled.es")
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials()
+        policy.WithOrigins(
+            "http://localhost:3000/", 
+            "https://localhost:3000/", 
+            "https://loadbalancer.simpled.es/",
+            "https://backend-simpled.duckdns.org/"
+        )
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials()
     );
 });
 
