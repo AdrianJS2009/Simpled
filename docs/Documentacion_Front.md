@@ -382,7 +382,8 @@ Durante la fase de diseño, se realizó un análisis exhaustivo de las principal
 
 - Html.to.Design
 - A11y - Colour Contrast Checker
-- Palettes [Imagen con nuestras paletas](https://imgur.com/t32TbNz)
+- Palettes
+- Material Design Icons
 
 ---
 
