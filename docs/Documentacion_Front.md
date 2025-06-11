@@ -249,7 +249,7 @@ No se han personalizado los breakpoints en la configuración, lo que garantiza c
 
 ### 3.2 Colores y Tipografía
 
-#### Paleta de Colores {#32-paleta-de-colores}
+#### Paleta de Colores
 
 La aplicación utiliza un sistema de colores moderno basado en variables CSS con soporte para modo claro y oscuro:
 
@@ -281,7 +281,7 @@ La aplicación utiliza un sistema de colores moderno basado en variables CSS con
 - Chart 4: `oklch(0.828 0.189 84.429)` - Verde
 - Chart 5: `oklch(0.769 0.188 70.08)` - Amarillo
 
-#### Tipografía {#32-tipografía}
+#### Tipografía 
 
 La aplicación utiliza la fuente **Figtree** como tipografía principal, una fuente moderna y legible que transmite profesionalidad y claridad:
 
@@ -304,7 +304,7 @@ font-family: var(--font-figtree), sans-serif;
 - Semibold: 600
 - Bold: 700
 
-#### Justificación de la Elección de Colores {#32-justificación-de-la-elección-de-colores}
+#### Justificación de la Elección de Colores
 
 1. **Color Primario (Gris):**
 
@@ -331,7 +331,7 @@ font-family: var(--font-figtree), sans-serif;
    - Compatible con daltonismo
    - Mantiene la coherencia con la identidad visual
 
-#### Justificación de la Tipografía {#32-justificación-de-la-tipografía}
+#### Justificación de la Tipografía
 
 1. **Figtree:**
 
@@ -347,7 +347,7 @@ font-family: var(--font-figtree), sans-serif;
    - Mantiene la legibilidad en todos los dispositivos
    - Crea una experiencia de lectura cómoda
 
-#### Análisis Previo y Referencias de Diseño {#32-análisis-previo-y-referencias-de-diseño}
+#### Análisis Previo y Referencias de Diseño
 
 Durante la fase de diseño, se realizó un análisis exhaustivo de las principales plataformas de gestión de proyectos del mercado, identificando patrones de diseño exitosos y áreas de mejora:
 
