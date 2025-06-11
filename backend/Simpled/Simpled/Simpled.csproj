@@ -16,15 +16,6 @@
 	</PropertyGroup>
 
 
-
-
-
-
-
-	<ItemGroup>
-	  <Content Include="wwwroot\images\default\avatar-default.jpg" />
-	</ItemGroup>
-
 	<ItemGroup>
 		<PackageReference Include="AspNet.Security.OAuth.GitHub" Version="8.3.0" />
 		<PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
@@ -57,8 +48,5 @@
 		<Folder Include="Resources\" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <None Include="wwwroot\images\default\avatar-default.jpg" />
-	</ItemGroup>
 
 </Project>
