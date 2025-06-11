@@ -127,17 +127,17 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
         policy.WithOrigins(
-            "https://frontend1-simpled.duckdns.org/",
-            "https://frontend2-simpled.duckdns.org/",
-            "http://frontend1-simpled.duckdns.org:3000/",
-            "http://frontend2-simpled.duckdns.org:3000/",
-            "http://frontend1.simpled.es/",
-            "http://frontend2.simpled.es/",
+            "https://frontend1-simpled.duckdns.org",
+            "https://frontend2-simpled.duckdns.org",
+            "http://frontend1-simpled.duckdns.org:3000",
+            "http://frontend2-simpled.duckdns.org:3000",
+            "http://frontend1.simpled.es",
+            "http://frontend2.simpled.es",
             "https://13.221.56.87",
             "http://13.221.56.87",
-            "https://front-simpled.duckdns.org/",
-            "https://loadbalancer-simpled.duckdns.org/",
-            "https://backend-simpled.duckdns.org/"
+            "https://front-simpled.duckdns.org",
+            "https://loadbalancer-simpled.duckdns.org",
+            "https://backend-simpled.duckdns.org"
         )
         .AllowAnyHeader()
         .AllowAnyMethod()

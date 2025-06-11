@@ -99,7 +99,7 @@ namespace Simpled.Controllers
             if (loginResult == null)
                 return BadRequest("No se pudo autenticar con el proveedor externo");
 
-            var frontendUrl = Environment.GetEnvironmentVariable("URL_FRONTEND");
+            var frontendUrl = _configuration("Frontend:Url");
 
             if (string.IsNullOrEmpty(frontendUrl))
                 return StatusCode(500, "URL del frontend no está configurada");
