@@ -31,6 +31,7 @@ type User = {
   imageUrl: string;
   isBanned: boolean;
   roles: string[];
+  WebRole: string;
 };
 
 export default function AdminPage() {
@@ -84,7 +85,9 @@ export default function AdminPage() {
         throw new Error('Error al cambiar el rol');
       }
 
-      setUsers(users.map((u) => (u.id === userId ? { ...u, roles: [newRole] } : u)));
+      const updatedUser = await response.json();
+
+      setUsers(users.map((u) => (u.id === userId ? updatedUser : u)));
 
       toast.success('Rol de usuario actualizado correctamente.');
     } catch (error: any) {
@@ -154,17 +157,8 @@ export default function AdminPage() {
                 {users.map((user) => {
                   const isSelf = user.id === auth.id;
                   const lastAdmin = isLastAdmin(user);
-                  const userRole = user.roles.includes('admin')
-                    ? 'admin'
-                    : user.roles.includes('editor')
-                      ? 'editor'
-                      : 'viewer';
-                  const userRoleLabel =
-                    userRole === 'admin'
-                      ? 'Administrador'
-                      : userRole === 'editor'
-                        ? 'Editor'
-                        : 'Usuario';
+                  const userRole = user.roles.includes('admin') ? 'admin' : 'user';
+                  const userRoleLabel = userRole === 'admin' ? 'Administrador' : 'Usuario';
                   return (
                     <TableRow key={user.id}>
                       <TableCell>
@@ -209,8 +203,7 @@ export default function AdminPage() {
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="admin">Administrador</SelectItem>
-                            <SelectItem value="editor">Editor</SelectItem>
-                            <SelectItem value="viewer">Usuario</SelectItem>
+                            <SelectItem value="user">Usuario</SelectItem>
                           </SelectContent>
                         </Select>
                         <div className="text-muted-foreground mt-1 text-xs">{userRoleLabel}</div>

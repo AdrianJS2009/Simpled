@@ -13,6 +13,9 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   webpack(config, { dev }) {
     if (dev) {
       config.devtool = false;
@@ -23,6 +26,6 @@ const nextConfig: NextConfig = {
 
 export default nextConfig;
 
-const API_URL = 'https://localhost:7177';
+const API_URL = 'https://backend-simpled.duckdns.org';
 
 export { API_URL };

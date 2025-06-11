@@ -70,6 +70,9 @@ export default function RootLayout({ children }: { readonly children: React.Reac
 
   return (
     <html lang="es" suppressHydrationWarning>
+      <head>
+        <title>Simpled.</title>
+      </head>
       <body className={`${figtree.variable} flex min-h-screen flex-col antialiased`}>
         <AuthProvider>
           <InvitationsProvider>

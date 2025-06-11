@@ -87,7 +87,11 @@ namespace Simpled.Controllers
         public async Task<IActionResult> ChangeUserRole(Guid id, [FromQuery] string role)
         {
             var success = await _userService.ChangeUserRoleAsync(id, role);
-            return success ? NoContent() : BadRequest("No se pudo cambiar el rol.");
+            if (!success)
+                return BadRequest("No se pudo cambiar el rol.");
+                
+            var updatedUser = await _userService.GetUserByIdAsync(id);
+            return Ok(updatedUser);
         }
 
         /// <summary>

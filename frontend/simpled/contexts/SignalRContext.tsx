@@ -1,10 +1,10 @@
 'use client';
 
+import { API_URL } from '@/next.config';
 import * as signalR from '@microsoft/signalr';
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useAuth } from './AuthContext';
-import { API_URL } from '@/next.config';
 
 type SignalRContextType = {
   connection: signalR.HubConnection | null;
@@ -83,6 +83,8 @@ export const SignalRProvider = ({ children }: { children: React.ReactNode }) => 
     const conn = new signalR.HubConnectionBuilder()
       .withUrl(`${API_URL}/hubs/board`, {
         accessTokenFactory: () => auth.token!,
+        transport: signalR.HttpTransportType.WebSockets,
+        skipNegotiation: true,
       })
       .withAutomaticReconnect()
       .build();

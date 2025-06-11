@@ -6,6 +6,7 @@ using Simpled.Exception;
 using Simpled.Hubs;
 using Simpled.Models;
 using Simpled.Repository;
+using Simpled.Services;
 
 namespace Simpled.Services
 {
@@ -17,11 +18,13 @@ namespace Simpled.Services
     {
         private readonly SimpledDbContext _context;
         private readonly IHubContext<BoardHub> _hubContext;
+        private readonly AchievementsService _achievementsService;
 
-        public BoardService(SimpledDbContext context, IHubContext<BoardHub> hubContext)
+        public BoardService(SimpledDbContext context, IHubContext<BoardHub> hubContext, AchievementsService achievementsService)
         {
             _context = context;
             _hubContext = hubContext;
+            _achievementsService = achievementsService;
         }
 
         /// <summary>
@@ -112,6 +115,13 @@ namespace Simpled.Services
                 UserId = userId,
                 Role = "admin"
             });
+
+            var user = await _context.Users.FindAsync(userId);
+            if (user != null)
+            {
+                user.CreatedBoardsCount++;
+                await _achievementsService.ProcessActionAsync(user, "CrearTablero", user.CreatedBoardsCount);
+            }
 
             await _context.SaveChangesAsync();
 

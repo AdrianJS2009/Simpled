@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSignalR } from '@/contexts/SignalRContext';
+import { API_URL } from '@/next.config';
 import {
   ChatMessageReadDto,
   getMessages,
@@ -13,7 +14,6 @@ import {
 import { MessageSquare, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
-import { API_URL } from '@/next.config';
 
 interface MemberInfo {
   userId: string;
@@ -39,9 +39,12 @@ export default function ChatPanel({ roomType, entityId, members }: ChatPanelProp
   const [unreadMessages, setUnreadMessages] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const lastReadMessageRef = useRef<string | null>(null);
+  const isVisibleRef = useRef(isVisible);
 
-  // Para mostrar "escribiendo" (opcional, si se implementa en backend)
-  // const [typingUsers, setTypingUsers] = useState<string[]>([]);
+  // Sincronizar la referencia con el estado isVisible
+  useEffect(() => {
+    isVisibleRef.current = isVisible;
+  }, [isVisible]);
 
   // Obtener sala y mensajes
   useEffect(() => {
@@ -69,26 +72,53 @@ export default function ChatPanel({ roomType, entityId, members }: ChatPanelProp
     };
   }, [roomType, entityId, auth.token]);
 
+  // Añadir intervalo de actualización
+  useEffect(() => {
+    if (!roomId || !auth.token) return;
+
+    const interval = setInterval(async () => {
+      try {
+        const msgs = await getMessages(roomId, auth.token!);
+        setMessages(msgs);
+        if (msgs.length > 0) {
+          lastReadMessageRef.current = msgs[msgs.length - 1].id;
+        }
+      } catch (err) {
+        console.error('Error al actualizar mensajes:', err);
+      }
+    }, 5000); // Actualizar cada 5 segundos
+
+    return () => clearInterval(interval);
+  }, [roomId, auth.token]);
+
   // SignalR: unirse al grupo y recibir mensajes en tiempo real
   useEffect(() => {
     if (!connection || !roomId) return;
     let mounted = true;
+
     const join = async () => {
       try {
         if (roomType === 'Team') {
           await connection.invoke('JoinTeamRoom', entityId);
         } else {
-          await connection.invoke('JoinBoardRoom', entityId);
+          await connection.invoke('JoinBoardGroup', entityId);
         }
       } catch (err) {
-        // Puede que ya esté unido
+        console.error('Error al unirse a la sala:', err);
       }
     };
+
     join();
+
     const handler = (msg: ChatMessageReadDto) => {
       if (!mounted) return;
-      setMessages((prev) => [...prev, msg]);
-      if (!isVisible) {
+
+      setMessages((prev) => {
+        if (prev.some((m) => m.id === msg.id)) return prev;
+        return [...prev, msg];
+      });
+
+      if (!isVisibleRef.current) {
         setUnreadMessages((prev) => prev + 1);
         toast.info(`Nuevo mensaje de ${getUserInfo(msg.userId).name}`, {
           toastId: `chat-msg-${msg.id}`,
@@ -97,13 +127,17 @@ export default function ChatPanel({ roomType, entityId, members }: ChatPanelProp
         lastReadMessageRef.current = msg.id;
       }
     };
+
     connection.on('ReceiveMessage', handler);
+
     return () => {
       mounted = false;
       connection.off('ReceiveMessage', handler);
-      if (roomId) connection.invoke('LeaveRoom', roomId).catch(() => {});
+      if (roomId) {
+        connection.invoke('LeaveRoom', roomId).catch(console.error);
+      }
     };
-  }, [connection, roomId, roomType, entityId, isVisible]);
+  }, [connection, roomId, roomType, entityId]); // Removido isVisible de las dependencias
 
   useEffect(() => {
     if (isVisible) {

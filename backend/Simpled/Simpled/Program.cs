@@ -16,18 +16,27 @@ using Simpled.Exception;
 using Microsoft.AspNetCore.SignalR;
 using Simpled.Helpers;
 using Microsoft.AspNetCore.Authentication;
-using System.Text.Json;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // --------------------------------------------------
 //  DbContext 
 // --------------------------------------------------
-builder.Services.AddDbContext<SimpledDbContext>(options =>
+/* builder.Services.AddDbContext<SimpledDbContext>(options =>
     options.UseSqlite(
         builder.Configuration.GetConnectionString("DefaultConnection")
     )
-);
+); */
+// builder.Services.AddDbContext<SimpledDbContext>(options =>
+//     options.UseMySql(
+//         builder.Configuration.GetConnectionString("DefaultConnection"),
+//         new MySqlServerVersion(new Version(8, 0, 36))
+//     ));
+var connectionString = "Server=bd.simpled.es;Database=simpled;User Id=simpled_user;Password=12345;";
+builder.Services.AddDbContext<SimpledDbContext>(options =>
+    options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 36))));
 
 // --------------------------------------------------
 //  Authentication: JWT + Cookies + Google + GitHub
@@ -117,10 +126,22 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
-        policy.WithOrigins("http://localhost:3000", "https://localhost:3000")
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials()
+        policy.WithOrigins(
+            "https://frontend1-simpled.duckdns.org",
+            "https://frontend2-simpled.duckdns.org",
+            "http://frontend1-simpled.duckdns.org:3000",
+            "http://frontend2-simpled.duckdns.org:3000",
+            "http://frontend1.simpled.es",
+            "http://frontend2.simpled.es",
+            "https://13.221.56.87",
+            "http://13.221.56.87",
+            "https://front-simpled.duckdns.org",
+            "https://loadbalancer-simpled.duckdns.org",
+            "https://backend-simpled.duckdns.org"
+        )
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials()
     );
 });
 
@@ -174,15 +195,33 @@ builder.Services.AddAuthorization();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IAuthRepository, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserService>();
-builder.Services.AddScoped<IBoardRepository, BoardService>();
+builder.Services.AddScoped<IBoardRepository, BoardService>(provider =>
+    new BoardService(
+        provider.GetRequiredService<SimpledDbContext>(),
+        provider.GetRequiredService<IHubContext<BoardHub>>(),
+        provider.GetRequiredService<AchievementsService>()
+    ));
 builder.Services.AddScoped<IColumnRepository, ColumnService>();
-builder.Services.AddScoped<IItemRepository, ItemService>();
+builder.Services.AddScoped<IItemRepository, ItemService>(provider =>
+    new ItemService(
+        provider.GetRequiredService<SimpledDbContext>(),
+        provider.GetRequiredService<IHubContext<BoardHub>>(),
+        provider.GetRequiredService<AchievementsService>()
+    ));
 builder.Services.AddScoped<IBoardMemberRepository, BoardMemberService>();
 builder.Services.AddScoped<IBoardInvitationRepository, BoardInvitationService>();
 builder.Services.AddScoped<AchievementsService>();
 builder.Services.AddSingleton<IUserIdProvider, EmailBasedUserIdHelper>();
-builder.Services.AddScoped<ITeamRepository, TeamService>();
-builder.Services.AddScoped<ITeamMemberRepository, TeamService>();
+builder.Services.AddScoped<ITeamRepository, TeamService>(provider =>
+    new TeamService(
+        provider.GetRequiredService<SimpledDbContext>(),
+        provider.GetRequiredService<AchievementsService>()
+    ));
+builder.Services.AddScoped<ITeamMemberRepository, TeamService>(provider =>
+    new TeamService(
+        provider.GetRequiredService<SimpledDbContext>(),
+        provider.GetRequiredService<AchievementsService>()
+    ));
 builder.Services.AddScoped<ITeamInvitationRepository, TeamInvitationService>();
 builder.Services.AddScoped<IDependencyRepository, DependencyService>();
 builder.Services.AddScoped<DependencyService>();
@@ -214,6 +253,7 @@ using (var scope = app.Services.CreateScope())
             PasswordHash = BCrypt.Net.BCrypt.HashPassword("administrador"),
             CreatedAt = DateTime.UtcNow,
             ImageUrl = "/images/default/avatar-default.jpg",
+            WebRole = Simpled.Models.Enums.UserWebRoles.Admin,
             Roles = new List<Simpled.Models.UserRole>()
         };
         adminUser.Roles.Add(new Simpled.Models.UserRole

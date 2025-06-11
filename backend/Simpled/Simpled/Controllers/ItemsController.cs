@@ -121,140 +121,139 @@ namespace Simpled.Controllers
             var boardId = await _itemService.GetBoardIdByColumnId(dto.ColumnId);
             var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             var member = await _memberRepo.GetByIdsAsync(boardId, userId);
+            var item = await _itemService.GetByIdAsync(id);
 
             if (member == null)
                 return Forbid("No eres miembro de este tablero.");
 
             var before = await _itemService.GetByIdAsync(id);
+            var isAssignee = item.AssigneeId == userId;
 
             // Admin: puede cambiar todos los campos
             if (member.Role.ToLower() == "admin")
             {
                 await _itemService.UpdateAsync(dto);
-
-                // Título
-                if (!string.Equals(before.Title, dto.Title, StringComparison.Ordinal))
-                {
-                    await _logRepo.AddAsync(new ActivityLog
-                    {
-                        Id = Guid.NewGuid(),
-                        ItemId = id,
-                        UserId = userId,
-                        Action = ActivityType.Updated.ToString(),
-                        Field = "Title",
-                        OldValue = before.Title,
-                        NewValue = dto.Title,
-                        Details = "Cambio de título",
-                        Timestamp = DateTime.UtcNow
-                    });
-                }
-
-                // Descripción
-                if ((before.Description ?? string.Empty) != (dto.Description ?? string.Empty))
-                {
-                    await _logRepo.AddAsync(new ActivityLog
-                    {
-                        Id = Guid.NewGuid(),
-                        ItemId = id,
-                        UserId = userId,
-                        Action = ActivityType.Updated.ToString(),
-                        Field = "Description",
-                        OldValue = before.Description,
-                        NewValue = dto.Description,
-                        Details = "Cambio de descripción",
-                        Timestamp = DateTime.UtcNow
-                    });
-                }
-
-                // Responsable
-                if (before.AssigneeId != dto.AssigneeId)
-                {
-                    await _logRepo.AddAsync(new ActivityLog
-                    {
-                        Id = Guid.NewGuid(),
-                        ItemId = id,
-                        UserId = userId,
-                        Action = ActivityType.Assigned.ToString(),
-                        Field = "AssigneeId",
-                        OldValue = before.AssigneeId?.ToString(),
-                        NewValue = dto.AssigneeId?.ToString(),
-                        Details = dto.AssigneeId.HasValue ? $"Asignado a {dto.AssigneeId}" : "Sin asignar",
-                        Timestamp = DateTime.UtcNow
-                    });
-                }
-
-                // Fecha de inicio
-                if (before.StartDate != dto.StartDate)
-                {
-                    await _logRepo.AddAsync(new ActivityLog
-                    {
-                        Id = Guid.NewGuid(),
-                        ItemId = id,
-                        UserId = userId,
-                        Action = ActivityType.Updated.ToString(),
-                        Field = "StartDate",
-                        OldValue = before.StartDate?.ToString("o"),
-                        NewValue = dto.StartDate?.ToString("o"),
-                        Details = "Cambio de fecha de inicio",
-                        Timestamp = DateTime.UtcNow
-                    });
-                }
-
-                // Fecha de vencimiento
-                if (before.DueDate != dto.DueDate)
-                {
-                    await _logRepo.AddAsync(new ActivityLog
-                    {
-                        Id = Guid.NewGuid(),
-                        ItemId = id,
-                        UserId = userId,
-                        Action = ActivityType.Updated.ToString(),
-                        Field = "DueDate",
-                        OldValue = before.DueDate?.ToString("o"),
-                        NewValue = dto.DueDate?.ToString("o"),
-                        Details = "Cambio de fecha de vencimiento",
-                        Timestamp = DateTime.UtcNow
-                    });
-                }
-
-                // Estado
-                if (!string.Equals(before.Status, dto.Status, StringComparison.Ordinal))
-                {
-                    await _logRepo.AddAsync(new ActivityLog
-                    {
-                        Id = Guid.NewGuid(),
-                        ItemId = id,
-                        UserId = userId,
-                        Action = ActivityType.StatusChanged.ToString(),
-                        Field = "Status",
-                        OldValue = before.Status,
-                        NewValue = dto.Status,
-                        Details = $"Estado cambiado a {dto.Status}",
-                        Timestamp = DateTime.UtcNow
-                    });
-                }
-
+                await LogItemChanges(before, dto, userId);
                 return NoContent();
             }
-            // Editor: solo puede cambiar estado si es responsable
-            else if (member.Role.ToLower() == "editor" && dto.AssigneeId == userId)
+            // Editor: puede cambiar todos los campos
+            else if (member.Role.ToLower() == "editor")
             {
-                await _itemService.UpdateStatusAsync(id, dto.Status);
-                await _logRepo.AddAsync(new ActivityLog
+                await _itemService.UpdateAsync(dto);
+                await LogItemChanges(before, dto, userId);
+                return NoContent();
+            }
+            // Usuario asignado: solo puede cambiar estado y fechas
+            else if (isAssignee)
+            {
+                // Solo permitir cambios en estado y fechas
+                if (dto.Title != before.Title || 
+                    dto.Description != before.Description || 
+                    dto.AssigneeId != before.AssigneeId)
                 {
-                    Id = Guid.NewGuid(),
-                    ItemId = id,
-                    UserId = userId,
-                    Action = ActivityType.StatusChanged.ToString(),
-                    Details = dto.Status,
-                    Timestamp = DateTime.UtcNow
-                });
+                    return Forbid("Solo puedes cambiar el estado y las fechas de tus tareas.");
+                }
 
+                await _itemService.UpdateStatusAsync(id, dto.Status);
+                if (dto.StartDate != before.StartDate || dto.DueDate != before.DueDate)
+                {
+                    await _itemService.UpdateAsync(dto);
+                }
+
+                await LogItemChanges(before, dto, userId);
                 return NoContent();
             }
             else
             {
                 return Forbid("No tienes permisos para modificar este ítem.");
+            }
+        }
+
+        private async Task LogItemChanges(ItemReadDto before, ItemUpdateDto after, Guid userId)
+        {
+            // Título
+            if (!string.Equals(before.Title, after.Title, StringComparison.Ordinal))
+            {
+                await _logRepo.AddAsync(new ActivityLog
+                {
+                    Id = Guid.NewGuid(),
+                    ItemId = before.Id,
+                    UserId = userId,
+                    Action = ActivityType.Updated.ToString(),
+                    Field = "Title",
+                    OldValue = before.Title,
+                    NewValue = after.Title,
+                    Details = "Cambio de título",
+                    Timestamp = DateTime.UtcNow
+                });
+            }
+
+            // Descripción
+            if ((before.Description ?? string.Empty) != (after.Description ?? string.Empty))
+            {
+                await _logRepo.AddAsync(new ActivityLog
+                {
+                    Id = Guid.NewGuid(),
+                    ItemId = before.Id,
+                    UserId = userId,
+                    Action = ActivityType.Updated.ToString(),
+                    Field = "Description",
+                    OldValue = before.Description,
+                    NewValue = after.Description,
+                    Details = "Cambio de descripción",
+                    Timestamp = DateTime.UtcNow
+                });
+            }
+
+            // Fecha de inicio
+            if (before.StartDate != after.StartDate)
+            {
+                await _logRepo.AddAsync(new ActivityLog
+                {
+                    Id = Guid.NewGuid(),
+                    ItemId = before.Id,
+                    UserId = userId,
+                    Action = ActivityType.Updated.ToString(),
+                    Field = "StartDate",
+                    OldValue = before.StartDate?.ToString("o"),
+                    NewValue = after.StartDate?.ToString("o"),
+                    Details = "Cambio de fecha de inicio",
+                    Timestamp = DateTime.UtcNow
+                });
+            }
+
+            // Fecha de vencimiento
+            if (before.DueDate != after.DueDate)
+            {
+                await _logRepo.AddAsync(new ActivityLog
+                {
+                    Id = Guid.NewGuid(),
+                    ItemId = before.Id,
+                    UserId = userId,
+                    Action = ActivityType.Updated.ToString(),
+                    Field = "DueDate",
+                    OldValue = before.DueDate?.ToString("o"),
+                    NewValue = after.DueDate?.ToString("o"),
+                    Details = "Cambio de fecha de vencimiento",
+                    Timestamp = DateTime.UtcNow
+                });
+            }
+
+            // Estado
+            if (!string.Equals(before.Status, after.Status, StringComparison.Ordinal))
+            {
+                await _logRepo.AddAsync(new ActivityLog
+                {
+                    Id = Guid.NewGuid(),
+                    ItemId = before.Id,
+                    UserId = userId,
+                    Action = ActivityType.StatusChanged.ToString(),
+                    Field = "Status",
+                    OldValue = before.Status,
+                    NewValue = after.Status,
+                    Details = $"Estado cambiado a {after.Status}",
+                    Timestamp = DateTime.UtcNow
+                });
             }
         }
 

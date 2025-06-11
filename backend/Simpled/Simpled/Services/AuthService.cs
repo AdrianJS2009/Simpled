@@ -70,11 +70,13 @@ namespace Simpled.Services
             );
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-            user.CreatedBoardsCount = 10;
-            user.CreatedTasksCount = 50;
-            user.CompletedTasksCount = 5;
-            user.TeamsCount = 3;
-            await _context.SaveChangesAsync();
+
+            // Por si algo va mal, descomentar los datos dummies.
+            // user.CreatedBoardsCount = 10;
+            // user.CreatedTasksCount = 50;
+            // user.CompletedTasksCount = 5;
+            // user.TeamsCount = 3;
+            // await _context.SaveChangesAsync();
 
             var unlocked = new List<string>();
             unlocked.AddRange(await _achievementsService.ProcessActionAsync(user, "CrearTablero", user.CreatedBoardsCount));

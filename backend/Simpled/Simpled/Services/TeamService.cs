@@ -1,5 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Simpled.Data;
 using Simpled.Dtos.Teams;
 using Simpled.Dtos.Teams.TeamMembers;
@@ -7,6 +6,7 @@ using Simpled.Exception;
 using Simpled.Models;
 using Simpled.Repository;
 using FluentValidation;
+using Simpled.Services;
 
 namespace Simpled.Services
 {
@@ -17,10 +17,12 @@ namespace Simpled.Services
     public class TeamService : ITeamRepository, ITeamMemberRepository
     {
         private readonly SimpledDbContext _context;
+        private readonly AchievementsService _achievementsService;
 
-        public TeamService(SimpledDbContext context)
+        public TeamService(SimpledDbContext context, AchievementsService achievementsService)
         {
             _context = context;
+            _achievementsService = achievementsService;
         }
 
         // ITeamRepository
@@ -200,6 +202,15 @@ namespace Simpled.Services
                 UserId = dto.UserId,
                 Role = dto.Role
             });
+
+          
+            var user = await _context.Users.FindAsync(dto.UserId);
+            if (user != null)
+            {
+                user.TeamsCount++;
+                await _achievementsService.ProcessActionAsync(user, "UnirseEquipo", user.TeamsCount);
+            }
+
             await _context.SaveChangesAsync();
         }
 
@@ -246,6 +257,13 @@ namespace Simpled.Services
             var member = await _context.TeamMembers
                 .FirstOrDefaultAsync(tm => tm.TeamId == teamId && tm.UserId == userId);
             if (member == null) throw new NotFoundException("Miembro no encontrado.");
+
+          
+            var user = await _context.Users.FindAsync(userId);
+            if (user != null)
+            {
+                user.TeamsCount--;
+            }
 
             _context.TeamMembers.Remove(member);
             await _context.SaveChangesAsync();

@@ -3,7 +3,7 @@
 namespace Simpled.Models
 {
      /// <summary>
-    /// Define los roles posibles de un usuario global.
+    /// Define los roles globales posibles de un usuario en la aplicación.
     /// </summary>
     public class UserRole
     {
@@ -18,9 +18,9 @@ namespace Simpled.Models
         public Guid UserId { get; set; }
 
         /// <summary>
-        /// Rol asignado (admin, editor o viewer).
+        /// Rol global asignado (admin o user).
         /// </summary>
-        [Required, RegularExpression("admin|editor|viewer")]
+        [Required, RegularExpression("admin|user")]
         public string Role { get; set; } = default!;
 
         /// <summary>

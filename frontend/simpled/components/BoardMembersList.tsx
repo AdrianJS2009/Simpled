@@ -9,12 +9,13 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useAuth } from '@/contexts/AuthContext';
+import { API_URL as API } from '@/next.config';
 import { User } from '@/types';
+import { AlertCircle } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { deleteBoardMember, updateBoardMemberRole } from '../services/boardMemberService';
-import { API_URL as API } from '@/next.config';
 
 const ROLES = [
   { value: 'admin', label: 'Administrador' },
@@ -51,7 +52,27 @@ export default function BoardMembersList({
   const [loading, setLoading] = useState<string | null>(null);
   const { auth } = useAuth();
 
+  const getUserIdFromToken = (token: string | null): string | null => {
+    if (!token) return null;
+    try {
+      const pl = JSON.parse(atob(token.split('.')[1]));
+      return pl['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+    } catch {
+      return null;
+    }
+  };
+
+  const currentUserId = getUserIdFromToken(auth.token);
+  const isCurrentUserAdmin = currentUserRole === 'admin';
+  const isLastAdmin = isCurrentUserAdmin && members.filter((m) => m.role === 'admin').length === 1;
+  const isCurrentUser = (userId: string) => currentUserId !== null && userId === currentUserId;
+
   const handleRoleChange = async (userId: string, newRole: string) => {
+    if (isCurrentUser(userId) && isLastAdmin) {
+      toast.error('No puedes cambiar tu rol ya que eres el único administrador');
+      return;
+    }
+
     setLoading(userId);
     try {
       await updateBoardMemberRole({ boardId, userId, role: newRole, token: auth.token });
@@ -65,6 +86,11 @@ export default function BoardMembersList({
   };
 
   const handleRemove = async (userId: string) => {
+    if (isCurrentUser(userId) && isLastAdmin) {
+      toast.error('No puedes eliminarte ya que eres el único administrador');
+      return;
+    }
+
     if (!confirm('¿Eliminar este miembro del tablero?')) return;
     setLoading(userId);
     try {
@@ -87,6 +113,8 @@ export default function BoardMembersList({
         <ul className="divide-border divide-y">
           {members.map((m) => {
             const user = users.find((u) => u.id === m.userId);
+            const isSelf = isCurrentUser(m.userId);
+            const isSelfLastAdmin = isSelf && isLastAdmin;
             return (
               <li
                 key={m.userId}
@@ -118,22 +146,30 @@ export default function BoardMembersList({
                 )}
                 <span className="flex items-center gap-2">
                   {currentUserRole === 'admin' && m.role !== 'owner' ? (
-                    <Select
-                      value={m.role}
-                      onValueChange={(value) => handleRoleChange(m.userId, value)}
-                      disabled={loading === m.userId}
-                    >
-                      <SelectTrigger className="w-28" title="Seleccionar rol">
-                        <SelectValue placeholder="Rol" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {ROLES.map((r) => (
-                          <SelectItem key={r.value} value={r.value}>
-                            {r.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <div className="flex items-center gap-2">
+                      <Select
+                        value={m.role}
+                        onValueChange={(value) => handleRoleChange(m.userId, value)}
+                        disabled={loading === m.userId || isSelfLastAdmin}
+                      >
+                        <SelectTrigger className="w-28" title="Seleccionar rol">
+                          <SelectValue placeholder="Rol" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {ROLES.map((r) => (
+                            <SelectItem key={r.value} value={r.value}>
+                              {r.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      {isSelfLastAdmin && (
+                        <div className="flex items-center gap-1 text-xs text-yellow-600 dark:text-yellow-400">
+                          <AlertCircle className="h-4 w-4" />
+                          <span>Último admin</span>
+                        </div>
+                      )}
+                    </div>
                   ) : (
                     <Badge className={getRoleBadgeColor(m.role)}>
                       {ROLES.find((r) => r.value === m.role)?.label || m.role}
@@ -145,7 +181,7 @@ export default function BoardMembersList({
                     variant="ghost"
                     size="sm"
                     className="text-destructive font-semibold"
-                    disabled={loading === m.userId}
+                    disabled={loading === m.userId || isSelfLastAdmin}
                     onClick={() => handleRemove(m.userId)}
                   >
                     Eliminar
