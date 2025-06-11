@@ -26,6 +26,6 @@ const nextConfig: NextConfig = {
 
 export default nextConfig;
 
-const API_URL = 'https://localhost:7177';
+const API_URL = 'https://loadbalancer-simpled.duckdns.org';
 
 export { API_URL };
