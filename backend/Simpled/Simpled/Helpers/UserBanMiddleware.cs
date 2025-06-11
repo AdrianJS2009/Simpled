@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Simpled.Data;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace Simpled.Helpers
 {
@@ -26,11 +27,22 @@ namespace Simpled.Helpers
                 var userIdStr = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 if (Guid.TryParse(userIdStr, out var userId))
                 {
-                    var user = await db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == userId);
+                    var user = await db.Users
+                        .AsNoTracking()
+                        .FirstOrDefaultAsync(u => u.Id == userId);
+
                     if (user != null && user.IsBanned)
                     {
                         context.Response.StatusCode = StatusCodes.Status403Forbidden;
-                        await context.Response.WriteAsync("Usuario baneado. Acceso denegado.");
+                        context.Response.ContentType = "application/json";
+                        
+                        var response = new
+                        {
+                            error = "Usuario baneado",
+                            message = "Tu cuenta ha sido suspendida. Por favor, contacta con un administrador para más información."
+                        };
+
+                        await context.Response.WriteAsync(JsonSerializer.Serialize(response));
                         return;
                     }
                 }
