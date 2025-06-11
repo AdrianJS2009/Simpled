@@ -22,7 +22,7 @@
 
 
 	<ItemGroup>
-	  <Content Remove="wwwroot\images\default\avatar-default.jpg" />
+	  <Content Include="wwwroot\images\default\avatar-default.jpg" />
 	</ItemGroup>
 
 	<ItemGroup>
