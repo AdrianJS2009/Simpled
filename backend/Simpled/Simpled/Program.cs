@@ -131,6 +131,8 @@ builder.Services.AddCors(options =>
             "https://frontend2-simpled.duckdns.org/",
             "http://frontend1-simpled.duckdns.org:3000/",
             "http://frontend2-simpled.duckdns.org:3000/",
+            "http://frontend1.simpled.es/",
+            "http://frontend2.simpled.es/",
             "https://loadbalancer-simpled.duckdns.org/",
             "https://backend-simpled.duckdns.org/"
         )
