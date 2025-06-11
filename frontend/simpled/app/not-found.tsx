@@ -114,7 +114,7 @@ export default function Custom404() {
               </p>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-3 gap-1">
+              <div className="grid justify-items-center grid-cols-3 gap-1">
                 {board.map((cell, i) => (
                   <motion.div
                     key={`cell-${i}-${cell}`}
