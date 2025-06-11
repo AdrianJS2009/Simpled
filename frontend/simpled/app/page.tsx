@@ -6,7 +6,7 @@ import Image from 'next/image';
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col">
       <Banner className="bg-gradient-to-r from-blue-500 to-indigo-600 px-4 py-16 text-center">
         <h1 className="mb-6 text-4xl font-bold md:text-5xl">
           La herramienta definitiva para la gestión colaborativa de proyectos
@@ -111,6 +111,6 @@ export default function Home() {
           <a href="/registro">Regístrate</a>
         </Button>
       </Banner>
-    </main>
+    </div>
   );
 }
