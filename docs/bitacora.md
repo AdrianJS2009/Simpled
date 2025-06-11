@@ -125,8 +125,9 @@ Registro de tareas realizadas durante el desarrollo del proyecto **Simpled**.
 | 2025-06-04  | Elías Robles   | Cloudformation puente entre backend y Load balancer roto |
 | 2025-06-05  | Elías Robles   | Cloudformation intento de https con certificado externo y autofirmado |
 | 2025-06-06  | Elías Robles   | Cloudformation funcionando con parametros genericos en la primera instancia y todas las configuraciones pertinentes |
-
-
+| 2025-06-09  | Elías Robles   | Intento de arreglo del despliegue y backend funcionando |
+| 2025-06-10  | Elías Robles   | Intento de arreglo del despliegue |
+| 2025-06-11  | Elías Robles   | Deploy desde 0 con nueva estructura |
 
 ---
 
