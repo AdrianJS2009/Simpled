@@ -246,6 +246,7 @@ No se han personalizado los breakpoints en la configuración, lo que garantiza c
 ### 3.1 Figma
 
 - [Ver diseño en Figma](https://www.figma.com/design/ZTKNYtmhuYOohtMGaIVn5v/Simpled---TFG--Adri%C3%A1n-y-El%C3%ADas-?m=auto&t=msqBeFaFMWj3opuf-6)
+- [Ver Prototipo en Figma](https://www.figma.com/proto/ZTKNYtmhuYOohtMGaIVn5v/Simpled---TFG--Adri%C3%A1n-y-El%C3%ADas-?node-id=380-3184&p=f&t=wafojWutGVZa1dEO-0&scaling=scale-down&content-scaling=fixed&page-id=372%3A11393&starting-point-node-id=380%3A3184)
 
 ### 3.2 Colores y Tipografía
 
