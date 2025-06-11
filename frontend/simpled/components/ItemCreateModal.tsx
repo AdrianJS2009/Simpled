@@ -21,13 +21,13 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/contexts/AuthContext';
+import { API_URL as API } from '@/next.config';
 import type { User } from '@/types';
 import { motion } from 'framer-motion';
 import { Check, Loader2, Trash2, X } from 'lucide-react';
 import { nanoid } from 'nanoid';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { API_URL as API } from '@/next.config';
 
 type Props = Readonly<{
   columnId: string;
@@ -58,7 +58,6 @@ export default function ItemCreateModal({
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('details');
 
-  // Crea una nueva tarea y sus subtareas
   const handleCreate = async () => {
     if (!title.trim()) {
       toast.warning('El título es obligatorio');
@@ -114,7 +113,6 @@ export default function ItemCreateModal({
     }
   };
 
-  // Añade una subtarea temporal con id único
   const handleAddSubtask = () => {
     if (newSubtask.trim()) {
       setSubtasks([...subtasks, { id: nanoid(), title: newSubtask.trim() }]);

@@ -131,14 +131,10 @@ export default function TeamDetailModal({ team, isOwner, onClose, onUpdated }: P
     }
   };
 
-  // Cambiar rol de miembro (solo owner)
   const handleRoleChange = async (userId: string, newRole: string) => {
     setRoleUpdates((prev) => ({ ...prev, [userId]: newRole }));
     setProcessing(true);
     try {
-      // Aquí deberías llamar a tu servicio para actualizar el rol en el backend
-      // await updateTeamMemberRole(team.id, userId, newRole);
-      // Simulación de éxito:
       toast.success('Rol actualizado');
       onUpdated();
     } catch {
@@ -160,11 +156,9 @@ export default function TeamDetailModal({ team, isOwner, onClose, onUpdated }: P
           </DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-6 md:flex-row">
-          {/* Sección miembros */}
           <div className="min-w-0 flex-1">
             <h3 className="mb-2 text-lg font-semibold">Miembros del equipo</h3>
             <ul className="divide-y divide-gray-200 rounded-lg border bg-gray-50 dark:bg-gray-900">
-              {/* Owner */}
               <li className="flex items-center gap-3 px-4 py-3">
                 <Avatar>
                   <AvatarImage src={ownerMember.imageUrl} alt={ownerMember.name} />
@@ -182,7 +176,7 @@ export default function TeamDetailModal({ team, isOwner, onClose, onUpdated }: P
                   </span>
                 </div>
               </li>
-              {/* Otros miembros */}
+
               {otherMembers.length === 0 && (
                 <li className="text-muted-foreground px-4 py-3 text-sm">
                   No hay más miembros en este equipo.
@@ -241,7 +235,7 @@ export default function TeamDetailModal({ team, isOwner, onClose, onUpdated }: P
                 </li>
               ))}
             </ul>
-            {/* Sección de invitación */}
+
             {isOwner && (
               <div className="mt-6 border-t pt-4">
                 <h3 className="mb-2 text-lg font-semibold">Invitar por correo</h3>
@@ -264,7 +258,7 @@ export default function TeamDetailModal({ team, isOwner, onClose, onUpdated }: P
               </div>
             )}
           </div>
-          {/* Chat lateral */}
+
           <div className="flex min-h-[500px] w-full flex-col rounded-lg border bg-white p-2 md:w-[380px] dark:bg-gray-900">
             <ChatPanel roomType="Team" entityId={team.id} members={enrichedMembers} />
           </div>

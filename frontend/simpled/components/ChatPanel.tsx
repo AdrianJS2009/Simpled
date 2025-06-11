@@ -91,7 +91,6 @@ export default function ChatPanel({ roomType, entityId, members }: ChatPanelProp
     return () => clearInterval(interval);
   }, [roomId, auth.token]);
 
-  // SignalR: unirse al grupo y recibir mensajes en tiempo real
   useEffect(() => {
     if (!connection || !roomId) return;
     let mounted = true;
@@ -137,7 +136,7 @@ export default function ChatPanel({ roomType, entityId, members }: ChatPanelProp
         connection.invoke('LeaveRoom', roomId).catch(console.error);
       }
     };
-  }, [connection, roomId, roomType, entityId]); // Removido isVisible de las dependencias
+  }, [connection, roomId, roomType, entityId]);
 
   useEffect(() => {
     if (isVisible) {
@@ -147,11 +146,6 @@ export default function ChatPanel({ roomType, entityId, members }: ChatPanelProp
       }
     }
   }, [isVisible, messages]);
-
-  // Scroll automático al final
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
 
   const handleSend = async (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -223,7 +217,6 @@ export default function ChatPanel({ roomType, entityId, members }: ChatPanelProp
                   key={msg.id}
                   className={`flex w-full items-end ${isMe ? 'justify-end' : 'justify-start'}`}
                 >
-                  {/* Avatar a la izquierda para otros, a la derecha para ti */}
                   {!isMe && (
                     <div className="mr-2 flex-shrink-0">
                       <Avatar className="h-8 w-8">
