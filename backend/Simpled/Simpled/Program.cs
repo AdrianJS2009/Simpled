@@ -250,6 +250,7 @@ using (var scope = app.Services.CreateScope())
             PasswordHash = BCrypt.Net.BCrypt.HashPassword("administrador"),
             CreatedAt = DateTime.UtcNow,
             ImageUrl = "/images/default/avatar-default.jpg",
+            WebRole = Simpled.Models.Enums.UserWebRoles.Admin,
             Roles = new List<Simpled.Models.UserRole>()
         };
         adminUser.Roles.Add(new Simpled.Models.UserRole
