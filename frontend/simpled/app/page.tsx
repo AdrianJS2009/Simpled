@@ -39,21 +39,21 @@ export default function Home() {
               icon={<Layers className="h-10 w-10 text-indigo-500" />}
               title="Organiza tu trabajo en Tableros"
               description="Crea tableros personalizados para dividir tus proyectos y hacer un seguimiento claro de las tareas."
-              imageUrl="/imagen.png"
+              imageUrl="/home - 1.jpg"
             />
 
             <FeatureCard
               icon={<Users className="h-10 w-10 text-indigo-500" />}
               title="Colabora en Tiempo Real"
               description="Trabaja simultáneamente con tu equipo, con cambios reflejados al instante gracias a la edición colaborativa."
-              imageUrl="/imagen.png"
+              imageUrl="/home - 2.jpg"
             />
 
             <FeatureCard
               icon={<Calendar className="h-10 w-10 text-indigo-500" />}
               title="Gestión Avanzada"
               description="Utiliza vistas tipo Kanban y calendarios para organizar tus tareas de manera visual y eficiente."
-              imageUrl="/imagen.png"
+              imageUrl="/home - 3.jpg"
             />
           </div>
         </div>
@@ -90,7 +90,7 @@ export default function Home() {
             </div>
             <div className="overflow-hidden rounded-xl shadow-lg">
               <Image
-                src="/imagen.png"
+                src="/home - 4.jpg"
                 alt="Manejo de Roles y Permisos"
                 width={600}
                 height={400}
