@@ -304,11 +304,11 @@ namespace Simpled.Services
             if (user == null) 
                 throw new NotFoundException("Usuario no encontrado.");
 
-            if (!Enum.TryParse<UserWebRoles>(role, true, out var parsedRole))
-                throw new ApiException("Rol no válido.", 400);
+            if (role != "admin" && role != "user")
+                throw new ApiException("Rol no válido. Solo se permiten los roles 'admin' y 'user'.", 400);
 
             // Actualizar WebRole
-            user.WebRole = parsedRole;
+            user.WebRole = role == "admin" ? UserWebRoles.Admin : UserWebRoles.User;
 
             // Actualizar Roles
             user.Roles.Clear();

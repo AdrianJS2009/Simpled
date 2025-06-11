@@ -101,7 +101,7 @@ export default function ChatPanel({ roomType, entityId, members }: ChatPanelProp
         if (roomType === 'Team') {
           await connection.invoke('JoinTeamRoom', entityId);
         } else {
-          await connection.invoke('JoinBoardRoom', entityId);
+          await connection.invoke('JoinBoardGroup', entityId);
         }
       } catch (err) {
         console.error('Error al unirse a la sala:', err);
