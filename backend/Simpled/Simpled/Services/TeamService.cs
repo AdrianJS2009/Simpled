@@ -6,6 +6,7 @@ using Simpled.Exception;
 using Simpled.Models;
 using Simpled.Repository;
 using FluentValidation;
+using Simpled.Services.Achievements;
 
 namespace Simpled.Services
 {
@@ -16,10 +17,12 @@ namespace Simpled.Services
     public class TeamService : ITeamRepository, ITeamMemberRepository
     {
         private readonly SimpledDbContext _context;
+        private readonly AchievementsService _achievementsService;
 
-        public TeamService(SimpledDbContext context)
+        public TeamService(SimpledDbContext context, AchievementsService achievementsService)
         {
             _context = context;
+            _achievementsService = achievementsService;
         }
 
         // ITeamRepository
@@ -205,6 +208,7 @@ namespace Simpled.Services
             if (user != null)
             {
                 user.TeamsCount++;
+                await _achievementsService.ProcessActionAsync(user, "UnirseEquipo", user.TeamsCount);
             }
 
             await _context.SaveChangesAsync();

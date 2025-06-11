@@ -192,15 +192,33 @@ builder.Services.AddAuthorization();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IAuthRepository, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserService>();
-builder.Services.AddScoped<IBoardRepository, BoardService>();
+builder.Services.AddScoped<IBoardRepository, BoardService>(provider =>
+    new BoardService(
+        provider.GetRequiredService<SimpledDbContext>(),
+        provider.GetRequiredService<IHubContext<BoardHub>>(),
+        provider.GetRequiredService<AchievementsService>()
+    ));
 builder.Services.AddScoped<IColumnRepository, ColumnService>();
-builder.Services.AddScoped<IItemRepository, ItemService>();
+builder.Services.AddScoped<IItemRepository, ItemService>(provider =>
+    new ItemService(
+        provider.GetRequiredService<SimpledDbContext>(),
+        provider.GetRequiredService<IHubContext<BoardHub>>(),
+        provider.GetRequiredService<AchievementsService>()
+    ));
 builder.Services.AddScoped<IBoardMemberRepository, BoardMemberService>();
 builder.Services.AddScoped<IBoardInvitationRepository, BoardInvitationService>();
 builder.Services.AddScoped<AchievementsService>();
 builder.Services.AddSingleton<IUserIdProvider, EmailBasedUserIdHelper>();
-builder.Services.AddScoped<ITeamRepository, TeamService>();
-builder.Services.AddScoped<ITeamMemberRepository, TeamService>();
+builder.Services.AddScoped<ITeamRepository, TeamService>(provider =>
+    new TeamService(
+        provider.GetRequiredService<SimpledDbContext>(),
+        provider.GetRequiredService<AchievementsService>()
+    ));
+builder.Services.AddScoped<ITeamMemberRepository, TeamService>(provider =>
+    new TeamService(
+        provider.GetRequiredService<SimpledDbContext>(),
+        provider.GetRequiredService<AchievementsService>()
+    ));
 builder.Services.AddScoped<ITeamInvitationRepository, TeamInvitationService>();
 builder.Services.AddScoped<IDependencyRepository, DependencyService>();
 builder.Services.AddScoped<DependencyService>();

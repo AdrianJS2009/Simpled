@@ -9,6 +9,7 @@ using Simpled.Models;
 using Simpled.Repository;
 using Simpled.Validators;
 using FluentValidation;
+using Simpled.Services.Achievements;
 
 namespace Simpled.Services
 {
@@ -20,11 +21,13 @@ namespace Simpled.Services
     {
         private readonly SimpledDbContext _context;
         private readonly IHubContext<BoardHub> _hubContext;
+        private readonly AchievementsService _achievementsService;
 
-        public ItemService(SimpledDbContext context, IHubContext<BoardHub> hubContext)
+        public ItemService(SimpledDbContext context, IHubContext<BoardHub> hubContext, AchievementsService achievementsService)
         {
             _context = context;
             _hubContext = hubContext;
+            _achievementsService = achievementsService;
         }
 
         /// <summary>
@@ -122,6 +125,7 @@ namespace Simpled.Services
                 if (user != null)
                 {
                     user.CreatedTasksCount++;
+                    await _achievementsService.ProcessActionAsync(user, "CrearTarea", user.CreatedTasksCount);
                 }
             }
 
@@ -184,6 +188,7 @@ namespace Simpled.Services
                     if (user != null)
                     {
                         user.CompletedTasksCount++;
+                        await _achievementsService.ProcessActionAsync(user, "CompletarTarea", user.CompletedTasksCount);
                     }
                 }
             }
@@ -245,6 +250,7 @@ namespace Simpled.Services
                     if (user != null)
                     {
                         user.CompletedTasksCount++;
+                        await _achievementsService.ProcessActionAsync(user, "CompletarTarea", user.CompletedTasksCount);
                     }
                 }
             }
