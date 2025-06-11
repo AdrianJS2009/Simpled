@@ -9,7 +9,7 @@ using Simpled.Models;
 using Simpled.Repository;
 using Simpled.Validators;
 using FluentValidation;
-using Simpled.Services.Achievements;
+using Simpled.Services;
 
 namespace Simpled.Services
 {

@@ -6,7 +6,7 @@ using Simpled.Exception;
 using Simpled.Models;
 using Simpled.Repository;
 using FluentValidation;
-using Simpled.Services.Achievements;
+using Simpled.Services;
 
 namespace Simpled.Services
 {
