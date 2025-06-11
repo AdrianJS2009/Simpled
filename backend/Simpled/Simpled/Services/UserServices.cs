@@ -297,13 +297,26 @@ namespace Simpled.Services
         /// <returns>True si la operación fue exitosa.</returns>
         public async Task<bool> ChangeUserRoleAsync(Guid userId, string role)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
-            if (user == null) throw new NotFoundException("Usuario no encontrado.");
+            var user = await _context.Users
+                .Include(u => u.Roles)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+                
+            if (user == null) 
+                throw new NotFoundException("Usuario no encontrado.");
 
             if (!Enum.TryParse<UserWebRoles>(role, true, out var parsedRole))
                 throw new ApiException("Rol no válido.", 400);
 
+            // Actualizar WebRole
             user.WebRole = parsedRole;
+
+            // Actualizar Roles
+            user.Roles.Clear();
+            user.Roles.Add(new UserRole
+            {
+                UserId = user.Id,
+                Role = role
+            });
 
             await _context.SaveChangesAsync();
             return true;

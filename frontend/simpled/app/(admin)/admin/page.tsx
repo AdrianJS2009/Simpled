@@ -31,6 +31,7 @@ type User = {
   imageUrl: string;
   isBanned: boolean;
   roles: string[];
+  WebRole: string;
 };
 
 export default function AdminPage() {
@@ -84,7 +85,9 @@ export default function AdminPage() {
         throw new Error('Error al cambiar el rol');
       }
 
-      setUsers(users.map((u) => (u.id === userId ? { ...u, roles: [newRole] } : u)));
+      const updatedUser = await response.json();
+
+      setUsers(users.map((u) => (u.id === userId ? updatedUser : u)));
 
       toast.success('Rol de usuario actualizado correctamente.');
     } catch (error: any) {
