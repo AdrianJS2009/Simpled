@@ -45,7 +45,12 @@ export default function AboutPage() {
               </div>
             </div>
             <div className="relative h-[400px] overflow-hidden rounded-xl shadow-xl">
-              <Image src="/imagen.png" alt="Equipo colaborando" fill className="object-cover" />
+              <Image
+                src="/about us -1.jpg"
+                alt="Equipo colaborando"
+                fill
+                className="object-cover"
+              />
             </div>
           </div>
         </div>
@@ -149,13 +154,13 @@ export default function AboutPage() {
               name="Adrián Jiménez Santiago"
               role="CEO & Co-fundador"
               bio="Con más de 10 años de experiencia en desarrollo de productos, Adrián lidera la visión estratégica de Simpled."
-              imageUrl="/imagen.png"
+              imageUrl="/adrian.jpg"
             />
             <TeamMemberCard
               name="Elías Robles Ruiz"
               role="CEO & Co-fundador"
               bio="Ingeniero de software con experiencia en startups tecnológicas, Elías supervisa el desarrollo técnico de la plataforma."
-              imageUrl="/imagen.png"
+              imageUrl="/Elias.jpg"
             />
           </div>
         </div>
