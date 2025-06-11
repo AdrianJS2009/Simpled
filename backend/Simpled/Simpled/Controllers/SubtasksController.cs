@@ -93,10 +93,21 @@ namespace Simpled.Controllers
 
             var boardId = await _itemService.GetBoardIdByItemId(itemId);
             var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var item = await _itemService.GetByIdAsync(itemId);
 
-            if (!await BoardAuthorizationHelper.HasBoardPermissionAsync(
-                    User, boardId, new[] { "admin", "editor" }, _memberRepo))
+            // Verificar permisos
+            var hasBoardPermission = await BoardAuthorizationHelper.HasBoardPermissionAsync(
+                User, boardId, new[] { "admin", "editor" }, _memberRepo);
+
+            // Permitir que el usuario asignado marque sus subtareas como completadas
+            var isAssignee = item.AssigneeId == userId;
+
+            if (!hasBoardPermission && !isAssignee)
                 return Forbid("No tienes permisos para editar subtareas.");
+
+            // Si no es admin/editor, solo puede cambiar el estado de completado
+            if (!hasBoardPermission && isAssignee && dto.Title != null)
+                return Forbid("Solo puedes marcar las subtareas como completadas.");
 
             // Obtener estado previo para detalle
             var allSubtasks = await _itemService.GetSubtasksByItemIdAsync(itemId);

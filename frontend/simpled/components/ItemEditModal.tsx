@@ -24,6 +24,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/contexts/AuthContext';
+import { API_URL as API } from '@/next.config';
 import * as activityLogService from '@/services/activityLogService';
 import * as commentService from '@/services/commentService';
 import type { ActivityLog, Comment, Item, Subtask, User } from '@/types';
@@ -31,7 +32,6 @@ import { Check, Loader2, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import SubtaskList from './SubtaskList';
-import { API_URL as API } from '@/next.config';
 
 type Props = Readonly<{
   item: Item;
@@ -84,6 +84,11 @@ export default function ItemEditModal({
   const canChangeAll = userRole === 'admin';
   const canChangeDates = canChangeAll || item.assigneeId === currentUserId;
   const canChangeStatus = canChangeAll || item.assigneeId === currentUserId;
+  const canEditSubtasks =
+    canChangeAll || userRole === 'editor' || item.assigneeId === currentUserId;
+  const canEditTitle = canChangeAll || userRole === 'editor';
+  const canEditDescription = canChangeAll || userRole === 'editor';
+  const canEditAssignee = canChangeAll;
 
   useEffect(() => {
     // Fetch subtasks
@@ -157,14 +162,14 @@ export default function ItemEditModal({
     try {
       const payload: any = {
         id: item.id,
-        title,
-        description,
-        startDate: startDate ? startDate.toISOString() : null,
-        dueDate: dueDate ? dueDate.toISOString() : null,
+        title: canEditTitle ? title : item.title,
+        description: canEditDescription ? description : item.description,
+        startDate: canChangeDates ? (startDate ? startDate.toISOString() : null) : item.startDate,
+        dueDate: canChangeDates ? (dueDate ? dueDate.toISOString() : null) : item.dueDate,
         columnId: item.columnId,
-        status,
+        status: canChangeStatus ? status : item.status,
       };
-      if (canChangeAll) {
+      if (canEditAssignee) {
         payload.assigneeId = assigneeId || null;
       }
 
@@ -177,12 +182,15 @@ export default function ItemEditModal({
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) throw new Error('Error al actualizar');
+      if (!res.ok) {
+        const error = await res.text();
+        throw new Error(error || 'Error al actualizar');
+      }
       onUpdated();
       onClose();
     } catch (err) {
       console.error('Error updating item:', err);
-      toast.error('Error actualizando tarea');
+      toast.error(err instanceof Error ? err.message : 'Error actualizando tarea');
     } finally {
       setLoading(false);
     }
@@ -385,7 +393,7 @@ export default function ItemEditModal({
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                disabled={!canChangeAll}
+                disabled={!canEditTitle}
                 placeholder="Título de la tarea"
               />
             </div>
@@ -395,7 +403,7 @@ export default function ItemEditModal({
                 id="item-description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                disabled={!canChangeAll}
+                disabled={!canEditDescription}
                 placeholder="Descripción de la tarea"
                 rows={3}
               />
@@ -454,7 +462,7 @@ export default function ItemEditModal({
                 </SelectContent>
               </Select>
             </div>
-            {canChangeAll && (
+            {canEditAssignee && (
               <div className="space-y-2">
                 <Label htmlFor="item-assignee">Asignar a</Label>
                 <Select
@@ -485,7 +493,7 @@ export default function ItemEditModal({
               onAdd={handleAddSubtask}
               onUpdate={handleUpdateSubtask}
               onDelete={handleDeleteSubtask}
-              disabled={!canChangeStatus}
+              disabled={!canEditSubtasks}
             />
           </TabsContent>
 
