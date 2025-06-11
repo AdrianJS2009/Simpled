@@ -133,7 +133,7 @@ export default function Navbar() {
         <Link href="/">Simpled.</Link>
       </h1>
 
-      <div className="hidden items-center gap-4 font-semibold md:flex">
+      <div className="hidden items-center gap-4 font-semibold xl:flex">
         <NavItems
           mostrarLogin={mostrarLogin}
           authId={auth.id ?? ''}
@@ -145,13 +145,13 @@ export default function Navbar() {
       </div>
 
       <Sheet>
-        <SheetTrigger asChild className="md:hidden">
+        <SheetTrigger asChild className="xl:hidden">
           <Button variant="ghost" size="icon" aria-label="Menú">
             <Menu className="h-5 w-5" />
           </Button>
         </SheetTrigger>
 
-        <SheetContent side="right" className="flex flex-col">
+        <SheetContent side="right" className="flex w-[320px] flex-col md:w-[400px] lg:w-[480px]">
           <div className="mt-6"></div>
           <nav className={`m-4 flex flex-col gap-4`}>
             <IconLink href="/" icon={<Home className="size-4" />}>
