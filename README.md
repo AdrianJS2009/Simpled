@@ -230,7 +230,7 @@ Simpled/
 
 ### 🔗 Enlaces de Producción
 
-- **Aplicación**: [simpled.app](https://simpled.app)
+- **Aplicación**: [simpled.app](https://front-simpled.duckdns.org/)
 
 ---
 
