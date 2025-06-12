@@ -76,14 +76,14 @@ export const staggerChildren = {
 };
 
 export const listItem = {
-  hidden: { y: 10, opacity: 0 },
+  hidden: { y: 5, opacity: 0 },
   visible: {
     y: 0,
     opacity: 1,
     transition: {
       type: 'spring',
-      stiffness: 400,
-      damping: 30,
+      stiffness: 200,
+      damping: 20,
     },
   },
 };

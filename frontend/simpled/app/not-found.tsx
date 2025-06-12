@@ -114,7 +114,7 @@ export default function Custom404() {
               </p>
             </CardHeader>
             <CardContent>
-              <div className="grid justify-items-center grid-cols-3 gap-1">
+              <div className="grid grid-cols-3 justify-items-center gap-1">
                 {board.map((cell, i) => (
                   <motion.div
                     key={`cell-${i}-${cell}`}
@@ -146,17 +146,17 @@ export default function Custom404() {
               <div className="mt-4 flex justify-center">
                 <Button onClick={resetGame}>Reiniciar Juego</Button>
               </div>
-              <div className='h-2.5'>
+              <div className="h-2.5">
                 {isAiThinking && (
-                <motion.div
-                  className="text-muted-foreground mt-2 text-center text-xs"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  IA pensando...
-                </motion.div>
-              )}
+                  <motion.div
+                    className="text-muted-foreground mt-2 text-center text-xs"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    IA pensando...
+                  </motion.div>
+                )}
               </div>
             </CardContent>
           </Card>
