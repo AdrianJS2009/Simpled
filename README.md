@@ -246,16 +246,16 @@ Simpled/
 
 ### 📒 Bitácora
 
-Ver [bitacora.md](docs/bitacora.md) para el registro detallado de desarrollo.
-Ver [Documentacion_Front.md](docs/Documentacion_Front.md) para la documentación relacionada con el apartado front incluyendo Figma.
+- Ver [bitacora.md](docs/bitacora.md) para el registro detallado de desarrollo.
+- Ver [Documentacion_Front.md](docs/Documentacion_Front.md) para la documentación relacionada con el apartado front incluyendo Figma.
 
 ---
 
 ## 📺 Vídeos
 
-Video de presentación - [![Simpled](https://img.youtube.com/vi/7ciRupxl6A4/0.jpg)](https://youtu.be/7ciRupxl6A4)
-Video tutorial breve de funcionamiento -
-Video de entrega final -
+- Video de presentación - [![Simpled](https://img.youtube.com/vi/7ciRupxl6A4/0.jpg)](https://youtu.be/7ciRupxl6A4)
+- Video tutorial breve de funcionamiento -
+- Video de entrega final -
 
 ---
 
