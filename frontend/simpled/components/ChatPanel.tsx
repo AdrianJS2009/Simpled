@@ -148,11 +148,6 @@ export default function ChatPanel({ roomType, entityId, members }: ChatPanelProp
     }
   }, [isVisible, messages]);
 
-  // Scroll automático al final
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
   const handleSend = async (e?: React.FormEvent) => {
     e?.preventDefault();
     if (!input.trim() || !roomId) return;

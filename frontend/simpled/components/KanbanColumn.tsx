@@ -86,7 +86,8 @@ export default function KanbanColumn({
                   <motion.div
                     key={item.id}
                     variants={listItem}
-                    layout
+                    initial="hidden"
+                    animate="visible"
                     exit={{ opacity: 0, y: 10, transition: { duration: 0.2 } }}
                   >
                     <KanbanItem
