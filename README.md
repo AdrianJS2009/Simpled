@@ -33,7 +33,6 @@
     - [Entidades Principales](#entidades-principales)
   - [🚀 Despliegue](#-despliegue)
     - [🔗 Enlaces de Producción](#-enlaces-de-producción)
-    - [🛠️ Requisitos de Despliegue](#️-requisitos-de-despliegue)
   - [📚 Referencias y bitácora](#-referencias-y-bitácora)
     - [📘 Bibliografía](#-bibliografía)
     - [📒 Bitácora](#-bitácora)
@@ -232,20 +231,6 @@ Simpled/
 ### 🔗 Enlaces de Producción
 
 - **Aplicación**: [simpled.app](https://simpled.app)
-
-### 🛠️ Requisitos de Despliegue
-
-- **Backend:**
-
-  - .NET 8 Runtime
-  - SQLite
-  - Certificado SSL
-  - Variables de entorno configuradas
-
-- **Frontend:**
-  - Node.js LTS
-  - Variables de entorno configuradas
-  - Dominio configurado
 
 ---
 
