@@ -46,7 +46,7 @@ export default function EditProfileModal({ isOpen, onClose, user }: EditProfileM
 
   const [image, setImage] = useState<File | null>(null);
 
-  const isExternal = (user as any).isExternal || (user as any).provider;
+  const isExternal = (user as any).isExternal ?? (user as any).provider;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -92,7 +92,11 @@ export default function EditProfileModal({ isOpen, onClose, user }: EditProfileM
         logout();
       }
     } catch (error) {
-      toast.error('Error al actualizar el perfil.');
+      if (error instanceof Error) {
+        toast.error(`Error al actualizar el perfil: ${error.message}`);
+      } else {
+        toast.error('Error al actualizar el perfil');
+      }
     }
   };
 

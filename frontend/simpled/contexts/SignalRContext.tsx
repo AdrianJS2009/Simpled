@@ -146,7 +146,7 @@ export const SignalRProvider = ({ children }: { children: React.ReactNode }) => 
             {payload?.title && <span className="ml-1 font-semibold">{payload.title}</span>}
           </span>,
           {
-            toastId: `board-action-${action}-${payload?.id || payload?.columnId}`,
+            toastId: `board-action-${action}-${payload?.id ?? payload?.columnId}`,
             autoClose: 3500,
           },
         );

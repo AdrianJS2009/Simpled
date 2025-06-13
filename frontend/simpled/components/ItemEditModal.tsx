@@ -365,7 +365,6 @@ export default function ItemEditModal({
             <TabsTrigger value="activity">Actividad</TabsTrigger>
           </TabsList>
 
-          {/* Detalles */}
           <TabsContent value="details" className="space-y-4 py-4">
             <div className="space-y-2">
               <Label htmlFor="item-title">Título</Label>
@@ -466,7 +465,6 @@ export default function ItemEditModal({
             )}
           </TabsContent>
 
-          {/* Subtareas */}
           <TabsContent value="subtasks" className="py-4">
             <SubtaskList
               subtasks={subtasks}
@@ -478,7 +476,6 @@ export default function ItemEditModal({
             />
           </TabsContent>
 
-          {/* Comentarios */}
           <TabsContent value="comments" className="py-4">
             {isLoadingComments ? (
               <div className="flex justify-center py-8">
@@ -496,7 +493,6 @@ export default function ItemEditModal({
             )}
           </TabsContent>
 
-          {/* Actividad */}
           <TabsContent value="activity" className="py-4">
             {activityContent}
           </TabsContent>

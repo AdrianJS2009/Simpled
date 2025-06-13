@@ -49,11 +49,19 @@ export default function ColumnCreateModal({ boardId, onClose, onCreated }: Props
         }),
       });
 
-      if (!res.ok) throw new Error('Error al crear la columna.');
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => null);
+        throw new Error(errorData?.message ?? 'Error al crear la columna');
+      }
+
       onCreated();
       onClose();
-    } catch (err) {
-      toast.error('No se pudo crear la columna.');
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error('No se pudo crear la columna');
+      }
     } finally {
       setLoading(false);
     }

@@ -194,12 +194,12 @@ export function GanttChart({ boardId, className }: GanttChartProps) {
         [
           task.id,
           `"${task.title.replace(/"/g, '""')}"`,
-          `"${(task.description || '').replace(/"/g, '""')}"`,
+          `"${(task.description ?? '').replace(/"/g, '""')}"`,
           format(new Date(task.startDate), 'yyyy-MM-dd'),
           format(new Date(task.endDate), 'yyyy-MM-dd'),
           task.progress,
-          task.status || 'pending',
-          task.dependencies?.join(';') || '',
+          task.status ?? 'pending',
+          task.dependencies?.join(';') ?? '',
         ].join(','),
       ),
     ];
@@ -309,7 +309,6 @@ export function GanttChart({ boardId, className }: GanttChartProps) {
         )}
       </CardContent>
 
-      {/* Diálogos modales para edición y dependencias */}
       {selectedTask && (
         <>
           <GanttTaskDialog

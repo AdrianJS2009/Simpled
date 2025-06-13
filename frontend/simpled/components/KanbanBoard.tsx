@@ -686,7 +686,7 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
           entityId={boardId}
           members={members.map((m) => {
             const user = users.find((u) => u.id === m.userId);
-            return { userId: m.userId, name: user?.name || 'Usuario', imageUrl: user?.imageUrl };
+            return { userId: m.userId, name: user?.name ?? 'Usuario', imageUrl: user?.imageUrl };
           })}
         />
       </div>

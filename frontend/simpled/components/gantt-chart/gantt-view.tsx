@@ -181,7 +181,6 @@ export function GanttView({
   return (
     <TooltipProvider>
       <div className="gantt-chart min-w-[800px]">
-        {/* Cabecera principal con días o periodos */}
         <div
           className="gantt-timeline-header grid"
           style={{
@@ -215,7 +214,6 @@ export function GanttView({
               ))}
         </div>
 
-        {/* Subcabecera para mes o semana cuando no es vista "day" */}
         {viewMode !== 'day' && (
           <div
             className="gantt-timeline-subheader grid"
@@ -238,7 +236,6 @@ export function GanttView({
           </div>
         )}
 
-        {/* Cuerpo del Gantt con tareas */}
         <div className="gantt-body relative">
           <button
             type="button"
@@ -303,7 +300,6 @@ export function GanttView({
             ))
           )}
 
-          {/* Renderizado de líneas de dependencia */}
           <svg
             className="pointer-events-none absolute top-0 left-0 h-full w-full"
             style={{ zIndex: 5 }}
@@ -400,7 +396,6 @@ export function GanttView({
             </defs>
           </svg>
 
-          {/* Línea vertical de "Hoy" */}
           {todayPosition !== null && (
             <div
               className="gantt-today-line pointer-events-none absolute top-0 bottom-0 z-10 w-[2px] bg-red-500/80"

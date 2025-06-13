@@ -52,7 +52,7 @@ function getActivityMessage(log: ActivityLog, users?: { id: string; name: string
     case 'Created':
       return `Tarea creada por ${log.userName}`;
     case 'Updated':
-      if (['StartDate', 'DueDate'].includes(log.field || '')) {
+      if (['StartDate', 'DueDate'].includes(log.field ?? '')) {
         return (
           <>
             {log.userName} cambió la fecha:{' '}
@@ -66,7 +66,7 @@ function getActivityMessage(log: ActivityLog, users?: { id: string; name: string
           <>
             {log.userName} cambió el responsable:{' '}
             <span className="font-semibold">
-              {log.oldValueName ||
+              {log.oldValueName ??
                 getUserNameById(
                   log.oldValue && typeof log.oldValue === 'string' ? log.oldValue : undefined,
                   users,
@@ -74,7 +74,7 @@ function getActivityMessage(log: ActivityLog, users?: { id: string; name: string
             </span>{' '}
             →{' '}
             <span className="font-semibold">
-              {log.newValueName ||
+              {log.newValueName ??
                 getUserNameById(
                   log.newValue && typeof log.newValue === 'string' ? log.newValue : undefined,
                   users,
@@ -112,7 +112,7 @@ function getActivityMessage(log: ActivityLog, users?: { id: string; name: string
         <>
           {log.userName} cambió el responsable:{' '}
           <span className="font-semibold">
-            {log.oldValueName ||
+            {log.oldValueName ??
               getUserNameById(
                 log.oldValue && typeof log.oldValue === 'string' ? log.oldValue : undefined,
                 users,
@@ -120,7 +120,7 @@ function getActivityMessage(log: ActivityLog, users?: { id: string; name: string
           </span>{' '}
           →{' '}
           <span className="font-semibold">
-            {log.newValueName ||
+            {log.newValueName ??
               getUserNameById(
                 log.newValue && typeof log.newValue === 'string' ? log.newValue : undefined,
                 users,
@@ -156,7 +156,7 @@ const getActivityIcon = (type: string, field?: string) => {
     case 'Created':
       return <Edit className="h-4 w-4 text-blue-500" />;
     case 'Updated':
-      if (['StartDate', 'DueDate'].includes(field || '')) {
+      if (['StartDate', 'DueDate'].includes(field ?? '')) {
         return <Clock className="h-4 w-4 text-amber-500" />;
       }
       return <Edit className="h-4 w-4 text-amber-500" />;

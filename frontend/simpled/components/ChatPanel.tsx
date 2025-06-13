@@ -22,9 +22,9 @@ interface MemberInfo {
 }
 
 interface ChatPanelProps {
-  roomType: 'Team' | 'Board';
-  entityId: string;
-  members?: MemberInfo[];
+  readonly roomType: 'Team' | 'Board';
+  readonly entityId: string;
+  readonly members?: MemberInfo[];
 }
 
 export default function ChatPanel({ roomType, entityId, members }: ChatPanelProps) {
@@ -59,8 +59,12 @@ export default function ChatPanel({ roomType, entityId, members }: ChatPanelProp
         if (msgs.length > 0) {
           lastReadMessageRef.current = msgs[msgs.length - 1].id;
         }
-      } catch (err) {
-        toast.error('No se pudo cargar el chat');
+      } catch (error) {
+        if (error instanceof Error) {
+          toast.error(`Error al cargar el chat: ${error.message}`);
+        } else {
+          toast.error('No se pudo cargar el chat');
+        }
       } finally {
         setLoading(false);
       }
@@ -80,7 +84,11 @@ export default function ChatPanel({ roomType, entityId, members }: ChatPanelProp
         if (msgs.length > 0) {
           lastReadMessageRef.current = msgs[msgs.length - 1].id;
         }
-      } catch (err) {}
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error('Error al actualizar mensajes:', error.message);
+        }
+      }
     }, 5000);
 
     return () => clearInterval(interval);
@@ -97,7 +105,11 @@ export default function ChatPanel({ roomType, entityId, members }: ChatPanelProp
         } else {
           await connection.invoke('JoinBoardGroup', entityId);
         }
-      } catch (err) {}
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error('Error al unirse a la sala:', error.message);
+        }
+      }
     };
 
     join();
@@ -147,8 +159,12 @@ export default function ChatPanel({ roomType, entityId, members }: ChatPanelProp
     try {
       await sendMessage({ chatRoomId: roomId, text: input }, auth.token!);
       setInput('');
-    } catch {
-      toast.error('No se pudo enviar el mensaje');
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(`Error al enviar mensaje: ${error.message}`);
+      } else {
+        toast.error('No se pudo enviar el mensaje');
+      }
     } finally {
       setSending(false);
     }

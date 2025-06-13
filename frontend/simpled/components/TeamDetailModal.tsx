@@ -79,7 +79,7 @@ export default function TeamDetailModal({ team, isOwner, onClose, onUpdated }: P
           return {
             userId: m.userId,
             name: m.userName,
-            imageUrl: profile?.imageUrl || undefined,
+            imageUrl: profile?.imageUrl ?? undefined,
             role: m.role,
           };
         }),
@@ -94,7 +94,7 @@ export default function TeamDetailModal({ team, isOwner, onClose, onUpdated }: P
 
   const ownerMember = {
     userId: team.ownerId,
-    name: team.ownerName || 'Propietario',
+    name: team.ownerName ?? 'Propietario',
     imageUrl: enrichedMembers.find((m) => m.userId === team.ownerId)?.imageUrl,
     role: 'Propietario',
   };

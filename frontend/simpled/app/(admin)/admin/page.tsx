@@ -48,13 +48,18 @@ export default function AdminPage() {
       });
 
       if (!response.ok) {
-        throw new Error('Error al obtener usuarios');
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.message ?? 'Error al obtener usuarios');
       }
 
       const data = await response.json();
       setUsers(data);
     } catch (error) {
-      toast.error('No se pudieron cargar los usuarios.');
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error('No se pudieron cargar los usuarios.');
+      }
     } finally {
       setLoading(false);
     }
@@ -91,7 +96,7 @@ export default function AdminPage() {
 
       toast.success('Rol de usuario actualizado correctamente.');
     } catch (error: any) {
-      toast.error(error.message || 'No se pudo cambiar el rol del usuario.');
+      toast.error(error.message ?? 'No se pudo cambiar el rol del usuario.');
     }
   };
 
@@ -120,7 +125,7 @@ export default function AdminPage() {
 
       toast.success(`Usuario ${isBanned ? 'baneado' : 'desbaneado'} correctamente.`);
     } catch (error: any) {
-      toast.error(error.message || 'No se pudo actualizar el estado de baneo del usuario.');
+      toast.error(error.message ?? 'No se pudo actualizar el estado de baneo del usuario.');
     }
   };
 

@@ -13,10 +13,10 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { useAuth } from '@/contexts/AuthContext';
+import { API_URL as API } from '@/next.config';
 import { BookUser, Lock, LockOpen, PenLine, Plus, UserPlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { API_URL as API } from '@/next.config';
 
 type User = {
   id: string;
@@ -132,7 +132,6 @@ export default function BoardDetails({ boardId }: Readonly<{ boardId: string }>)
 
   return (
     <div className="mx-auto max-w-6xl p-8">
-      {/* Header */}
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-2xl font-bold">{board.name}</h1>
         <span className="rounded bg-gray-200 p-2 text-sm dark:bg-gray-700">
@@ -148,7 +147,6 @@ export default function BoardDetails({ boardId }: Readonly<{ boardId: string }>)
         </span>
       </div>
 
-      {/* Actions */}
       {userRole === 'admin' && (
         <div className="mb-3 flex gap-2">
           <button
@@ -189,12 +187,10 @@ export default function BoardDetails({ boardId }: Readonly<{ boardId: string }>)
         </div>
       )}
 
-      {/* Member count */}
       <p className="mb-6 flex items-center gap-1 text-sm text-gray-500">
         <BookUser className="h-5 w-5" /> Miembros: {members.length}
       </p>
 
-      {/* Columns & Items */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {columns.map((col) => (
           <div key={col.id} className="rounded bg-white p-4 shadow">
@@ -238,7 +234,6 @@ export default function BoardDetails({ boardId }: Readonly<{ boardId: string }>)
         ))}
       </div>
 
-      {/* Modals */}
       {showCreateColumn && (
         <ColumnCreateModal
           boardId={boardId}
@@ -276,7 +271,6 @@ export default function BoardDetails({ boardId }: Readonly<{ boardId: string }>)
         />
       )}
 
-      {/* Invite Modal */}
       {showInviteModal && (
         <div className="bg-opacity-40 fixed inset-0 flex items-center justify-center bg-black">
           <div className="w-full max-w-md rounded bg-white p-6 shadow-lg">
