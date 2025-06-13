@@ -288,6 +288,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (!response.ok) throw new Error('Error al actualizar favorito.');
 
       const data = await response.json();
+
+      if (data.favorite) {
+        const boardResponse = await fetch(`${API_URL}/api/Boards/${boardId}`, {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        });
+        if (boardResponse.ok) {
+          const boardData = await boardResponse.json();
+          setFavoriteBoards((prev) => [...prev, { id: boardId, name: boardData.name }]);
+        }
+      } else {
+        setFavoriteBoards((prev) => prev.filter((board) => board.id !== boardId));
+      }
+
       toast.success(
         data.favorite ? 'Tablero añadido a favoritos.' : 'Tablero eliminado de favoritos.',
       );

@@ -43,9 +43,6 @@ export default function ProfileHeader({ user, isOwner }: ProfileHeaderProps) {
           >
             <Image src={getImageSrc(user.imageUrl)} alt={user.name} fill className="object-cover" />
           </div>
-          <div
-            className={`absolute right-1 bottom-1 h-4 w-4 rounded-full ${user.isOnline ? 'bg-green-500' : 'bg-gray-400'} border-2 border-white dark:border-gray-800`}
-          ></div>
         </div>
 
         <div className="mt-4 flex-1 text-center md:mt-0 md:ml-8 md:text-left">

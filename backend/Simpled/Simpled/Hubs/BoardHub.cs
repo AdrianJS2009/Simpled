@@ -76,5 +76,14 @@ namespace Simpled.Hubs
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, boardId.ToString());
             Console.WriteLine($"[Hub] Usuario salió del grupo del board {boardId}");
         }
+
+        /// <summary>
+        /// Alias para LeaveBoardGroup, usado por el frontend para salir de un grupo de tablero.
+        /// </summary>
+        /// <param name="boardId">Identificador del tablero.</param>
+        public async Task LeaveRoom(Guid boardId)
+        {
+            await LeaveBoardGroup(boardId);
+        }
     }
 }
