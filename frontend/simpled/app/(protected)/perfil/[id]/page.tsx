@@ -2,7 +2,7 @@
 
 import AchievementCounter from '@/components/AchievementCounter';
 import FavoriteList from '@/components/FavoriteList';
-import InvitationsModal from '@/components/InvitationsModal';
+import InvitationsModal from '@/components/InvitationModal';
 import ProfileHeader from '@/components/ProfileHeader';
 import TeamsList from '@/components/TeamsList';
 import { useAuth } from '@/contexts/AuthContext';
