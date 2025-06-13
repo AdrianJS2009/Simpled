@@ -10,10 +10,8 @@ interface ProjectOverviewProps {
 }
 
 export function ProjectOverview({ boards }: ProjectOverviewProps) {
-  // Function to generate random progress for demo purposes
   const getRandomProgress = () => Math.floor(Math.random() * 100);
 
-  // Function to get a color based on progress
   const getProgressColor = (progress: number) => {
     if (progress < 30) return 'bg-amber-500';
     if (progress < 70) return 'bg-blue-500';

@@ -70,7 +70,6 @@ export default function TeamDetailModal({ team, isOwner, onClose, onUpdated }: P
   >([]);
   const [roleUpdates, setRoleUpdates] = useState<{ [userId: string]: string }>({});
 
-  // Cargar datos de perfil de los miembros al abrir el modal
   useEffect(() => {
     let mounted = true;
     const loadProfiles = async () => {
@@ -93,7 +92,6 @@ export default function TeamDetailModal({ team, isOwner, onClose, onUpdated }: P
     };
   }, [team.members, fetchUserProfile]);
 
-  // Owner como primer miembro
   const ownerMember = {
     userId: team.ownerId,
     name: team.ownerName || 'Propietario',

@@ -24,7 +24,6 @@ export default function AdminLayout({ children }: Readonly<{ children: React.Rea
       const timeout = setTimeout(() => {
         router.push('/');
       }, 1500);
-      // console.log(userData?.roles)
       return () => clearTimeout(timeout);
     }
 

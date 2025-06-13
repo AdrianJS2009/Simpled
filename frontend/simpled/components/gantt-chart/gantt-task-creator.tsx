@@ -41,7 +41,6 @@ export function GanttTaskCreator({ position, onClose, onSave, columns }: GanttTa
   });
 
   useEffect(() => {
-    // Update the task start date when the position changes
     setTask((prev) => ({
       ...prev,
       startDate: position.date.toISOString(),

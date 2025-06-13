@@ -1,4 +1,3 @@
-// Animation variants for consistent animations across components
 export const fadeIn = {
   hidden: { opacity: 0 },
   visible: {

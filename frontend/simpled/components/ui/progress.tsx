@@ -11,7 +11,6 @@ interface ProgressProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
   ({ className, value = 0, max = 100, getValueLabel, ...props }, ref) => {
-    // Porcentaje de progreso
     const percentage = value && max ? (value / max) * 100 : 0;
 
     return (

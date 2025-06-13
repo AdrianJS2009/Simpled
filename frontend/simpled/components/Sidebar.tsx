@@ -1,5 +1,4 @@
 'use client';
-import { API_URL as API } from '@/next.config';
 import {
   Accordion,
   AccordionContent,
@@ -17,6 +16,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
+import { API_URL as API } from '@/next.config';
 import { ChevronDown, ChevronRight, Grid2x2, Home, Menu, RefreshCw, Settings } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -47,9 +47,7 @@ const Sidebar = () => {
       const columnData = await columnRes.json();
 
       setColumns(columnData);
-    } catch (err) {
-      console.error('Error al cargar el tablero:', err);
-    }
+    } catch (err) {}
   };
 
   return (

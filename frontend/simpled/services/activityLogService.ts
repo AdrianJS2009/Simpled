@@ -1,5 +1,3 @@
-// src/services/activityLogService.ts
-
 import { API_URL } from '@/next.config';
 import type { ActivityLog } from '@/types';
 

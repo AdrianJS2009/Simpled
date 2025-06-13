@@ -6,7 +6,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Circle, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-// Combinaciones ganadoras en el tablero 3x3
 const winningCombos: number[][] = [
   [0, 1, 2],
   [3, 4, 5],
@@ -24,7 +23,6 @@ export default function Custom404() {
   const [userSymbol, setUserSymbol] = useState<'X' | 'O'>('X');
   const [aiSymbol, setAiSymbol] = useState<'X' | 'O'>('O');
 
-  // Estado del tablero y juego
   const [board, setBoard] = useState<Array<CellValue>>(Array(9).fill(null));
   const [winner, setWinner] = useState<'X' | 'O' | 'Draw' | null>(null);
   const [isAiThinking, setIsAiThinking] = useState(false);
@@ -44,7 +42,6 @@ export default function Custom404() {
     resetGame();
   }, []);
 
-  // Comprueba si hay ganador
   const checkWinner = (b: Array<CellValue>) => {
     for (const [a, bIdx, c] of winningCombos) {
       if (b[a] && b[a] === b[bIdx] && b[a] === b[c]) {
@@ -54,7 +51,6 @@ export default function Custom404() {
     return null;
   };
 
-  // Mpvimiento de la IA random
   const aiMove = (currentBoard: Array<CellValue>) => {
     const emptyIndexes = currentBoard
       .map((cell, idx) => (cell === null ? idx : null))
@@ -68,7 +64,6 @@ export default function Custom404() {
 
   const handleCellClick = (idx: number) => {
     if (board[idx] || winner || isAiThinking) return;
-    // Turno usuario
     const userBoard = [...board];
     userBoard[idx] = userSymbol;
     const winUser = checkWinner(userBoard);
@@ -81,7 +76,7 @@ export default function Custom404() {
       setWinner('Draw');
       return;
     }
-    // Turno IA
+
     setIsAiThinking(true);
     setTimeout(() => {
       const boardAfterAi = aiMove(userBoard);

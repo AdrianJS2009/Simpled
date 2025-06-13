@@ -11,11 +11,11 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/contexts/AuthContext';
+import { API_URL as API } from '@/next.config';
 import { motion } from 'framer-motion';
 import { Check, X } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { API_URL as API } from '@/next.config';
 
 type Props = {
   readonly boardId: string;
@@ -53,7 +53,6 @@ export default function ColumnCreateModal({ boardId, onClose, onCreated }: Props
       onCreated();
       onClose();
     } catch (err) {
-      console.error(err);
       toast.error('No se pudo crear la columna.');
     } finally {
       setLoading(false);

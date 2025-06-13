@@ -2,12 +2,12 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
+import { API_URL as API } from '@/next.config';
 import type { ActivityLog as ActivityLogBase } from '@/types';
 import { formatDistanceToNow, isValid } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { CheckCircle2, Clock, Edit, MessageSquare, Tag, Trash2, UserPlus } from 'lucide-react';
 import React from 'react';
-import { API_URL as API } from '@/next.config';
 
 type ActivityLog = ActivityLogBase & {
   oldValueName?: string;
@@ -28,7 +28,7 @@ function getUserNameById(id?: string | null, users?: { id: string; name: string 
 
 function formatDateString(dateStr?: string | null) {
   if (!dateStr) return '';
-  // Intenta parsear la fecha
+
   let date: Date;
   try {
     date = new Date(dateStr);
@@ -36,7 +36,7 @@ function formatDateString(dateStr?: string | null) {
     return dateStr;
   }
   if (!isValid(date)) return dateStr;
-  // Formato local: dd/MM/yyyy HH:mm
+
   return date.toLocaleString(undefined, {
     day: '2-digit',
     month: '2-digit',
@@ -83,7 +83,7 @@ function getActivityMessage(log: ActivityLog, users?: { id: string; name: string
           </>
         );
       }
-      // Si el campo parece una fecha, también lo formateo
+
       if (log.field && /date/i.test(log.field)) {
         return (
           <>

@@ -1,4 +1,3 @@
-// src/components/ItemEditModal.tsx
 'use client';
 
 import { ActivityLogComponent } from '@/components/ActivityLog';
@@ -52,7 +51,6 @@ export default function ItemEditModal({
 }: Props) {
   const { auth } = useAuth();
 
-  // Detalles de la tarea
   const [title, setTitle] = useState(item.title);
   const [description, setDescription] = useState(item.description ?? '');
   const [startDate, setStartDate] = useState<Date | undefined>(
@@ -64,18 +62,14 @@ export default function ItemEditModal({
   const [status, setStatus] = useState(item.status ?? 'pending');
   const [assigneeId, setAssigneeId] = useState(item.assigneeId ?? '');
 
-  // Subtareas
   const [subtasks, setSubtasks] = useState<Subtask[]>(item.subtasks || []);
 
-  // Comentarios
   const [comments, setComments] = useState<Comment[]>([]);
   const [isLoadingComments, setIsLoadingComments] = useState(false);
 
-  // Actividad
   const [activityLogs, setActivityLogs] = useState<ActivityLog[]>([]);
   const [isLoadingLogs, setIsLoadingLogs] = useState(false);
 
-  // UI
   const [activeTab, setActiveTab] = useState<'details' | 'subtasks' | 'comments' | 'activity'>(
     'details',
   );
@@ -91,7 +85,6 @@ export default function ItemEditModal({
   const canEditAssignee = canChangeAll;
 
   useEffect(() => {
-    // Fetch subtasks
     const fetchSubtasks = async () => {
       try {
         const res = await fetch(`${API}/api/items/${item.id}/subtasks`, {
@@ -101,12 +94,10 @@ export default function ItemEditModal({
           setSubtasks(await res.json());
         }
       } catch (err) {
-        console.error('Error fetching subtasks:', err);
         toast.error('Error al cargar subtareas');
       }
     };
 
-    // Fetch comments
     const fetchComments = async () => {
       if (!auth.token) {
         toast.error('No autenticado');
@@ -118,14 +109,12 @@ export default function ItemEditModal({
         const data = await commentService.fetchComments(item.id, auth.token);
         setComments(data);
       } catch (err) {
-        console.error('Error fetching comments:', err);
         toast.error('Error al cargar los comentarios');
       } finally {
         setIsLoadingComments(false);
       }
     };
 
-    // Fetch activity logs
     const fetchActivityLogs = async () => {
       if (!auth.token) {
         toast.error('No autenticado');
@@ -135,10 +124,8 @@ export default function ItemEditModal({
       setIsLoadingLogs(true);
       try {
         const data = await activityLogService.fetchActivityLogs(item.id, auth.token);
-        console.log('Activity logs for item', item.id, data);
         setActivityLogs(data);
       } catch (err) {
-        console.error('Error fetching activity logs:', err);
         toast.error('Error al cargar el historial de actividad');
       } finally {
         setIsLoadingLogs(false);
@@ -150,7 +137,6 @@ export default function ItemEditModal({
     fetchActivityLogs();
   }, [item.id, auth.token]);
 
-  // Guardar cambios de la tarea
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim()) {
@@ -189,14 +175,12 @@ export default function ItemEditModal({
       onUpdated();
       onClose();
     } catch (err) {
-      console.error('Error updating item:', err);
       toast.error(err instanceof Error ? err.message : 'Error actualizando tarea');
     } finally {
       setLoading(false);
     }
   };
 
-  // Handlers de subtareas
   const handleAddSubtask = async (title: string) => {
     try {
       const res = await fetch(`${API}/api/items/${item.id}/subtasks`, {
@@ -211,7 +195,6 @@ export default function ItemEditModal({
       const newSubtask = await res.json();
       setSubtasks((prev) => [...prev, newSubtask]);
     } catch (err) {
-      console.error(err);
       toast.error('Error al crear subtarea');
     }
   };
@@ -241,7 +224,6 @@ export default function ItemEditModal({
       if (all > 0 && done === all) setStatus('completed');
       else if (done > 0) setStatus('in-progress');
     } catch (err) {
-      console.error(err);
       toast.error('Error al actualizar subtarea');
     }
   };
@@ -260,7 +242,6 @@ export default function ItemEditModal({
     }
   };
 
-  // Handlers de comentarios
   const handleAddComment = async (text: string) => {
     if (!auth.token) {
       toast.error('No autenticado');

@@ -19,7 +19,6 @@ import {
 export function TaskProgressChart() {
   const [activeTab, setActiveTab] = useState('burndown');
 
-  // Simulated data for the burndown chart
   const burndownData = [
     { day: 'Lun', remaining: 30, ideal: 30 },
     { day: 'Mar', remaining: 28, ideal: 25 },
@@ -30,7 +29,6 @@ export function TaskProgressChart() {
     { day: 'Dom', remaining: 12, ideal: 0 },
   ];
 
-  // Simulated data for the velocity chart
   const velocityData = [
     { sprint: 'Sprint 1', completed: 18 },
     { sprint: 'Sprint 2', completed: 22 },
@@ -40,7 +38,6 @@ export function TaskProgressChart() {
     { sprint: 'Sprint 6', completed: 24 },
   ];
 
-  // Simulated data for the cumulative flow
   const cumulativeFlowData = [
     { day: 'Lun', completed: 5, inProgress: 10, backlog: 15 },
     { day: 'Mar', completed: 8, inProgress: 12, backlog: 12 },

@@ -40,7 +40,7 @@ import ItemCreateModal from './ItemCreateModal';
 import ItemEditModal from './ItemEditModal';
 import KanbanColumn from './KanbanColumn';
 import KanbanItem from './KanbanItem';
-// Helper functions for subtask, column, and item updates
+
 function addSubtaskToItem(items: Item[], payload: any): Item[] {
   return items.map((item) => {
     if (item.id === payload.itemId) {
@@ -236,7 +236,6 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
             }
             return item;
           } catch (error) {
-            console.error(`Error fetching subtasks for item ${item.id}:`, error);
             return item;
           }
         }),

@@ -27,7 +27,6 @@ export default function BoardCard({ board }: { readonly board: Board }) {
       try {
         deleteBoard(board.id);
       } catch (error) {
-        console.error('Error al eliminar el tablero:', error);
         toast.error('Error al eliminar el tablero');
       } finally {
         setIsDeleting(false);
@@ -41,7 +40,6 @@ export default function BoardCard({ board }: { readonly board: Board }) {
       toggleFavoriteBoard(board.id);
       setIsFavorite(!isFavorite);
     } catch (error) {
-      console.error('Error al actualizar favorito:', error);
       toast.error('No se pudo actualizar el estado de favorito');
     } finally {
       setIsFavoriteToggling(false);
@@ -144,14 +142,12 @@ export default function BoardCard({ board }: { readonly board: Board }) {
   );
 }
 
-// Decodificación del token para obtener el ID del usuario
 function getUserIdFromToken(token: string | null): string | null {
   if (!token) return null;
   try {
     const payload = JSON.parse(atob(token.split('.')[1]));
     return payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
   } catch (error) {
-    console.error('Error al decodificar el token:', error);
     return null;
   }
 }

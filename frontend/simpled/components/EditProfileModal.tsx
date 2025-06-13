@@ -92,7 +92,6 @@ export default function EditProfileModal({ isOpen, onClose, user }: EditProfileM
         logout();
       }
     } catch (error) {
-      console.error('Error actualizando perfil:', error);
       toast.error('Error al actualizar el perfil.');
     }
   };

@@ -24,7 +24,7 @@ interface MemberInfo {
 interface ChatPanelProps {
   roomType: 'Team' | 'Board';
   entityId: string;
-  members?: MemberInfo[]; // Lista de miembros para mostrar nombre y foto
+  members?: MemberInfo[];
 }
 
 export default function ChatPanel({ roomType, entityId, members }: ChatPanelProps) {
@@ -41,12 +41,10 @@ export default function ChatPanel({ roomType, entityId, members }: ChatPanelProp
   const lastReadMessageRef = useRef<string | null>(null);
   const isVisibleRef = useRef(isVisible);
 
-  // Sincronizar la referencia con el estado isVisible
   useEffect(() => {
     isVisibleRef.current = isVisible;
   }, [isVisible]);
 
-  // Obtener sala y mensajes
   useEffect(() => {
     let isMounted = true;
     setLoading(true);
@@ -72,7 +70,6 @@ export default function ChatPanel({ roomType, entityId, members }: ChatPanelProp
     };
   }, [roomType, entityId, auth.token]);
 
-  // Añadir intervalo de actualización
   useEffect(() => {
     if (!roomId || !auth.token) return;
 
@@ -83,10 +80,8 @@ export default function ChatPanel({ roomType, entityId, members }: ChatPanelProp
         if (msgs.length > 0) {
           lastReadMessageRef.current = msgs[msgs.length - 1].id;
         }
-      } catch (err) {
-        console.error('Error al actualizar mensajes:', err);
-      }
-    }, 5000); // Actualizar cada 5 segundos
+      } catch (err) {}
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [roomId, auth.token]);
@@ -102,9 +97,7 @@ export default function ChatPanel({ roomType, entityId, members }: ChatPanelProp
         } else {
           await connection.invoke('JoinBoardGroup', entityId);
         }
-      } catch (err) {
-        console.error('Error al unirse a la sala:', err);
-      }
+      } catch (err) {}
     };
 
     join();
@@ -133,7 +126,7 @@ export default function ChatPanel({ roomType, entityId, members }: ChatPanelProp
       mounted = false;
       connection.off('ReceiveMessage', handler);
       if (roomId) {
-        connection.invoke('LeaveRoom', roomId).catch(console.error);
+        connection.invoke('LeaveRoom', roomId).catch(() => {});
       }
     };
   }, [connection, roomId, roomType, entityId]);
@@ -154,7 +147,6 @@ export default function ChatPanel({ roomType, entityId, members }: ChatPanelProp
     try {
       await sendMessage({ chatRoomId: roomId, text: input }, auth.token!);
       setInput('');
-      // El mensaje llegará por SignalR
     } catch {
       toast.error('No se pudo enviar el mensaje');
     } finally {
@@ -162,7 +154,6 @@ export default function ChatPanel({ roomType, entityId, members }: ChatPanelProp
     }
   };
 
-  // Busca el usuario en la lista de miembros o usa el usuario autenticado
   const getUserInfo = (userId: string) => {
     if (userId === userData?.id) return { name: userData.name, imageUrl: userData.imageUrl };
     if (members) {

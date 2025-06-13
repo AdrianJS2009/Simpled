@@ -67,10 +67,8 @@ export function GanttView({
     }>
   >([]);
 
-  // Formateo de la fecha de hoy para resaltar la columna correspondiente
   const todayFormatted = useMemo(() => format(new Date(), 'yyyy-MM-dd'), []);
 
-  // Cálculo de la posición de la línea de "Hoy" en el timeline
   useEffect(() => {
     const today = new Date();
     const daysSinceStart = Math.floor(
@@ -84,7 +82,6 @@ export function GanttView({
     }
   }, [startDate, daysToShow]);
 
-  // Helper: Find task index in groupedTasks
   function findTaskIndexInGroups(groupedTasks: GroupedTask[], taskId: string) {
     let index = -1;
     let visible = true;
@@ -104,7 +101,6 @@ export function GanttView({
     return { index, visible };
   }
 
-  // Helper: Calculate days from start
   function toDays(dateStr: string, startDate: Date, daysToShow: number) {
     const date = new Date(dateStr);
     const diffTime = date.getTime() - startDate.getTime();
@@ -112,8 +108,6 @@ export function GanttView({
     return Math.max(0, Math.min(diffDays, daysToShow - 1));
   }
 
-  // Efecto para calcular las líneas de dependencia entre tareas
-  // Nota: este cálculo es simplificado y asume posiciones fijas para los elementos
   useEffect(() => {
     const lines: typeof dependencyLines = [];
     const dayWidth = 40 * zoomLevel;
@@ -172,11 +166,10 @@ export function GanttView({
     setDependencyLines(lines);
   }, [dependencies, tasks, groupedTasks, startDate, zoomLevel, daysToShow]);
 
-  // Manejo de clic en el timeline para detectar la fecha seleccionada
   const handleTimelineClick = (e: React.MouseEvent) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
-    if (x <= 200) return; // columna fija de nombres
+    if (x <= 200) return;
 
     const dayWidth = 40 * zoomLevel;
     const dayIndex = Math.floor((x - 200) / dayWidth);
@@ -521,7 +514,6 @@ function TaskRow({
 
   let isVisible = startDiff < daysToShow && startDiff + duration > 0;
 
-  // Hook de dnd-kit para arrastrar tareas
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: task.id,
     data: {

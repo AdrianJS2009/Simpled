@@ -53,7 +53,6 @@ export function CommentSection({
       await onAddComment(newComment.trim());
       setNewComment('');
     } catch (error) {
-      console.error('Error adding comment:', error);
       toast.error('No se pudo añadir el comentario');
     } finally {
       setIsSubmitting(false);
@@ -78,7 +77,6 @@ export function CommentSection({
       await onUpdateComment(commentId, editText.trim());
       setEditingCommentId(null);
     } catch (error) {
-      console.error('Error updating comment:', error);
       toast.error('No se pudo actualizar el comentario');
     } finally {
       setIsUpdating(false);
@@ -90,7 +88,6 @@ export function CommentSection({
     try {
       await onDeleteComment(commentId);
     } catch (error) {
-      console.error('Error deleting comment:', error);
       toast.error('No se pudo eliminar el comentario');
     } finally {
       setIsDeleting(null);
@@ -102,7 +99,6 @@ export function CommentSection({
     try {
       await onResolveComment(commentId, !currentStatus);
     } catch (error) {
-      console.error('Error resolving comment:', error);
       toast.error('No se pudo actualizar el estado del comentario');
     } finally {
       setIsResolving(null);

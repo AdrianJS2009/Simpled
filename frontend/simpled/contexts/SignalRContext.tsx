@@ -14,7 +14,6 @@ const SignalRContext = createContext<SignalRContextType>({ connection: null });
 
 export const useSignalR = () => useContext(SignalRContext);
 
-// Banner de conexión global
 function ConnectionBanner({ status }: { status: 'connected' | 'reconnecting' | 'disconnected' }) {
   if (status === 'connected') return null;
   return (
@@ -122,15 +121,12 @@ export const SignalRProvider = ({ children }: { children: React.ReactNode }) => 
       });
     });
     conn.on('BoardUpdated', (_boardId, action, payload) => {
-      // Filter out toasts for the user who originated the action
       const currentUserId = auth.id;
-      // Prefer payload.userId, fallback to payload.assigneeId for assignment events
       const originUserId = payload?.userId ?? payload?.assigneeId ?? null;
       if (originUserId && originUserId === currentUserId) {
-        // Do not show toast for self-originated events
         return;
       }
-      // Notificación in-app para acciones relevantes
+
       const actionMap: Record<string, { icon: string; color: string; label: string }> = {
         ColumnCreated: { icon: '📌', color: '#2563eb', label: 'Columna creada' },
         ColumnDeleted: { icon: '🗑️', color: '#ef4444', label: 'Columna eliminada' },
@@ -155,7 +151,6 @@ export const SignalRProvider = ({ children }: { children: React.ReactNode }) => 
           },
         );
       }
-      // Puedes añadir más lógica aquí para banners, sonidos, etc.
       console.log('📡 BoardUpdated', { action, payload });
     });
 

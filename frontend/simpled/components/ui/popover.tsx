@@ -7,10 +7,8 @@ import { cn } from '@/lib/utils';
 
 const Popover = PopoverPrimitive.Root;
 
-// Al clicar el botón, se abrirá el popover
 const PopoverTrigger = PopoverPrimitive.Trigger;
 
-// Contenido motrado
 const PopoverContent = React.forwardRef<
   HTMLDivElement,
   React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>

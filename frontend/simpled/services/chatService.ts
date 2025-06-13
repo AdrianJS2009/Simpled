@@ -1,6 +1,5 @@
 import { API_URL } from '@/next.config';
 
-// Tipos mínimos para el chat
 export type ChatRoomReadDto = {
   id: string;
   roomType: 'Team' | 'Board';

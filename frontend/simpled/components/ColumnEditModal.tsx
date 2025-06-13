@@ -1,10 +1,10 @@
 'use client';
 import { fadeIn, scaleUp } from '@/lib/animation-variants';
+import { API_URL as API } from '@/next.config';
 import { motion } from 'framer-motion';
 import type React from 'react';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { API_URL as API } from '@/next.config';
 
 export default function ColumnEditModal({
   columnId,
@@ -47,7 +47,6 @@ export default function ColumnEditModal({
       onUpdated();
       onClose();
     } catch (err) {
-      console.error(err);
       toast.error('Error al actualizar columna.');
     } finally {
       setLoading(false);

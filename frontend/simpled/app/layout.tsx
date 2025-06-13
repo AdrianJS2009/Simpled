@@ -36,9 +36,7 @@ export default function RootLayout({ children }: { readonly children: React.Reac
   const [showCheatsheet, setShowCheatsheet] = useState(false);
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // console.log('Evento keydown:', { key: e.key, code: e.code, altKey: e.altKey });
-    };
+    const handleKeyDown = (e: KeyboardEvent) => {};
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);

@@ -17,7 +17,7 @@ export default function BoardsPage() {
     if (!name.trim()) return;
     await createBoard(name);
     setName('');
-    setShowCrudForm(false); // Hide form after creation
+    setShowCrudForm(false);
   };
 
   return (

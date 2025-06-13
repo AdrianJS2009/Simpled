@@ -20,10 +20,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useAuth } from '@/contexts/AuthContext';
+import { API_URL as API } from '@/next.config';
 import { Send, X } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { API_URL as API } from '@/next.config';
 
 type Props = {
   readonly boardId: string;
@@ -37,7 +37,6 @@ export default function BoardInviteModal({ boardId, onClose, onInvited }: Props)
   const [loading, setLoading] = useState(false);
   const { auth } = useAuth();
 
-  // Envía la invitación al backend
   const handleInvite = async () => {
     if (!email.trim()) {
       toast.warning('El email es obligatorio.');

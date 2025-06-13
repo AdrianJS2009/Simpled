@@ -1,6 +1,6 @@
+import { API_URL as API } from '@/next.config';
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { useAuth } from './AuthContext';
-import { API_URL as API } from '@/next.config';
 export type BoardInvite = {
   id: string;
   boardId: string;
@@ -36,7 +36,6 @@ export const InvitationsProvider = ({ children }: { children: React.ReactNode })
   const [teamInvites, setTeamInvites] = useState<TeamInvite[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Refresca la lista de invitaciones
   const fetchInvites = useCallback(async () => {
     if (!auth.token) return;
     setLoading(true);
@@ -60,7 +59,6 @@ export const InvitationsProvider = ({ children }: { children: React.ReactNode })
     }
   }, [auth.token]);
 
-  // SSE para invitaciones en tiempo real
   useEffect(() => {
     if (!auth.token || !userData?.email) return;
     let eventSource: EventSource | null = null;
@@ -82,7 +80,7 @@ export const InvitationsProvider = ({ children }: { children: React.ReactNode })
         if (eventSource) {
           eventSource.close();
         }
-        // Reintentar conexión tras 5s
+
         setTimeout(connectSSE, 5000);
       };
     };

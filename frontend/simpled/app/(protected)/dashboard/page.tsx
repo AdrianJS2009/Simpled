@@ -44,7 +44,6 @@ export default function DashboardPage() {
         if (auth.token && userData?.id) {
           await fetchBoards();
 
-          // Obtener estadísticas
           const statsRes = await fetch(`${API_URL}/api/Users/${userData.id}/stats`);
           const statsData = await statsRes.json();
           setStats({
@@ -58,7 +57,6 @@ export default function DashboardPage() {
             pendingTasks: statsData.pendingTasks,
           });
 
-          // Obtener actividad reciente
           const activityRes = await fetch(`${API_URL}/api/Users/${userData.id}/activity`);
           const activityData = await activityRes.json();
           setRecentActivity(

@@ -54,11 +54,9 @@ interface GanttChartProps {
 }
 
 export function GanttChart({ boardId, className }: GanttChartProps) {
-  // Contexto de autenticación
   const { auth } = useAuth();
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Estados locales para diálogos y creación de tarea
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDependencyDialogOpen, setIsDependencyDialogOpen] = useState(false);
@@ -68,7 +66,6 @@ export function GanttChart({ boardId, className }: GanttChartProps) {
     date: Date;
   } | null>(null);
 
-  // Hook de datos: tareas, dependencias y operaciones CRUD
   const {
     tasks,
     loading,
@@ -82,7 +79,6 @@ export function GanttChart({ boardId, className }: GanttChartProps) {
     removeDependency,
   } = useGanttData(boardId, auth);
 
-  // Hook de timeline: fechas visibles y navegación
   const {
     viewMode,
     setViewMode,
@@ -94,7 +90,6 @@ export function GanttChart({ boardId, className }: GanttChartProps) {
     navigateTimeline,
   } = useGanttTimeline();
 
-  // Hook de filtros: búsqueda, agrupación y visibilidad
   const {
     showCompleted,
     setShowCompleted,
@@ -111,7 +106,6 @@ export function GanttChart({ boardId, className }: GanttChartProps) {
     toggleGroupExpansion,
   } = useGanttFilters(tasks);
 
-  // Sensores para drag-and-drop
   const sensors = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 10 } }),
     useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } }),
@@ -222,8 +216,6 @@ export function GanttChart({ boardId, className }: GanttChartProps) {
   const goToToday = () => setStartDate(new Date());
   const setDateRange = (startDate: Date, days: number) => {
     setStartDate(startDate);
-    // If you have a daysToShow state, set it here as well
-    // setDaysToShow(days);
   };
 
   return (

@@ -1,9 +1,9 @@
 'use client';
 
+import { API_URL } from '@/next.config';
 import { addDays } from 'date-fns';
 import { useEffect, useState } from 'react';
 import type { Dependency, Task } from './index';
-import { API_URL } from '@/next.config';
 
 type Auth = { token: string | null; id: string | null };
 
@@ -118,7 +118,7 @@ export function useGanttData(boardId: string, auth: Auth) {
         columnId: updated.columnId,
         status: updated.status,
         progress: updated.progress,
-        assigneeId: updated.assignedTo, // coincide con DTO AssigneeId
+        assigneeId: updated.assignedTo,
         dependencies: updated.dependencies ?? [],
       };
       const res = await fetch(`${API_URL}/api/Items/${updated.id}`, {

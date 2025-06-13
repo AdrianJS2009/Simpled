@@ -9,7 +9,6 @@ const Card = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & { interactive?: boolean }
 >(({ className, interactive = false, ...props }, ref) => {
-  // Extraer los props de drag para evitar conflicto de tipos con motion.div
   const { onDrag, onDragEnd, onDragStart, ...rest } = props as any;
   return (
     <motion.div
