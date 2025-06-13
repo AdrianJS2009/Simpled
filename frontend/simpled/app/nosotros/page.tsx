@@ -9,7 +9,7 @@ import type React from 'react';
 
 export default function AboutPage() {
   return (
-    <main className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col">
       <Banner className="bg-gradient-to-r from-indigo-600 to-purple-600">
         <h1 className="mb-6 text-4xl font-bold md:text-5xl">Conoce a Simpled.</h1>
         <p className="mx-auto mb-8 max-w-3xl text-lg md:text-xl">
@@ -189,7 +189,7 @@ export default function AboutPage() {
           </a>
         </Button>
       </Banner>
-    </main>
+    </div>
   );
 }
 

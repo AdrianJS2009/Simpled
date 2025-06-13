@@ -21,7 +21,7 @@ export default function BoardsPage() {
   };
 
   return (
-    <main className="mx-auto max-w-5xl px-4 py-8">
+    <div className="mx-auto max-w-5xl px-4 py-8">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold sm:text-3xl">Tus Tableros</h1>
         <Button
@@ -59,6 +59,6 @@ export default function BoardsPage() {
       )}
 
       <BoardList />
-    </main>
+    </div>
   );
 }
