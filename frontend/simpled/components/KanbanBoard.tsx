@@ -11,6 +11,7 @@ import {
 import { useAuth } from '@/contexts/AuthContext';
 import { useSignalR } from '@/contexts/SignalRContext';
 import { fadeIn, slideUp } from '@/lib/animation-variants';
+import { API_URL as API } from '@/next.config';
 import type { Column, Item, User } from '@/types';
 import {
   DndContext,
@@ -39,7 +40,6 @@ import ItemCreateModal from './ItemCreateModal';
 import ItemEditModal from './ItemEditModal';
 import KanbanColumn from './KanbanColumn';
 import KanbanItem from './KanbanItem';
-import { API_URL as API } from '@/next.config';
 // Helper functions for subtask, column, and item updates
 function addSubtaskToItem(items: Item[], payload: any): Item[] {
   return items.map((item) => {

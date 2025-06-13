@@ -93,6 +93,25 @@ namespace Simpled.Controllers
                 })
                 .ToListAsync();
 
+            return Ok(list);
+        }
+
+        /// <summary>
+        /// Obtiene la lista de tableros marcados como favoritos por un usuario específico.
+        /// </summary>
+        /// <param name="userId">ID del usuario</param>
+        /// <returns>Lista de tableros favoritos</returns>
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> GetUserFavoriteBoards(Guid userId)
+        {
+            var list = await _context.FavoriteBoards
+                .Where(f => f.UserId == userId)
+                .Include(f => f.Board)
+                .Select(f => new {
+                    Id = f.Board!.Id,
+                    Name = f.Board!.Name
+                })
+                .ToListAsync();
 
             return Ok(list);
         }
