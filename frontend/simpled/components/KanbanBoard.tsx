@@ -181,7 +181,8 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
       return payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
-    } catch {
+    } catch (error) {
+      console.error('Error al decodificar el token:', error);
       return null;
     }
   };
@@ -209,7 +210,13 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
         fetch(`${API}/api/BoardMembers/board/${boardId}`, { headers }),
         fetch(`${API}/api/Users`, { headers }),
       ]);
+
       if (!bR.ok) throw new Error('Error al cargar el tablero');
+      if (!cR.ok) throw new Error('Error al cargar las columnas');
+      if (!iR.ok) throw new Error('Error al cargar los items');
+      if (!mR.ok) throw new Error('Error al cargar los miembros');
+      if (!uR.ok) throw new Error('Error al cargar los usuarios');
+
       const [bd, allCols, allItems, mem, us] = await Promise.all([
         bR.json(),
         cR.json(),
@@ -224,18 +231,23 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
         its.map(async (item: Item) => {
           try {
             const subtasksRes = await fetch(`${API}/api/items/${item.id}/subtasks`, { headers });
-            if (subtasksRes.ok) {
-              const subtasks = await subtasksRes.json();
-
-              const subtasksCount = subtasks.length;
-              const completedSubtasks = subtasks.filter((st: any) => st.isCompleted).length;
-              const progress =
-                subtasksCount > 0 ? Math.round((completedSubtasks / subtasksCount) * 100) : 0;
-
-              return { ...item, subtasks, progress };
+            if (!subtasksRes.ok) {
+              console.error(
+                `Error al cargar subtareas para el item ${item.id}:`,
+                await subtasksRes.text(),
+              );
+              return item;
             }
-            return item;
+            const subtasks = await subtasksRes.json();
+
+            const subtasksCount = subtasks.length;
+            const completedSubtasks = subtasks.filter((st: any) => st.isCompleted).length;
+            const progress =
+              subtasksCount > 0 ? Math.round((completedSubtasks / subtasksCount) * 100) : 0;
+
+            return { ...item, subtasks, progress };
           } catch (error) {
+            console.error(`Error al procesar subtareas para el item ${item.id}:`, error);
             return item;
           }
         }),
@@ -246,16 +258,18 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
       setItems(itemsWithSubtasks);
       setMembers(mem);
       setUsers(us);
-    } catch (err) {
-      console.error('[fetchData] Error:', err);
-      toast.error('Error cargando datos');
-      showDesktopNotification('Error cargando datos', {
-        body: err instanceof Error ? err.message : String(err),
-      });
+    } catch (error) {
+      console.error('Error al cargar los datos del tablero:', error);
+      toast.error('Error al cargar los datos del tablero');
+      setBoard(null);
+      setColumns([]);
+      setItems([]);
+      setMembers([]);
+      setUsers([]);
     } finally {
       setLoading(false);
     }
-  }, [boardId, auth.token, showDesktopNotification]);
+  }, [boardId, headers]);
 
   useEffect(() => {
     fetchData();

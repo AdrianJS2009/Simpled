@@ -21,29 +21,37 @@ export default function BoardCard({ board }: { readonly board: Board }) {
   const userId = getUserIdFromToken(auth.token);
   const isOwner = userId === board.ownerId;
 
-  const handleDelete = async () => {
+  const handleDelete = () => {
     if (confirm('¿Seguro que deseas eliminar este tablero?')) {
       setIsDeleting(true);
-      try {
-        deleteBoard(board.id);
-      } catch (error) {
-        toast.error('Error al eliminar el tablero');
-      } finally {
-        setIsDeleting(false);
-      }
+      Promise.resolve()
+        .then(() => deleteBoard(board.id))
+        .then(() => fetchBoards())
+        .catch((error: unknown) => {
+          toast.error(error instanceof Error ? error.message : 'Error al eliminar el tablero');
+        })
+        .finally(() => {
+          setIsDeleting(false);
+        });
     }
   };
 
-  const toggleFavorite = async () => {
+  const toggleFavorite = () => {
     setIsFavoriteToggling(true);
-    try {
-      toggleFavoriteBoard(board.id);
-      setIsFavorite(!isFavorite);
-    } catch (error) {
-      toast.error('No se pudo actualizar el estado de favorito');
-    } finally {
-      setIsFavoriteToggling(false);
-    }
+    Promise.resolve()
+      .then(() => toggleFavoriteBoard(board.id))
+      .then(() => {
+        setIsFavorite(!isFavorite);
+        return fetchBoards();
+      })
+      .catch((error: unknown) => {
+        toast.error(
+          error instanceof Error ? error.message : 'No se pudo actualizar el estado de favorito',
+        );
+      })
+      .finally(() => {
+        setIsFavoriteToggling(false);
+      });
   };
 
   const formattedDate = (board as any).updatedAt
@@ -148,6 +156,7 @@ function getUserIdFromToken(token: string | null): string | null {
     const payload = JSON.parse(atob(token.split('.')[1]));
     return payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
   } catch (error) {
+    console.error('Error al decodificar el token:', error);
     return null;
   }
 }

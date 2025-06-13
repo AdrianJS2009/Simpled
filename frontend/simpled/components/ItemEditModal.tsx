@@ -90,11 +90,14 @@ export default function ItemEditModal({
         const res = await fetch(`${API}/api/items/${item.id}/subtasks`, {
           headers: { Authorization: `Bearer ${auth.token}` },
         });
-        if (res.ok) {
-          setSubtasks(await res.json());
+        if (!res.ok) {
+          const error = await res.text();
+          throw new Error(error || 'Error al cargar subtareas');
         }
+        const data = await res.json();
+        setSubtasks(data);
       } catch (err) {
-        toast.error('Error al cargar subtareas');
+        toast.error(err instanceof Error ? err.message : 'Error al cargar subtareas');
       }
     };
 
@@ -109,7 +112,7 @@ export default function ItemEditModal({
         const data = await commentService.fetchComments(item.id, auth.token);
         setComments(data);
       } catch (err) {
-        toast.error('Error al cargar los comentarios');
+        toast.error(err instanceof Error ? err.message : 'Error al cargar los comentarios');
       } finally {
         setIsLoadingComments(false);
       }
@@ -126,7 +129,9 @@ export default function ItemEditModal({
         const data = await activityLogService.fetchActivityLogs(item.id, auth.token);
         setActivityLogs(data);
       } catch (err) {
-        toast.error('Error al cargar el historial de actividad');
+        toast.error(
+          err instanceof Error ? err.message : 'Error al cargar el historial de actividad',
+        );
       } finally {
         setIsLoadingLogs(false);
       }
@@ -191,11 +196,14 @@ export default function ItemEditModal({
         },
         body: JSON.stringify({ itemId: item.id, title }),
       });
-      if (!res.ok) throw new Error('Error al crear subtarea');
+      if (!res.ok) {
+        const error = await res.text();
+        throw new Error(error || 'Error al crear subtarea');
+      }
       const newSubtask = await res.json();
       setSubtasks((prev) => [...prev, newSubtask]);
     } catch (err) {
-      toast.error('Error al crear subtarea');
+      toast.error(err instanceof Error ? err.message : 'Error al crear subtarea');
     }
   };
 
@@ -214,7 +222,10 @@ export default function ItemEditModal({
           isCompleted: subtask.isCompleted,
         }),
       });
-      if (!res.ok) throw new Error('Error al actualizar subtarea');
+      if (!res.ok) {
+        const error = await res.text();
+        throw new Error(error || 'Error al actualizar subtarea');
+      }
       setSubtasks((prev) => prev.map((st) => (st.id === subtask.id ? subtask : st)));
 
       const all = subtasks.length;
@@ -224,7 +235,7 @@ export default function ItemEditModal({
       if (all > 0 && done === all) setStatus('completed');
       else if (done > 0) setStatus('in-progress');
     } catch (err) {
-      toast.error('Error al actualizar subtarea');
+      toast.error(err instanceof Error ? err.message : 'Error al actualizar subtarea');
     }
   };
 
@@ -234,11 +245,13 @@ export default function ItemEditModal({
         method: 'DELETE',
         headers: { Authorization: `Bearer ${auth.token}` },
       });
-      if (!res.ok) throw new Error('Error al eliminar subtarea');
+      if (!res.ok) {
+        const error = await res.text();
+        throw new Error(error || 'Error al eliminar subtarea');
+      }
       setSubtasks((prev) => prev.filter((st) => st.id !== subtaskId));
     } catch (err) {
-      console.error(err);
-      toast.error('Error al eliminar subtarea');
+      toast.error(err instanceof Error ? err.message : 'Error al eliminar subtarea');
     }
   };
 
@@ -250,8 +263,8 @@ export default function ItemEditModal({
     try {
       const newComment = await commentService.addComment(item.id, text, auth.token);
       setComments((prev) => [newComment, ...prev]);
-    } catch {
-      toast.error('Error al añadir comentario');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Error al añadir comentario');
     }
   };
 
@@ -263,8 +276,8 @@ export default function ItemEditModal({
     try {
       const updated = await commentService.updateComment(commentId, item.id, text, auth.token);
       setComments((prev) => prev.map((c) => (c.id === commentId ? updated : c)));
-    } catch {
-      toast.error('Error al editar comentario');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Error al editar comentario');
     }
   };
 
@@ -276,8 +289,8 @@ export default function ItemEditModal({
     try {
       await commentService.deleteComment(commentId, item.id, auth.token);
       setComments((prev) => prev.filter((c) => c.id !== commentId));
-    } catch {
-      toast.error('Error al eliminar comentario');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Error al eliminar comentario');
     }
   };
 
@@ -289,8 +302,8 @@ export default function ItemEditModal({
     try {
       await commentService.resolveComment(commentId, item.id, isResolved, auth.token);
       setComments((prev) => prev.map((c) => (c.id === commentId ? { ...c, isResolved } : c)));
-    } catch {
-      toast.error('Error al cambiar estado de comentario');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Error al cambiar estado de comentario');
     }
   };
 

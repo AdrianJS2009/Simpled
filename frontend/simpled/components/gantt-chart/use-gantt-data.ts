@@ -205,15 +205,15 @@ export function useGanttData(boardId: string, auth: Auth) {
 
     switch (type) {
       case 'finish-to-start':
-        return true;
+        return fromEnd <= toStart;
       case 'start-to-start':
-        return true;
+        return fromStart <= toStart;
       case 'finish-to-finish':
-        return true;
+        return fromEnd <= toEnd;
       case 'start-to-finish':
-        return true;
+        return fromStart <= toEnd;
       default:
-        return true;
+        return false;
     }
   };
 

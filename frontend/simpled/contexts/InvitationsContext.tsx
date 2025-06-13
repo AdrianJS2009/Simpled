@@ -1,5 +1,5 @@
 import { API_URL as API } from '@/next.config';
-import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useAuth } from './AuthContext';
 export type BoardInvite = {
   id: string;
@@ -23,7 +23,7 @@ type InvitationsContextType = {
   teamInvites: TeamInvite[];
   totalInvites: number;
   loading: boolean;
-  refreshInvites: () => void;
+  refreshInvites: () => Promise<void>;
   removeBoardInvite: (token: string) => void;
   removeTeamInvite: (token: string) => void;
 };
@@ -102,21 +102,20 @@ export const InvitationsProvider = ({ children }: { children: React.ReactNode })
     setTeamInvites((prev) => prev.filter((i) => i.token !== token));
   };
 
-  return (
-    <InvitationsContext.Provider
-      value={{
-        boardInvites,
-        teamInvites,
-        totalInvites: boardInvites.length + teamInvites.length,
-        loading,
-        refreshInvites: fetchInvites,
-        removeBoardInvite,
-        removeTeamInvite,
-      }}
-    >
-      {children}
-    </InvitationsContext.Provider>
+  const contextValue = useMemo(
+    () => ({
+      boardInvites,
+      teamInvites,
+      totalInvites: boardInvites.length + teamInvites.length,
+      loading,
+      refreshInvites: fetchInvites,
+      removeBoardInvite,
+      removeTeamInvite,
+    }),
+    [boardInvites, teamInvites, loading, fetchInvites, removeBoardInvite, removeTeamInvite],
   );
+
+  return <InvitationsContext.Provider value={contextValue}>{children}</InvitationsContext.Provider>;
 };
 
 export const useInvitations = () => {

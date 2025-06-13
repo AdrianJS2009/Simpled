@@ -42,12 +42,15 @@ export default function ColumnEditModal({
         }),
       });
 
-      if (!res.ok) throw new Error('Error al actualizar la columna.');
+      if (!res.ok) {
+        const error = await res.text();
+        throw new Error(error || 'Error al actualizar la columna');
+      }
 
       onUpdated();
       onClose();
     } catch (err) {
-      toast.error('Error al actualizar columna.');
+      toast.error(err instanceof Error ? err.message : 'Error al actualizar la columna');
     } finally {
       setLoading(false);
     }

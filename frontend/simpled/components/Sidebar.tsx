@@ -44,10 +44,16 @@ const Sidebar = () => {
     try {
       const [columnRes] = await Promise.all([fetch(`${API}/api/Columns`, { headers })]);
 
-      const columnData = await columnRes.json();
+      if (!columnRes.ok) {
+        throw new Error(`Error al cargar las columnas: ${columnRes.status}`);
+      }
 
+      const columnData = await columnRes.json();
       setColumns(columnData);
-    } catch (err) {}
+    } catch (error) {
+      console.error('Error al cargar las columnas:', error);
+      setColumns([]);
+    }
   };
 
   return (

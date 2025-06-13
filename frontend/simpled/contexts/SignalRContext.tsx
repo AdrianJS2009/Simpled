@@ -14,7 +14,9 @@ const SignalRContext = createContext<SignalRContextType>({ connection: null });
 
 export const useSignalR = () => useContext(SignalRContext);
 
-function ConnectionBanner({ status }: { status: 'connected' | 'reconnecting' | 'disconnected' }) {
+function ConnectionBanner({
+  status,
+}: Readonly<{ status: 'connected' | 'reconnecting' | 'disconnected' }>) {
   if (status === 'connected') return null;
   return (
     <div

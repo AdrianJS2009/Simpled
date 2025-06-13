@@ -70,7 +70,6 @@ export function GanttChart({ boardId, className }: GanttChartProps) {
     tasks,
     loading,
     error,
-    fetchTasks,
     updateTask,
     updateTaskDates,
     createTask,
@@ -101,7 +100,6 @@ export function GanttChart({ boardId, className }: GanttChartProps) {
     setGroupBy,
     zoomLevel,
     setZoomLevel,
-    filteredTasks,
     groupedTasks,
     toggleGroupExpansion,
   } = useGanttFilters(tasks);
