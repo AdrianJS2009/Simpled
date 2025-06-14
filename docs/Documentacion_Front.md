@@ -237,7 +237,7 @@ No se han personalizado los breakpoints en la configuración, lo que garantiza c
 
 - **Pruebas de validación**
   - [W3C Validador](https://validator.w3.org/nu/?doc=https%3A%2F%2Ffront-simpled.duckdns.org%2F)
-    (https://imgur.com/a/ZnVQZuA)
+    (https://i.imgur.com/oYDRDbj.png)
 
 - **Calidad de código**:
   - SonarQube análisis
