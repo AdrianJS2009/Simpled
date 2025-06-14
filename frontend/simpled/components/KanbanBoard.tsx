@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -211,11 +212,21 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
         fetch(`${API}/api/Users`, { headers }),
       ]);
 
-      if (!bR.ok) throw new Error('Error al cargar el tablero');
-      if (!cR.ok) throw new Error('Error al cargar las columnas');
-      if (!iR.ok) throw new Error('Error al cargar los items');
-      if (!mR.ok) throw new Error('Error al cargar los miembros');
-      if (!uR.ok) throw new Error('Error al cargar los usuarios');
+      if (!bR.ok) {
+        throw new Error(`Error al cargar el tablero: ${bR.status}`);
+      }
+      if (!cR.ok) {
+        throw new Error(`Error al cargar las columnas: ${cR.status}`);
+      }
+      if (!iR.ok) {
+        throw new Error(`Error al cargar los items: ${iR.status}`);
+      }
+      if (!mR.ok) {
+        throw new Error(`Error al cargar los miembros: ${mR.status}`);
+      }
+      if (!uR.ok) {
+        throw new Error(`Error al cargar los usuarios: ${uR.status}`);
+      }
 
       const [bd, allCols, allItems, mem, us] = await Promise.all([
         bR.json(),
@@ -227,31 +238,38 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
       const cols = allCols.filter((c: any) => c.boardId === boardId);
       const its = allItems.filter((i: any) => cols.some((c: any) => c.id === i.columnId));
 
-      const itemsWithSubtasks = await Promise.all(
-        its.map(async (item: Item) => {
-          try {
-            const subtasksRes = await fetch(`${API}/api/items/${item.id}/subtasks`, { headers });
-            if (!subtasksRes.ok) {
-              console.error(
-                `Error al cargar subtareas para el item ${item.id}:`,
-                await subtasksRes.text(),
-              );
-              return item;
+      const itemsWithSubtasks = [];
+      const BATCH_SIZE = 5;
+
+      for (let i = 0; i < its.length; i += BATCH_SIZE) {
+        const batch = its.slice(i, i + BATCH_SIZE);
+        const batchResults = await Promise.all(
+          batch.map(async (item: Item) => {
+            try {
+              const subtasksRes = await fetch(`${API}/api/items/${item.id}/subtasks`, { headers });
+              if (!subtasksRes.ok) {
+                console.error(
+                  `Error al cargar subtareas para el item ${item.id}:`,
+                  await subtasksRes.text(),
+                );
+                return { ...item, subtasks: [], progress: 0 };
+              }
+              const subtasks = await subtasksRes.json();
+
+              const subtasksCount = subtasks.length;
+              const completedSubtasks = subtasks.filter((st: any) => st.isCompleted).length;
+              const progress =
+                subtasksCount > 0 ? Math.round((completedSubtasks / subtasksCount) * 100) : 0;
+
+              return { ...item, subtasks, progress };
+            } catch (error) {
+              console.error(`Error al procesar subtareas para el item ${item.id}:`, error);
+              return { ...item, subtasks: [], progress: 0 };
             }
-            const subtasks = await subtasksRes.json();
-
-            const subtasksCount = subtasks.length;
-            const completedSubtasks = subtasks.filter((st: any) => st.isCompleted).length;
-            const progress =
-              subtasksCount > 0 ? Math.round((completedSubtasks / subtasksCount) * 100) : 0;
-
-            return { ...item, subtasks, progress };
-          } catch (error) {
-            console.error(`Error al procesar subtareas para el item ${item.id}:`, error);
-            return item;
-          }
-        }),
-      );
+          }),
+        );
+        itemsWithSubtasks.push(...batchResults);
+      }
 
       setBoard(bd);
       setColumns(cols);
@@ -260,7 +278,7 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
       setUsers(us);
     } catch (error) {
       console.error('Error al cargar los datos del tablero:', error);
-      toast.error('Error al cargar los datos del tablero');
+      toast.error(error instanceof Error ? error.message : 'Error al cargar los datos del tablero');
       setBoard(null);
       setColumns([]);
       setItems([]);
@@ -550,6 +568,9 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
                   <DialogContent className="max-w-2xl">
                     <DialogHeader>
                       <DialogTitle>Gestión de miembros</DialogTitle>
+                      <DialogDescription>
+                        Administra los miembros y sus roles en este tablero
+                      </DialogDescription>
                     </DialogHeader>
                     <BoardMembersList
                       members={members}

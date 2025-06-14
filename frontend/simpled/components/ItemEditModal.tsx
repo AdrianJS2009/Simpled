@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -364,6 +365,9 @@ export default function ItemEditModal({
       <DialogContent className="animate-scaleIn max-h-[90vh] overflow-y-auto sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>Editar Tarea</DialogTitle>
+          <DialogDescription>
+            Modifica los detalles, subtareas, comentarios y estado de la tarea
+          </DialogDescription>
         </DialogHeader>
 
         <Tabs

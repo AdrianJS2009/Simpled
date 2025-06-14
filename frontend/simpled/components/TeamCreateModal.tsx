@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -45,6 +46,7 @@ export default function TeamCreateModal({ onClose, onCreated }: Props) {
       <DialogContent className="animate-scaleIn sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Nuevo Equipo</DialogTitle>
+          <DialogDescription>Crea un nuevo equipo para organizar tus tableros</DialogDescription>
         </DialogHeader>
         <div className="space-y-3">
           <div>

@@ -4,6 +4,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -32,6 +33,7 @@ export default function BoardEditModal({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Editar tablero</DialogTitle>
+          <DialogDescription>Modifica la configuración y visibilidad del tablero</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="space-y-2">

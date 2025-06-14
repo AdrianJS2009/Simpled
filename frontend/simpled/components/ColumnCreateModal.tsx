@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -72,6 +73,7 @@ export default function ColumnCreateModal({ boardId, onClose, onCreated }: Props
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Nueva columna</DialogTitle>
+          <DialogDescription>Añade una nueva columna para organizar las tareas</DialogDescription>
         </DialogHeader>
 
         <motion.div

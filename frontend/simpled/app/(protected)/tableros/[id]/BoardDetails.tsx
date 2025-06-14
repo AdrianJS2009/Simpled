@@ -8,6 +8,7 @@ import ItemEditModal from '@/components/ItemEditModal';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -173,6 +174,9 @@ export default function BoardDetails({ boardId }: Readonly<{ boardId: string }>)
             <DialogContent className="max-w-2xl">
               <DialogHeader>
                 <DialogTitle>Gestión de miembros</DialogTitle>
+                <DialogDescription>
+                  Administra los miembros y sus roles en este tablero
+                </DialogDescription>
               </DialogHeader>
               <BoardMembersList
                 members={members}

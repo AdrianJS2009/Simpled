@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -129,6 +130,7 @@ export default function ItemCreateModal({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Nueva tarea</DialogTitle>
+          <DialogDescription>Crea una nueva tarea con sus detalles y subtareas</DialogDescription>
         </DialogHeader>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">

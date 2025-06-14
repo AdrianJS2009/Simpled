@@ -3,6 +3,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from '../components/ui/dialog';
@@ -34,6 +35,7 @@ export default function BoardMembersModal({
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>Miembros del tablero</DialogTitle>
+          <DialogDescription>Gestiona los miembros y sus roles en este tablero</DialogDescription>
         </DialogHeader>
         <BoardMembersList
           members={members}
