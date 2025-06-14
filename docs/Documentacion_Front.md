@@ -237,10 +237,7 @@ No se han personalizado los breakpoints en la configuración, lo que garantiza c
 
 - **Pruebas de validación**
   - [W3C Validador](https://validator.w3.org/nu/?doc=https%3A%2F%2Ffront-simpled.duckdns.org%2F)
-    - 1 Error de validación por un button sin aria-controls
-      (16. The aria-controls attribute must point to an element in the same document.)
-    - 1 Warning por no utilizar correctamente el H1
-    - 15 Info por usar barra de cierre en algunas etiquetas como HR o IMG
+    (https://imgur.com/a/ZnVQZuA)
 
 - **Calidad de código**:
   - SonarQube análisis
