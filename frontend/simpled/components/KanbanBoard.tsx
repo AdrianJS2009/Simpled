@@ -201,7 +201,7 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
   );
 
-  const fetchData = useCallback(async () => {
+  const fetchDataHandler = async () => {
     setLoading(true);
     try {
       const [bR, cR, iR, mR, uR] = await Promise.all([
@@ -211,23 +211,7 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
         fetch(`${API}/api/BoardMembers/board/${boardId}`, { headers }),
         fetch(`${API}/api/Users`, { headers }),
       ]);
-
-      if (!bR.ok) {
-        throw new Error(`Error al cargar el tablero: ${bR.status}`);
-      }
-      if (!cR.ok) {
-        throw new Error(`Error al cargar las columnas: ${cR.status}`);
-      }
-      if (!iR.ok) {
-        throw new Error(`Error al cargar los items: ${iR.status}`);
-      }
-      if (!mR.ok) {
-        throw new Error(`Error al cargar los miembros: ${mR.status}`);
-      }
-      if (!uR.ok) {
-        throw new Error(`Error al cargar los usuarios: ${uR.status}`);
-      }
-
+      if (!bR.ok) throw new Error('Error al cargar el tablero');
       const [bd, allCols, allItems, mem, us] = await Promise.all([
         bR.json(),
         cR.json(),
@@ -238,22 +222,11 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
       const cols = allCols.filter((c: any) => c.boardId === boardId);
       const its = allItems.filter((i: any) => cols.some((c: any) => c.id === i.columnId));
 
-      const itemsWithSubtasks = [];
-      const BATCH_SIZE = 5;
-
-      for (let i = 0; i < its.length; i += BATCH_SIZE) {
-        const batch = its.slice(i, i + BATCH_SIZE);
-        const batchResults = await Promise.all(
-          batch.map(async (item: Item) => {
-            try {
-              const subtasksRes = await fetch(`${API}/api/items/${item.id}/subtasks`, { headers });
-              if (!subtasksRes.ok) {
-                console.error(
-                  `Error al cargar subtareas para el item ${item.id}:`,
-                  await subtasksRes.text(),
-                );
-                return { ...item, subtasks: [], progress: 0 };
-              }
+      const itemsWithSubtasks = await Promise.all(
+        its.map(async (item: Item) => {
+          try {
+            const subtasksRes = await fetch(`${API}/api/items/${item.id}/subtasks`, { headers });
+            if (subtasksRes.ok) {
               const subtasks = await subtasksRes.json();
 
               const subtasksCount = subtasks.length;
@@ -262,36 +235,35 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
                 subtasksCount > 0 ? Math.round((completedSubtasks / subtasksCount) * 100) : 0;
 
               return { ...item, subtasks, progress };
-            } catch (error) {
-              console.error(`Error al procesar subtareas para el item ${item.id}:`, error);
-              return { ...item, subtasks: [], progress: 0 };
             }
-          }),
-        );
-        itemsWithSubtasks.push(...batchResults);
-      }
+            return item;
+          } catch (error) {
+            console.error(`Error fetching subtasks for item ${item.id}:`, error);
+            return item;
+          }
+        }),
+      );
 
       setBoard(bd);
       setColumns(cols);
       setItems(itemsWithSubtasks);
       setMembers(mem);
       setUsers(us);
-    } catch (error) {
-      console.error('Error al cargar los datos del tablero:', error);
-      toast.error(error instanceof Error ? error.message : 'Error al cargar los datos del tablero');
-      setBoard(null);
-      setColumns([]);
-      setItems([]);
-      setMembers([]);
-      setUsers([]);
+    } catch (err) {
+      console.error('[fetchData] Error:', err);
+      toast.error('Error cargando datos');
+      showDesktopNotification('Error cargando datos', {
+        body: err instanceof Error ? err.message : String(err),
+      });
     } finally {
       setLoading(false);
     }
-  }, [boardId, headers]);
+  };
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    fetchDataHandler();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [boardId, auth.token]);
 
   useEffect(() => {
     if (!connection) return;
@@ -376,13 +348,13 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
           break;
 
         default:
-          fetchData();
+          fetchDataHandler();
       }
     };
 
     connection.on('BoardUpdated', handler);
     return () => connection.off('BoardUpdated', handler);
-  }, [connection, boardId, fetchData, userId, showDesktopNotification]);
+  }, [connection, boardId, fetchDataHandler, userId, showDesktopNotification]);
 
   useEffect(() => {
     if (!connection) return;
@@ -427,7 +399,7 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
       } catch {
         toast.error('Error moviendo');
         showDesktopNotification('⚠️ Error moviendo tarea', { body: it.title });
-        fetchData();
+        fetchDataHandler();
       }
     }
     resetDrag();
@@ -453,7 +425,7 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
     } catch (e: any) {
       toast.error(e.message);
       showDesktopNotification('⚠️ Error eliminando columna', { body: e.message });
-      fetchData();
+      fetchDataHandler();
     }
   };
 
@@ -577,8 +549,8 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
                       users={users}
                       currentUserRole={userRole}
                       boardId={boardId}
-                      onRoleUpdated={fetchData}
-                      onMemberRemoved={fetchData}
+                      onRoleUpdated={fetchDataHandler}
+                      onMemberRemoved={fetchDataHandler}
                     />
                   </DialogContent>
                 </Dialog>
@@ -643,11 +615,11 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
                 boardId={boardId}
                 onClose={() => {
                   setShowInvite(false);
-                  setTimeout(() => fetchData(), 100);
+                  setTimeout(() => fetchDataHandler(), 100);
                 }}
                 onInvited={() => {
                   setShowInvite(false);
-                  fetchData();
+                  fetchDataHandler();
                 }}
               />
             )}
@@ -658,7 +630,7 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
               <ColumnCreateModal
                 boardId={boardId}
                 onClose={() => setShowCreateColumn(false)}
-                onCreated={fetchData}
+                onCreated={fetchDataHandler}
               />
             )}
           </AnimatePresence>
@@ -669,9 +641,9 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
                 columnId={createItemColumnId}
                 onClose={() => {
                   setCreateItemColumnId(null);
-                  setTimeout(() => fetchData(), 100);
+                  setTimeout(() => fetchDataHandler(), 100);
                 }}
-                onCreated={fetchData}
+                onCreated={fetchDataHandler}
                 assignees={
                   members.map((m) => users.find((u) => u.id === m.userId)).filter(Boolean) as User[]
                 }
@@ -688,7 +660,7 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
                 boardId={boardId}
                 token={auth.token!}
                 onClose={() => setEditColumnId(null)}
-                onUpdated={fetchData}
+                onUpdated={fetchDataHandler}
               />
             )}
           </AnimatePresence>
@@ -702,9 +674,9 @@ export default function KanbanBoard({ boardId }: { readonly boardId: string }) {
                 }}
                 onClose={() => {
                   setEditItem(null);
-                  setTimeout(() => fetchData(), 100);
+                  setTimeout(() => fetchDataHandler(), 100);
                 }}
-                onUpdated={fetchData}
+                onUpdated={fetchDataHandler}
                 assignees={
                   members.map((m) => users.find((u) => u.id === m.userId)).filter(Boolean) as User[]
                 }
