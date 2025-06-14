@@ -236,8 +236,14 @@ No se han personalizado los breakpoints en la configuración, lo que garantiza c
   ![Score de Lighthouse](https://i.imgur.com/wBq9nuw.png)
 
 - **Pruebas de validación**
-  - [W3C Validador](https://validator.w3.org/nu/?doc=https%3A%2F%2Ffront-simpled.duckdns.org%2F)
-    ![Score de W3C Validator](https://i.imgur.com/oYDRDbj.png)
+  - [W3C Validador Landing](https://validator.w3.org/nu/?doc=https%3A%2F%2Ffront-simpled.duckdns.org%2F)
+    ![Score de W3C Validator](https://i.imgur.com/vrD5D4o.png)
+
+  - [W3C Validador Nosotros](https://validator.w3.org/nu/?doc=https%3A%2F%2Ffront-simpled.duckdns.org%2Fnosotros)
+    ![Score de W3C Validator](https://i.imgur.com/kW4v5Ua.png)
+
+  - [W3C Validador Login](https://validator.w3.org/nu/?doc=https%3A%2F%2Ffront-simpled.duckdns.org%2Flogin)
+    ![Score de W3C Validator](https://i.imgur.com/lGVjqQO.png)
 
 - **Calidad de código**:
   - SonarQube análisis
