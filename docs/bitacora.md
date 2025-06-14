@@ -128,6 +128,7 @@ Registro de tareas realizadas durante el desarrollo del proyecto **Simpled**.
 | 2025-06-09  | Elías Robles   | Intento de arreglo del despliegue y backend funcionando |
 | 2025-06-10  | Elías Robles   | Intento de arreglo del despliegue |
 | 2025-06-11  | Elías Robles   | Deploy desde 0 con nueva estructura |
+| 2025-06-[del 6 hasta el 13] | Adrián Jiménez | Corrección de múltiples errores tras desplegar, limpieza de código, asistencia en el despliege a Elías, terminar Figma, pasada de plugins como Lightweight o W3C Validator. |
 
 ---
 
