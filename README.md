@@ -244,10 +244,11 @@ Simpled/
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs)
 - [SignalR Documentation](https://learn.microsoft.com/en-us/aspnet/core/signalr/introduction)
 
-### 📒 Bitácora
+### 📒 Bitácora y documentación
 
 - Ver [bitacora.md](docs/bitacora.md) para el registro detallado de desarrollo.
 - Ver [Documentacion_Front.md](docs/Documentacion_Front.md) para la documentación relacionada con el apartado front incluyendo Figma.
+- Ver [Presentación.pdf](docs/TFG%20-%20Simpled.pdf) para la presentación.
 
 ---
 
