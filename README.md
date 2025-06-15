@@ -38,23 +38,21 @@
     - [📒 Bitácora](#-bitácora)
   - [📺 Vídeos](#-vídeos)
   - [📌 Enlace al anteproyecto](#-enlace-al-anteproyecto)
+  - [💻 Objetivos](#-objetivos)
   - [👥 Autores](#-autores)
 
 ---
 
 ## 🔧 Cómo clonar y ejecutar
 
-```bash
-git clone https://github.com/usuario/simpled.git
-cd simpled
-```
-
 ### ▶ Backend (.NET 8)
 
 ```bash
-cd backend/Simpled
-dotnet restore
-dotnet run
+git clone https://github.com/AdrianJS2009/Simpled.git /opt/simpled
+cd /opt/simpled/backend/Simpled/Simpled/
+dotnet publish -c Release -o /opt/simpled/publish
+cd /opt/simpled/publish/
+dotnet Simpled.dll
 ```
 
 > ⚠ Es obligatorio tener instalado el **.NET 8 SDK**.
@@ -62,12 +60,14 @@ dotnet run
 ### ▶ Frontend (Next.js / React)
 
 ```bash
-cd frontend
-npm install
-npm run dev
+git clone https://github.com/AdrianJS2009/Simpled.git /opt/simpled
+cd /opt/simpled/frontend/simpled
+npm i
+npm run build
+npm run start
 ```
 
-> ⚠ Es obligatorio tener instalado **Node.js (LTS)**.
+> ⚠ Es obligatorio tener instalado **Node.js 18 o superior**.
 
 ---
 
