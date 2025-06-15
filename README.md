@@ -131,9 +131,9 @@ npm run dev
 
 - **Despliegue:**
 
-  - Backend: Azure / AWS
-  - Frontend: Vercel
-  - Base de datos: SQLite en producción
+  - Backend: AWS
+  - Frontend: AWS
+  - Base de datos: MySQLServer
 
 - **Monitoreo y Logging:**
   - Application Insights
@@ -243,12 +243,14 @@ Simpled/
 - [React Documentation](https://react.dev/)
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs)
 - [SignalR Documentation](https://learn.microsoft.com/en-us/aspnet/core/signalr/introduction)
+- [AWS Documentation](https://docs.aws.amazon.com/es_es/)
 
 ### 📒 Bitácora y documentación
 
 - Ver [bitacora.md](docs/bitacora.md) para el registro detallado de desarrollo.
 - Ver [Documentacion_Front.md](docs/Documentacion_Front.md) para la documentación relacionada con el apartado front incluyendo Figma.
 - Ver [Presentación.pdf](docs/TFG%20-%20Simpled.pdf) para la presentación.
+- Ver [Prototipo Figma](https://www.figma.com/proto/ZTKNYtmhuYOohtMGaIVn5v/Simpled---TFG--Adri%C3%A1n-y-El%C3%ADas-?node-id=380-3184&starting-point-node-id=380%3A3184) para el diseño base de la aplicación.
 
 ---
 
@@ -270,6 +272,16 @@ Simpled/
 🔗 [📄 Ver anteproyecto en Notion](https://steady-rock-b8f.notion.site/AnteProyecto-Simpled-1bea38c3af458040a867de299d2016fb?pvs=74)
 
 ---
+
+## 💻 Objetivos
+
+- Facilitar la organización y seguimiento de tareas en equipo.
+- Permitir la creación de tableros personalizados.
+- Gestionar roles y permisos de usuario.
+- Gestionar y trabajar en equipos.
+- Implementar funcionalidades de gamificación.
+
+---  
 
 ## 👥 Autores
 
